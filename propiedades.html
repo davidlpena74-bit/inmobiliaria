@@ -144,149 +144,106 @@
             cursor: pointer;
         }
 
-        /* Grid de Propiedades */
-        .property-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-            gap: 30px;
-        }
-
-        .property-card {
+        /* Tabla de Propiedades */
+        .table-wrapper {
             background: white;
             border-radius: 24px;
             overflow: hidden;
             box-shadow: 0 15px 40px rgba(0, 0, 0, 0.04);
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            position: relative;
             border: 1px solid rgba(0, 0, 0, 0.03);
-            display: flex;
-            flex-direction: column;
+            margin-bottom: 40px;
         }
 
-        .property-card:hover {
-            transform: translateY(-12px);
-            box-shadow: 0 30px 60px rgba(102, 126, 234, 0.15);
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
         }
 
-        .card-header {
-            padding: 25px;
-            position: relative;
-            flex-grow: 1;
-        }
-
-        .property-badge {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background: rgba(29, 209, 161, 0.1);
-            color: var(--accent);
-            padding: 6px 14px;
-            border-radius: 50px;
-            font-size: 0.75rem;
+        th {
+            background: #f8fafc;
+            padding: 18px 20px;
             font-weight: 700;
+            color: #64748b;
+            font-size: 0.85rem;
             text-transform: uppercase;
             letter-spacing: 1px;
+            border-bottom: 2px solid #edf2f7;
+            cursor: pointer;
+            transition: background 0.2s;
         }
 
-        .property-price {
-            font-size: 1.8rem;
+        th:hover {
+            background: #f1f5f9;
+        }
+
+        td {
+            padding: 16px 20px;
+            border-bottom: 1px solid #f1f5f9;
+            font-size: 0.95rem;
+            vertical-align: middle;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover {
+            background-color: #fcfdfe;
+        }
+
+        .td-price {
             font-weight: 700;
             color: var(--dark);
-            margin-bottom: 10px;
-            display: flex;
-            align-items: baseline;
-            gap: 5px;
+            white-space: nowrap;
         }
 
-        .property-price span {
-            font-size: 1rem;
-            color: #94a3b8;
-        }
-
-        .property-title {
-            font-size: 1.1rem;
+        .td-title {
             font-weight: 600;
             color: #475569;
-            margin-bottom: 15px;
-            line-height: 1.4;
+            max-width: 400px;
         }
 
-        .property-location {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            color: #64748b;
-            font-size: 0.9rem;
-            margin-bottom: 20px;
-        }
-
-        .card-details {
-            padding: 20px 25px;
-            background: #f8fafc;
-            display: flex;
-            justify-content: space-between;
-            border-top: 1px solid rgba(0, 0, 0, 0.05);
-        }
-
-        .detail-item {
-            text-align: center;
-        }
-
-        .detail-value {
-            display: block;
-            font-weight: 700;
-            color: var(--dark);
-            font-size: 1rem;
-        }
-
-        .detail-label {
-            font-size: 0.75rem;
-            color: #94a3b8;
-            text-transform: uppercase;
-            font-weight: 600;
-        }
-
-        .card-footer {
-            padding: 20px 25px;
-        }
-
-        .view-btn {
-            display: block;
-            width: 100%;
-            padding: 15px;
-            background: linear-gradient(to right, var(--primary), var(--secondary));
-            color: white;
-            text-align: center;
+        .td-title a {
             text-decoration: none;
-            border-radius: 16px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.2);
+            color: inherit;
+            transition: color 0.2s;
         }
 
-        .view-btn:hover {
-            opacity: 0.95;
-            transform: scale(1.02);
-            box-shadow: 0 15px 30px rgba(102, 126, 234, 0.3);
+        .td-title a:hover {
+            color: var(--primary);
         }
 
-        .portal-tag {
+        .td-zona {
+            text-transform: uppercase;
+            font-weight: 700;
+            font-size: 0.8rem;
+            color: #94a3b8;
+        }
+
+        .portal-badge {
             font-size: 0.7rem;
             padding: 4px 10px;
             border-radius: 6px;
             font-weight: 700;
-            margin-right: 8px;
+            display: inline-block;
         }
 
-        .tag-idealista {
+        .badge-idealista {
             background: #fee2e2;
             color: #ef4444;
         }
 
-        .tag-fotocasa {
+        .badge-fotocasa {
             background: #e0e7ff;
             color: #6366f1;
         }
+
+        .property-grid {
+            display: none;
+        }
+
+        /* Ocultamos el grid anterior */
 
         /* Loading Animation */
         .loader {
@@ -316,23 +273,11 @@
             padding: 50px;
             background: white;
             border-radius: 30px;
-            grid-column: 1 / -1;
         }
 
-        @media (max-width: 600px) {
-            h1 {
-                font-size: 2rem;
-            }
-
-            body {
-                padding: 20px 10px;
-            }
-
-            .back-btn {
-                top: 10px;
-                left: 10px;
-                padding: 10px 18px;
-                font-size: 0.8rem;
+        @media (max-width: 900px) {
+            .hide-mobile {
+                display: none;
             }
         }
     </style>
@@ -371,7 +316,7 @@
             </select>
         </div>
 
-        <div id="propertyGrid" class="property-grid">
+        <div class="table-wrapper" id="content-area">
             <div class="loader">
                 <div class="spinner"></div>
             </div>
@@ -387,7 +332,7 @@
         let allProperties = [];
 
         async function loadProperties() {
-            const grid = document.getElementById('propertyGrid');
+            const area = document.getElementById('content-area');
             try {
                 const { data, error } = await _supabase
                     .from('inm_propiedades')
@@ -398,10 +343,10 @@
 
                 allProperties = data;
                 updateStats(data);
-                renderGrid(data);
+                renderTable(data);
             } catch (e) {
                 console.error(e);
-                grid.innerHTML = `<div class="empty-state">❌ Error cargando propiedades. Por favor intentalo de nuevo.</div>`;
+                area.innerHTML = `<div class="empty-state">❌ Error cargando propiedades.</div>`;
             }
         }
 
@@ -411,56 +356,54 @@
             document.getElementById('distrito-count').innerText = distritos.length;
         }
 
-        function renderGrid(data) {
-            const grid = document.getElementById('propertyGrid');
+        function renderTable(data) {
+            const area = document.getElementById('content-area');
             if (data.length === 0) {
-                grid.innerHTML = `<div class="empty-state">No se han encontrado propiedades que coincidan con los filtros.</div>`;
+                area.innerHTML = `<div class="empty-state">No se han encontrado propiedades.</div>`;
                 return;
             }
 
-            grid.innerHTML = data.map(prop => {
+            let html = `
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Precio</th>
+                            <th>Propiedad</th>
+                            <th>Zona</th>
+                            <th class="hide-mobile">Hab.</th>
+                            <th class="hide-mobile">m²</th>
+                            <th class="hide-mobile">Portal</th>
+                            <th>Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+
+            html += data.map(prop => {
                 const portal = prop.caracteristicas?.portal || 'Idealista';
-                const tagClass = `tag-${portal.toLowerCase()}`;
+                const badgeClass = `badge-${portal.toLowerCase()}`;
 
                 return `
-                    <div class="property-card">
-                        <div class="card-header">
-                            <span class="property-badge">${prop.caracteristicas?.precio_m2 || 0} €/m²</span>
-                            <div class="property-price">
-                                ${prop.precio.toLocaleString()}€
-                            </div>
-                            <div class="property-title">
-                                <span class="portal-tag ${tagClass}">${portal}</span>
-                                ${prop.titulo}
-                            </div>
-                            <div class="property-location">
-                                <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                                </svg>
-                                ${prop.zona.toUpperCase()}
-                            </div>
-                        </div>
-                        <div class="card-details">
-                            <div class="detail-item">
-                                <span class="detail-value">${prop.habitaciones}</span>
-                                <span class="detail-label">Habitaciones</span>
-                            </div>
-                            <div class="detail-item">
-                                <span class="detail-value">${prop.superficie}</span>
-                                <span class="detail-label">m² const.</span>
-                            </div>
-                            <div class="detail-item">
-                                <span class="detail-value">${prop.banos || prop.caracteristicas?.banos || 1}</span>
-                                <span class="detail-label">Baños</span>
-                            </div>
-                        </div>
-                        <div class="card-footer">
-                            <a href="${prop.url}" target="_blank" class="view-btn">Ver Anuncio Completo</a>
-                        </div>
-                    </div>
+                    <tr>
+                        <td class="td-price">${prop.precio.toLocaleString()}€</td>
+                        <td class="td-title">
+                            <a href="${prop.url}" target="_blank">${prop.titulo}</a>
+                        </td>
+                        <td class="td-zona">${prop.zona}</td>
+                        <td class="hide-mobile">${prop.habitaciones}</td>
+                        <td class="hide-mobile">${prop.superficie} m²</td>
+                        <td class="hide-mobile">
+                            <span class="portal-badge ${badgeClass}">${portal}</span>
+                        </td>
+                        <td>
+                            <a href="${prop.url}" target="_blank" style="color: var(--primary); font-weight: 700; text-decoration: none; font-size: 0.85rem;">VER ↗</a>
+                        </td>
+                    </tr>
                 `;
             }).join('');
+
+            html += `</tbody></table>`;
+            area.innerHTML = html;
         }
 
         function filterItems() {
