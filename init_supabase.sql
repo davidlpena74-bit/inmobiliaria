@@ -1,5 +1,5 @@
 -- TABLAS ESPECÍFICAS PARA EL PROYECTO INMOBILIARIA
--- Usamos el prefijo 'inm_' para no mezclar con otros datos de LaVozDelPueblo
+-- Usamos el prefijo 'inm_' para organizar los datos
 
 -- 1. Tabla de Municipios y Estadísticas
 CREATE TABLE IF NOT EXISTS inm_municipios (
