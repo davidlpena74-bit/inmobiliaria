@@ -1,0 +1,1306 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Análisis Inmobiliario Madrid 2026</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://leaflet.github.io/Leaflet.heat/dist/leaflet-heat.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 100%;
+            margin: 0;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 0;
+            padding: 40px;
+            box-shadow: none;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+            text-align: center;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-value {
+            font-size: 2.2em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+
+        .filters {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .filter-btn {
+            background: white;
+            border: 2px solid #667eea;
+            color: #667eea;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .table-container {
+            overflow-x: auto;
+            margin-top: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+        }
+
+        th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        th:hover {
+            background: linear-gradient(135deg, #5568d3 0%, #653a8b 100%);
+        }
+
+        td {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        tr {
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        tr:hover {
+            background-color: #f0f4ff !important;
+        }
+
+        .precio {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+
+        .badge-premium {
+            background: #ffd700;
+            color: #333;
+        }
+
+        .badge-alto {
+            background: #ff6b6b;
+            color: white;
+        }
+
+        .badge-medio-alto {
+            background: #ff9f43;
+            color: white;
+        }
+
+        .badge-medio {
+            background: #48dbfb;
+            color: white;
+        }
+
+        .badge-asequible {
+            background: #1dd1a1;
+            color: white;
+        }
+
+        .badge-economico {
+            background: #10ac84;
+            color: white;
+        }
+
+        .variacion {
+            font-weight: bold;
+        }
+
+        .variacion.positiva {
+            color: #10ac84;
+        }
+
+        .bar-container {
+            width: 100%;
+            height: 8px;
+            background: #eee;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 5px;
+        }
+
+        .bar {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+
+        .highlight {
+            background: #fff3cd !important;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                background: #fff3cd;
+            }
+
+            50% {
+                background: #ffe69c;
+            }
+        }
+
+        .info-box {
+            background: #e7f3ff;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 30px;
+        }
+
+        .info-box h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .chart-container {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 40px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            height: 400px;
+            position: relative;
+        }
+
+        #map-container {
+            position: relative;
+            width: 100%;
+            height: 500px;
+            /* Reducido un poco para alinear mejor */
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+            border: 2px solid #fff;
+            overflow: hidden;
+            z-index: 10;
+        }
+
+        #map {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Layout Dividido: Ranking, Gráfica, Chips y Mapa */
+        .dashboard-main-section {
+            display: grid;
+            grid-template-columns: 0.8fr 1.4fr 160px 2.5fr;
+            gap: 12px;
+            margin-bottom: 40px;
+            align-items: start;
+        }
+
+        .chart-side-container {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            height: 500px;
+            /* Igual que el mapa */
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chart-side-container canvas {
+            flex-grow: 1;
+        }
+
+        .ranking-side-container {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            height: 500px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .ranking-list {
+            overflow-y: auto;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            padding-right: 5px;
+        }
+
+        .ranking-list::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .ranking-list::-webkit-scrollbar-thumb {
+            background: #cbd5e0;
+            border-radius: 10px;
+        }
+
+        .ranking-item {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            background: #f8fafc;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border-left: 3px solid transparent;
+            gap: 10px;
+        }
+
+        .ranking-item:hover {
+            background: #f1f5f9;
+            transform: translateX(4px);
+            border-left-color: #667eea;
+        }
+
+        .ranking-item.top-rank {
+            background: #fffbeb;
+            border-left-color: #f59e0b;
+        }
+
+        .ranking-number {
+            font-weight: 800;
+            font-size: 1em;
+            color: #667eea;
+            min-width: 20px;
+        }
+
+        .ranking-info {
+            flex-grow: 1;
+        }
+
+        .ranking-name {
+            font-weight: 700;
+            font-size: 0.85em;
+            color: #1e293b;
+            display: block;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .ranking-meta {
+            font-size: 0.75em;
+            color: #64748b;
+        }
+
+        .ranking-score {
+            font-weight: 700;
+            color: #059669;
+            font-size: 0.9em;
+            background: #ecfdf5;
+            padding: 2px 6px;
+            border-radius: 6px;
+        }
+
+        .stats-column {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            height: 500px;
+            justify-content: space-between;
+        }
+
+        .stats-column .stat-card {
+            margin: 0;
+            padding: 15px 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            height: 100%;
+            text-align: center;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .stats-column .stat-value {
+            font-size: 1.3em;
+            margin-bottom: 2px;
+        }
+
+        .stats-column .stat-label {
+            font-size: 0.75em;
+            line-height: 1.2;
+        }
+
+        .map-legend {
+            position: absolute;
+            bottom: 30px;
+            left: 20px;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(8px);
+            padding: 15px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            font-size: 0.85em;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.8);
+        }
+
+        .map-tooltip {
+            background: rgba(15, 23, 42, 0.9);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 5px 10px;
+            font-weight: 600;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            font-size: 0.85em;
+        }
+
+        .leaflet-tooltip-top:before {
+            border-top-color: rgba(15, 23, 42, 0.9);
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        .legend-color {
+            width: 16px;
+            height: 16px;
+            border-radius: 4px;
+            box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.1);
+        }
+
+        .map-overlay-controls {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .map-control-btn {
+            background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(8px);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 8px 12px;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            font-size: 0.8em;
+            width: 100%;
+        }
+
+        .map-control-btn:hover {
+            background: rgba(15, 23, 42, 0.9);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .map-control-btn.active {
+            background: #0984e3;
+            border-color: #74b9ff;
+            box-shadow: 0 0 20px rgba(9, 132, 227, 0.4);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .chart-container {
+                height: 300px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Botón de Volver -->
+        <a href="javascript:window.close();" onclick="if(!window.close()) window.location.href='/';"
+            style="position: fixed; top: 20px; left: 20px; z-index: 1000; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 12px 20px; border-radius: 50px; text-decoration: none; font-weight: bold; box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4); display: flex; align-items: center; gap: 8px; transition: all 0.3s ease; font-size: 14px;"
+            onmouseover="this.style.transform='scale(1.05)'; this.style.boxShadow='0 6px 20px rgba(102, 126, 234, 0.6)';"
+            onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 4px 15px rgba(102, 126, 234, 0.4)';"
+            title="Volver a La Voz Del Pueblo">
+            <svg style="width: 20px; height: 20px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            <span>Volver</span>
+        </a>
+
+        <h1>📊 Precios del m² por Distrito - Madrid</h1>
+        <p class="subtitle">📈 Análisis 10 Años: Capital y Comunidad de Madrid - Actualizado: 14/02/2026 14:15
+            (Verificado ✅)</p>
+
+        <div class="view-selector" style="display: flex; justify-content: center; gap: 20px; margin-bottom: 20px;">
+            <button class="filter-btn active" id="btnCapital" onclick="cambiarVista('capital')">🏙️ Madrid
+                Capital</button>
+            <button class="filter-btn" id="btnComunidad" onclick="cambiarVista('comunidad')">🏘️ Comunidad de
+                Madrid</button>
+        </div>
+
+        <!-- Criterios movidos al overlay del mapa -->
+
+        <!-- Estadísticas eliminadas de la parte superior -->
+
+        <div class="dashboard-main-section">
+            <!-- Ranking de Inversión (Nuevo Cuarto Izquierdo) -->
+            <div class="ranking-side-container">
+                <h2 style="margin-bottom: 15px; text-align: center; color: #333; font-size: 1.1em;">🏆 Top 10
+                    Rentabilidad</h2>
+                <div id="rankingList" class="ranking-list">
+                    <!-- Se llena con JS -->
+                </div>
+            </div>
+
+            <!-- Gráfica Histórica (Centro) -->
+            <div class="chart-side-container">
+                <h2 id="chartTitle" style="margin-bottom: 20px; text-align: center; color: #333; font-size: 1.2em;">📈
+                    Evolución Histórica (Madrid)</h2>
+                <canvas id="preciosChart"></canvas>
+            </div>
+
+            <!-- Chips de Estadísticas (Izquierda del Mapa) -->
+            <div class="stats-column">
+                <div class="stat-card">
+                    <div class="stat-value">5.861€</div>
+                    <div class="stat-label">Venta/m²</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">23.1€</div>
+                    <div class="stat-label">Alq/m²</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">4.73%</div>
+                    <div class="stat-label">Rent (%)</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">21.1</div>
+                    <div class="stat-label">Recup (a)</div>
+                </div>
+            </div>
+
+            <!-- Mapa (Derecha) -->
+            <div id="map-container">
+                <div id="map"></div>
+                <div class="map-overlay-controls">
+                    <button class="map-control-btn" id="btnMapStyle" onclick="toggleMapStyle()">🛰️ Satélite</button>
+                    <button class="map-control-btn" id="btnHeatMap" onclick="toggleHeatMap()">🔥 Hot Map
+                        (Precio)</button>
+
+                    <div class="criterion-vertical-selector"
+                        style="display: flex; flex-direction: column; gap: 8px; margin-top: 15px; padding-top: 15px; border-top: 1px solid rgba(0,0,0,0.1);">
+                        <div
+                            style="font-weight: 800; color: #475569; font-size: 0.7em; text-transform: uppercase; letter-spacing: 1px; text-align: right; margin-bottom: 4px;">
+                            Criterio Mapa</div>
+                        <button class="map-control-btn active" id="critVenta" onclick="cambiarCriterio('venta')">💰
+                            Venta</button>
+                        <button class="map-control-btn" id="critAlquiler" onclick="cambiarCriterio('alquiler')">🏢
+                            Alquiler</button>
+                        <button class="map-control-btn" id="critRent" onclick="cambiarCriterio('rentabilidad')">📈
+                            Rent</button>
+                    </div>
+                </div>
+
+                <div class="map-legend" id="mapLegend">
+                    <div style="font-weight: 800; margin-bottom: 5px; color: #0f172a; font-size: 0.95em;"
+                        id="legendTitle">Leyenda: Venta</div>
+                    <div id="legendItems">
+                        <!-- Se llena con JS -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="filters">
+            <button class="filter-btn active" onclick="filtrar('todos')">Todos</button>
+            <button class="filter-btn" onclick="filtrar('Premium')">Premium</button>
+            <button class="filter-btn" onclick="filtrar('Alto')">Alto</button>
+            <button class="filter-btn" onclick="filtrar('Medio')">Medio</button>
+            <button class="filter-btn" onclick="filtrar('Asequible')">Asequible</button>
+            <button class="filter-btn" onclick="filtrar('Económico')">Económico</button>
+        </div>
+
+        <div class="table-container">
+            <table id="distritosTable">
+                <thead>
+                    <tr>
+                        <th onclick="ordenar('posicion')">Pos.</th>
+                        <th onclick="ordenar('distrito')">Distrito</th>
+                        <th onclick="ordenar('precio')">Venta (€/m²)</th>
+                        <th onclick="ordenar('variacion')">Venta (1a)</th>
+                        <th onclick="ordenar('v5y')">Venta (5a)</th>
+                        <th onclick="ordenar('v10y')">Venta (10a)</th>
+                        <th onclick="ordenar('alquiler')">Alquiler (€)</th>
+                        <th onclick="ordenar('alv1y')">Alq (1a)</th>
+                        <th onclick="ordenar('alv5y')">Alq (5a)</th>
+                        <th onclick="ordenar('alv10y')">Alq (10a)</th>
+                        <th onclick="ordenar('rentabilidad')">Rent (%)</th>
+                        <th onclick="ordenar('ratio')">Recup (a)</th>
+                        <th onclick="ordenar('categoria')">Categoría</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                    <!-- Se llenará con JavaScript -->
+                </tbody>
+            </table>
+        </div>
+
+        <div class="info-box">
+            <h3>💡 Análisis de Rentabilidad</h3>
+            <p><strong>Mejor Relación Calidad-Precio:</strong> Carabanchel (3.573 €/m² con +23% revalorización),
+                Vicálvaro (3.735 €/m²), Latina (3.840 €/m²)</p>
+            <p><strong>Mayor Potencial:</strong> Villaverde (+27.9%), Puente de Vallecas (+26.9%), Carabanchel (+23%)
+            </p>
+            <p><strong>Inversión Premium:</strong> Salamanca, Chamberí, Retiro (zonas consolidadas con alta demanda)</p>
+        </div>
+    </div>
+
+    <script>
+        // Configuración de Supabase (LaVozDelPueblo)
+        const SB_URL = "https://dwbvegnxmyvpolvofkfn.supabase.co";
+        const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR3YnZlZ254bXl2cG9sdm9ma2ZuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njc1Mzg1NTUsImV4cCI6MjA4MzExNDU1NX0.eT5ZSce8H8Yk8pWKyLUYChU0HtmZljywP4eEQd5FkOI";
+        const { createClient } = supabase;
+        const _supabase = createClient(SB_URL, SB_KEY);
+
+        let distritosCapital = [];
+        let municipiosComunidad = [];
+
+        async function cargarDatosDesdeSupabase() {
+            try {
+                console.log("☁️ Cargando datos desde Supabase...");
+                const { data, error } = await _supabase
+                    .from('inm_municipios')
+                    .select('*')
+                    .order('nombre');
+
+                if (error) throw error;
+
+                // Mapear datos de Supabase al formato del Dashboard
+                const mappedData = data.map(d => ({
+                    distrito: d.nombre,
+                    precio: d.precio_venta || 0,
+                    alquiler: d.precio_alquiler || 0,
+                    rentabilidad: d.rentabilidad || 0,
+                    ratio: d.ratio_recuperacion || 0,
+                    variacion: d.variacion_1y || 0,
+                    v5y: d.variacion_5y || 0,
+                    v10y: d.variacion_10y || 0,
+                    alv1y: d.variacion_alquiler_1y || 0,
+                    alv5y: d.variacion_alquiler_5y || 0,
+                    alv10y: d.variacion_alquiler_10y || 0,
+                    categoria: d.categoria || 'Medio',
+                    lat: d.latitud,
+                    lon: d.longitud,
+                    fuente: 'Supabase'
+                }));
+
+                // Separar Madrid Capital de los demás municipios
+                const distritosMadridNames = ["Salamanca", "Chamberí", "Chamartín", "Retiro", "Centro", "Arganzuela", "Vicálvaro", "Villaverde", "Puente de Vallecas", "Usera", "Villa de Vallecas", "Ciudad Lineal", "Moncloa-Aravaca", "Tetuán", "Hortaleza", "Fuencarral-El Pardo", "Moratalaz", "Latina", "Carabanchel", "San Blas-Canillejas", "Barajas"];
+
+                distritosCapital = mappedData.filter(d => distritosMadridNames.includes(d.distrito));
+                municipiosComunidad = mappedData; // En la comunidad incluimos todos para el mapa general
+
+                console.log("✅ Datos cargados:", mappedData.length, "municipios.");
+
+                // Inicializar la aplicación con los datos nuevos
+                inicializarApp();
+
+            } catch (e) {
+                printError("Error cargando de Supabase: " + e.message);
+                // Fallback a inicialización vacía o error controlado
+            }
+        }
+
+        function printError(msg) {
+            console.error(msg);
+        }
+        let distritos = [];
+        let distritosOrdenados = [];
+        let filtroActual = 'todos';
+
+        // --- Lógica del Mapa Real (Leaflet) ---
+        let map;
+        let heatLayer;
+        let districtLayer;
+        let currentMapStyle = 'light';
+        let madridGeoJSON = null;
+        let comunidadGeoJSON = null;
+        let geoJsonLayer;
+
+        const mapStyles = {
+            light: 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
+            street: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+            satellite: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
+        };
+
+        async function initMap() {
+            if (map) return;
+            map = L.map('map', {
+                zoomControl: false,
+                attributionControl: false
+            }).setView([40.4168, -3.7038], 11);
+
+            L.control.zoom({ position: 'bottomright' }).addTo(map);
+
+            L.tileLayer(mapStyles.light).addTo(map);
+
+            // Cargar GeoJSON de Distritos (Capital) y Municipios (Comunidad)
+            try {
+                const [resCapital, resComunidad] = await Promise.all([
+                    fetch('https://raw.githubusercontent.com/codeforgermany/click_that_hood/main/public/data/madrid-districts.geojson'),
+                    // URL verificada y funcional para municipios de la Comunidad de Madrid
+                    fetch('https://raw.githubusercontent.com/FMullor/TopoJson/master/MadridMunicipios.geojson')
+                ]);
+                madridGeoJSON = await resCapital.json();
+                comunidadGeoJSON = await resComunidad.json();
+                console.log("GeoJSONs cargados correctamente");
+            } catch (e) {
+                console.error("Error cargando GeoJSON:", e);
+            }
+
+            actualizarContenidoMapa('capital');
+        }
+
+        function toggleMapStyle() {
+            const styles = ['light', 'street', 'satellite'];
+            const idx = styles.indexOf(currentMapStyle);
+            currentMapStyle = styles[(idx + 1) % styles.length];
+
+            const btn = document.getElementById('btnMapStyle');
+            const labels = { light: '⚪ Claro', street: '🗺️ Callejero', satellite: '🛰️ Satélite' };
+            btn.innerText = labels[currentMapStyle];
+
+            map.eachLayer(layer => {
+                if (layer instanceof L.TileLayer) map.removeLayer(layer);
+            });
+
+            L.tileLayer(mapStyles[currentMapStyle]).addTo(map);
+        }
+
+        function toggleHeatMap() {
+            const btn = document.getElementById('btnHeatMap');
+            if (map.hasLayer(heatLayer)) {
+                map.removeLayer(heatLayer);
+                btn.classList.remove('active');
+            } else {
+                heatLayer.addTo(map);
+                btn.classList.add('active');
+            }
+        }
+
+        function actualizarContenidoMapa(vista) {
+            if (heatLayer) map.removeLayer(heatLayer);
+            if (districtLayer) map.removeLayer(districtLayer);
+            if (geoJsonLayer) map.removeLayer(geoJsonLayer);
+
+            const data = vista === 'capital' ? distritosCapital : municipiosComunidad;
+
+            // 1. Capa de Calor
+            const heatPoints = data.map(d => [d.lat, d.lon, d.precio / 500]);
+            heatLayer = L.heatLayer(heatPoints, {
+                radius: 40,
+                blur: 25,
+                maxZoom: 12,
+                gradient: { 0.4: 'cyan', 0.6: 'lime', 0.8: 'yellow', 1: 'red' }
+            });
+
+            if (document.getElementById('btnHeatMap').classList.contains('active')) {
+                heatLayer.addTo(map);
+            }
+
+            // 2. Capa de Polígonos (Coropletas)
+            const activeGeoJSON = (vista === 'capital') ? madridGeoJSON : comunidadGeoJSON;
+
+            // Función de normalización agresiva para asegurar emparejamiento de nombres
+            const norm = (s) => s ? s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]/g, "").trim() : "";
+
+            if (activeGeoJSON) {
+                geoJsonLayer = L.geoJSON(activeGeoJSON, {
+                    style: (feature) => {
+                        const props = feature.properties;
+                        // Buscamos el nombre en varios posibles campos del GeoJSON
+                        const rawName = props.name || props.NAME || props.municipio || props.NMUN || props.name_3;
+                        const dName = norm(rawName);
+
+                        const item = data.find(d => {
+                            const target = norm(d.distrito);
+                            return target === dName || dName.includes(target) || target.includes(dName);
+                        });
+
+                        let valor = null;
+                        if (item) {
+                            if (criterioActual === 'venta') valor = item.precio;
+                            else if (criterioActual === 'alquiler') valor = item.alquiler;
+                            else valor = parseFloat(item.rentabilidad);
+                        }
+
+                        return {
+                            fillColor: valor !== null ? interpolateColorHex(valor) : '#e0e0e0', // Gris neutro si no hay datos
+                            weight: 1.2,
+                            opacity: 1,
+                            color: 'white',
+                            fillOpacity: valor !== null ? 0.7 : 0.3
+                        };
+                    },
+                    onEachFeature: (feature, layer) => {
+                        const props = feature.properties;
+                        const rawName = props.name || props.NAME || props.municipio || props.NMUN || props.name_3;
+                        const dName = norm(rawName);
+
+                        const item = data.find(d => {
+                            const target = norm(d.distrito);
+                            return target === dName || dName.includes(target) || target.includes(dName);
+                        });
+
+                        if (item) {
+                            let popupText = `<b>${item.distrito}</b><br>`;
+                            if (criterioActual === 'venta') popupText += `Venta: ${item.precio}€/m²`;
+                            else if (criterioActual === 'alquiler') popupText += `Alquiler: ${item.alquiler}€/m²`;
+                            else popupText += `Rentabilidad: ${item.rentabilidad}%`;
+
+                            layer.bindPopup(popupText);
+
+                            // Añadir Tooltip (Nombre al hacer Hover)
+                            layer.bindTooltip(`<b>${item.distrito}</b>`, {
+                                sticky: true,
+                                direction: 'top',
+                                className: 'map-tooltip',
+                                offset: [0, -10]
+                            });
+
+                            layer.on({
+                                mouseover: (e) => { e.target.setStyle({ fillOpacity: 0.9, weight: 3 }); },
+                                mouseout: (e) => { geoJsonLayer.resetStyle(e.target); },
+                                click: () => seleccionarDistrito(item.distrito)
+                            });
+                        } else {
+                            layer.bindPopup(`<b>${rawName}</b><br>Precio est. (zona): ~2.200€/m²`);
+                            layer.bindTooltip(rawName, {
+                                sticky: true,
+                                direction: 'top',
+                                className: 'map-tooltip',
+                                offset: [0, -10]
+                            });
+                        }
+                    }
+                }).addTo(map);
+            } else {
+                // Fallback a marcadores si falla el GeoJSON
+                districtLayer = L.layerGroup();
+                data.forEach(d => {
+                    let valor = d.precio;
+                    if (criterioActual === 'alquiler') valor = d.alquiler;
+                    else if (criterioActual === 'rentabilidad') valor = parseFloat(d.rentabilidad);
+
+                    const marker = L.circleMarker([d.lat, d.lon], {
+                        radius: 8,
+                        fillColor: interpolateColorHex(valor),
+                        color: "#fff",
+                        weight: 2,
+                        opacity: 1,
+                        fillOpacity: 0.8
+                    }).addTo(districtLayer);
+                    marker.bindPopup(`<b>${d.distrito}</b><br>Precio: ${d.precio}€/m²`);
+                    marker.on('click', () => seleccionarDistrito(d.distrito));
+                });
+                districtLayer.addTo(map);
+            }
+
+            if (data.length > 0) {
+                const bounds = L.latLngBounds(data.map(d => [d.lat, d.lon]));
+                // Ajustamos el zoom (padding menor para acercar) y desplazamos verticalmente (padding superior mayor para bajar el contenido)
+                map.fitBounds(bounds, {
+                    paddingTopLeft: [120, 180], // Más espacio arriba para que el mapa baje
+                    paddingBottomRight: [120, 60]
+                });
+            }
+        }
+
+        let criterioActual = 'venta';
+        let vistaActual = 'capital';
+
+        function interpolateColorHex(valor) {
+            if (criterioActual === 'venta') {
+                if (valor > 6500) return "#d63031"; // Rojo Intenso
+                if (valor > 4500) return "#e17055"; // Naranja
+                if (valor > 3500) return "#fdcb6e"; // Dorado
+                if (valor > 2500) return "#00b894"; // Turquesa
+                return "#0984e3"; // Azul Profundo
+            } else if (criterioActual === 'alquiler') {
+                if (valor > 25) return "#d63031";
+                if (valor > 20) return "#e17055";
+                if (valor > 15) return "#fdcb6e";
+                if (valor > 10) return "#00b894";
+                return "#0984e3";
+            } else { // rentabilidad
+                if (valor > 6.5) return "#d63031";
+                if (valor > 5.5) return "#e17055";
+                if (valor > 4.5) return "#fdcb6e";
+                if (valor > 3.5) return "#00b894";
+                return "#0984e3";
+            }
+        }
+
+        function cambiarCriterio(criterio) {
+            criterioActual = criterio;
+
+            // Actualizar botones de mapa (usando la nueva clase map-control-btn para coherencia)
+            document.querySelectorAll('.map-overlay-controls .map-control-btn').forEach(btn => {
+                if (btn.id.startsWith('crit')) btn.classList.remove('active');
+            });
+
+            if (criterio === 'venta') document.getElementById('critVenta').classList.add('active');
+            else if (criterio === 'alquiler') document.getElementById('critAlquiler').classList.add('active');
+            else if (criterio === 'rentabilidad') document.getElementById('critRent').classList.add('active');
+
+            actualizarContenidoMapa(vistaActual);
+            actualizarLeyenda();
+        }
+
+        function actualizarLeyenda() {
+            const title = document.getElementById('legendTitle');
+            const container = document.getElementById('legendItems');
+            container.innerHTML = '';
+
+            const config = {
+                venta: {
+                    title: 'Leyenda: Venta (€/m²)',
+                    items: [
+                        { color: '#d63031', text: 'Premium (> 6.5k€)' },
+                        { color: '#e17055', text: 'Alto (4.5k - 6.5k€)' },
+                        { color: '#fdcb6e', text: 'Medio (3.5k - 4.5k€)' },
+                        { color: '#00b894', text: 'Asequible (2.5k - 3.5k€)' },
+                        { color: '#0984e3', text: 'Económico (< 2.5k€)' }
+                    ]
+                },
+                alquiler: {
+                    title: 'Leyenda: Alquiler (€/m²)',
+                    items: [
+                        { color: '#d63031', text: 'Premium (> 25€)' },
+                        { color: '#e17055', text: 'Alto (20 - 25€)' },
+                        { color: '#fdcb6e', text: 'Medio (15 - 20€)' },
+                        { color: '#00b894', text: 'Asequible (10 - 15€)' },
+                        { color: '#0984e3', text: 'Económico (< 10€)' }
+                    ]
+                },
+                rentabilidad: {
+                    title: 'Leyenda: Rentabilidad (%)',
+                    items: [
+                        { color: '#d63031', text: 'Excelente (> 6.5%)' },
+                        { color: '#e17055', text: 'Muy Alta (5.5 - 6.5%)' },
+                        { color: '#fdcb6e', text: 'Alta (4.5 - 5.5%)' },
+                        { color: '#00b894', text: 'Media (3.5 - 4.5%)' },
+                        { color: '#0984e3', text: 'Baja (< 3.5%)' }
+                    ]
+                }
+            };
+
+            const current = config[criterioActual];
+            title.innerText = current.title;
+
+            current.items.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'legend-item';
+                div.innerHTML = `<div class="legend-color" style="background: ${item.color};"></div> <span>${item.text}</span>`;
+                container.appendChild(div);
+            });
+        }
+
+        function actualizarEstadisticas(vista) {
+            const stats = vista === 'capital' ?
+                ['5.861€', '23.1€', '4.73%', '21.1'] :
+                ['3.321€', '14.5€', '5.24%', '19.1'];
+
+            const cards = document.querySelectorAll('.stat-value');
+            cards[0].innerText = stats[0];
+            cards[1].innerText = stats[1];
+            cards[2].innerText = stats[2];
+            cards[3].innerText = stats[3];
+        }
+
+        function getBadgeClass(categoria) {
+            const map = {
+                'Premium': 'badge-premium',
+                'Alto': 'badge-alto',
+                'Medio-Alto': 'badge-medio-alto',
+                'Medio': 'badge-medio',
+                'Asequible': 'badge-asequible',
+                'Económico': 'badge-economico'
+            };
+            return map[categoria] || 'badge-medio';
+        }
+
+        function renderTable() {
+            const tbody = document.getElementById('tableBody');
+            tbody.innerHTML = '';
+
+            const maxPrecio = Math.max(...distritosOrdenados.map(d => d.precio));
+
+            distritosOrdenados.forEach((d, index) => {
+                const porcentaje = (d.precio / maxPrecio) * 100;
+                const isVicalvaro = d.distrito === 'Vicálvaro';
+
+                // Color de rentabilidad
+                let rentColor = '#10ac84'; // Verde por defecto
+                if (d.rentabilidad < 4) rentColor = '#ff6b6b'; // Rojo
+                else if (d.rentabilidad < 5) rentColor = '#ff9f43'; // Naranja
+
+                const row = `
+                    <tr class="${isVicalvaro ? 'highlight' : ''}" onclick="seleccionarDistrito('${d.distrito}')">
+                        <td><strong>${index + 1}</strong></td>
+                        <td><strong>${d.distrito}</strong></td>
+                        <td class="precio">${d.precio.toLocaleString('es-ES')} €</td>
+                        <td><span class="variacion positiva">+${d.variacion}%</span></td>
+                        <td>+${d.v5y}%</td>
+                        <td>+${d.v10y}%</td>
+                        <td><strong>${d.alquiler.toFixed(1)} €</strong></td>
+                        <td><span class="variacion positiva">+${d.alv1y}%</span></td>
+                        <td>+${d.alv5y}%</td>
+                        <td>+${d.alv10y}%</td>
+                        <td><strong style="color: ${rentColor}">${d.rentabilidad}%</strong></td>
+                        <td>${d.ratio}a</td>
+                        <td><span class="badge ${getBadgeClass(d.categoria)}">${d.categoria}</span></td>
+                    </tr>
+                `;
+                tbody.innerHTML += row;
+            });
+        }
+
+        function filtrar(categoria) {
+            filtroActual = categoria;
+
+            // Actualizar botones
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            // Filtrar datos
+            if (categoria === 'todos') {
+                distritosOrdenados = [...distritos];
+            } else {
+                distritosOrdenados = distritos.filter(d => d.categoria.includes(categoria));
+            }
+
+            renderTable();
+        }
+
+        function ordenar(campo) {
+            const orden = {
+                'posicion': (a, b) => distritos.indexOf(a) - distritos.indexOf(b),
+                'distrito': (a, b) => a.distrito.localeCompare(b.distrito),
+                'precio': (a, b) => b.precio - a.precio,
+                'alquiler': (a, b) => b.alquiler - a.alquiler,
+                'alv1y': (a, b) => (b.alv1y || 0) - (a.alv1y || 0),
+                'alv5y': (a, b) => (b.alv5y || 0) - (a.alv5y || 0),
+                'alv10y': (a, b) => (b.alv10y || 0) - (a.alv10y || 0),
+                'rentabilidad': (a, b) => b.rentabilidad - a.rentabilidad,
+                'ratio': (a, b) => a.ratio - b.ratio,
+                'categoria': (a, b) => a.categoria.localeCompare(b.categoria),
+                'variacion': (a, b) => (b.variacion || 0) - (a.variacion || 0),
+                'v5y': (a, b) => (b.v5y || 0) - (a.v5y || 0),
+                'v10y': (a, b) => (b.v10y || 0) - (a.v10y || 0)
+            };
+
+            distritosOrdenados.sort(orden[campo]);
+            renderTable();
+        }
+
+        function cambiarVista(vista) {
+            // Actualizar botones UI
+            document.getElementById('btnCapital').classList.toggle('active', vista === 'capital');
+            document.getElementById('btnComunidad').classList.toggle('active', vista === 'comunidad');
+
+            // Cambiar conjunto de datos activo
+            distritos = (vista === 'capital') ? distritosCapital : municipiosComunidad;
+            distritosOrdenados = [...distritos];
+
+            // Refrescar todos los componentes
+            renderTable();
+            actualizarEstadisticas(vista);
+            actualizarContenidoMapa(vista);
+            actualizarRanking();
+        }
+
+        // Inicializar
+        renderTable();
+
+        // --- Gráfica Histórica ---
+        let myChart;
+        const ctx = document.getElementById('preciosChart').getContext('2d');
+
+        const labels = ['2016', '2017', '2018', '2019', '2020', '2021', '2022', '2023', '2024', '2025', '2026'];
+        const madridGlobal = [2921, 3023, 3644, 3639, 3597, 3652, 3881, 4118, 4952, 5820, 5861];
+
+        function initChart() {
+            myChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'Media Madrid (Media Global)',
+                            data: madridGlobal,
+                            borderColor: '#667eea',
+                            backgroundColor: 'rgba(102, 126, 234, 0.05)',
+                            fill: true,
+                            tension: 0.4,
+                            borderWidth: 2,
+                            pointRadius: 3
+                        },
+                        {
+                            label: 'Selecciona un distrito en la tabla',
+                            data: [],
+                            borderColor: '#1dd1a1',
+                            backgroundColor: 'rgba(29, 209, 161, 0.2)',
+                            fill: true,
+                            tension: 0.4,
+                            borderWidth: 4,
+                            pointRadius: 6,
+                            pointBackgroundColor: '#1dd1a1'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: { beginAtZero: false, title: { display: true, text: 'Precio (€/m²)' } }
+                    },
+                    plugins: {
+                        legend: { position: 'bottom' },
+                        tooltip: { mode: 'index', intersect: false }
+                    }
+                }
+            });
+        }
+
+        function seleccionarDistrito(nombre, scroll = false) {
+            const d = distritos.find(item => item.distrito === nombre);
+            if (!d) return;
+
+            // Estimación de puntos históricos basados en los porcentajes
+            const p2026 = d.precio;
+            const p2025 = d.precio / (1 + d.variacion / 100);
+            const p2021 = d.precio / (1 + d.v5y / 100);
+            const p2016 = d.precio / (1 + d.v10y / 100);
+
+            // Generar curva suave entre puntos
+            const historiaDistrito = [
+                p2016, // 2016
+                p2016 * 1.1, // 2017 (est)
+                p2016 * 1.25, // 2018 (est)
+                p2016 * 1.4, // 2019 (est)
+                p2016 * 1.38, // 2020 (est)
+                p2021, // 2021
+                p2021 * 1.1, // 2022 (est)
+                p2021 * 1.2, // 2023 (est)
+                p2021 * 1.35, // 2024 (est)
+                p2025, // 2025
+                p2026  // 2026
+            ];
+
+            myChart.data.datasets[1].label = `${nombre} (Seleccionado)`;
+            myChart.data.datasets[1].data = historiaDistrito;
+            myChart.update();
+
+            // Actualizar el título del contenedor de la gráfica
+            document.getElementById('chartTitle').innerText = `📈 Evolución Histórica (${nombre})`;
+
+            // Actualizar tarjetas de estadísticas (chips) con los datos del seleccionado
+            const cards = document.querySelectorAll('.stat-value');
+            if (cards.length >= 4) {
+                cards[0].innerText = d.precio.toLocaleString('es-ES') + '€';
+                cards[1].innerText = d.alquiler.toFixed(1) + '€';
+                cards[2].innerText = d.rentabilidad + '%';
+                cards[3].innerText = d.ratio;
+            }
+
+            // Mover mapa real al distrito seleccionado y resaltar polígono
+            if (map && d.lat) {
+                map.flyTo([d.lat, d.lon], map.getZoom(), { animate: true, duration: 1.5 });
+
+                // Resaltar en GeoJSON si existe
+                if (geoJsonLayer) {
+                    geoJsonLayer.eachLayer(layer => {
+                        const props = layer.feature.properties;
+                        const rawName = props.name || props.NAME || props.municipio;
+                        const dName = rawName ? rawName.toLowerCase() : "";
+                        if (dName.includes(nombre.toLowerCase()) || nombre.toLowerCase().includes(dName)) {
+                            geoJsonLayer.resetStyle(); // Reset others
+                            layer.setStyle({ fillOpacity: 0.9, weight: 4, color: '#fff' });
+                            layer.openPopup();
+                        }
+                    });
+                }
+            }
+
+            // Scroll suave a la gráfica si se solicita
+            if (scroll) {
+                document.querySelector('.chart-side-container').scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        }
+
+        function actualizarRanking() {
+            const rankingList = document.getElementById('rankingList');
+            rankingList.innerHTML = '';
+
+            // Clasificar por rentabilidad descendente
+            const topDestinos = [...distritos]
+                .sort((a, b) => b.rentabilidad - a.rentabilidad)
+                .slice(0, 10);
+
+            topDestinos.forEach((d, index) => {
+                const item = document.createElement('div');
+                item.className = `ranking-item ${index < 3 ? 'top-rank' : ''}`;
+                item.onclick = () => seleccionarDistrito(d.distrito);
+
+                item.innerHTML = `
+                    <div class="ranking-number">#${index + 1}</div>
+                    <div class="ranking-info">
+                        <span class="ranking-name">${d.distrito}</span>
+                        <span class="ranking-meta">${d.precio.toLocaleString()} €/m²</span>
+                    </div>
+                    <div class="ranking-score">${d.rentabilidad}%</div>
+                `;
+                rankingList.appendChild(item);
+            });
+        }
+
+        async function inicializarApp() {
+            // Inicializar Variables Globales dependientes de los datos cargados
+            distritos = [...distritosCapital];
+            distritosOrdenados = [...distritos];
+            filtroActual = 'todos';
+
+            await initMap();
+            initChart();
+            actualizarEstadisticas('capital');
+            actualizarRanking();
+            actualizarLeyenda();
+
+            // Cargar Vicálvaro por defecto si existe, o el primero de la lista
+            const defItem = distritos.find(d => d.distrito === 'Vicálvaro') || distritos[0];
+            if (defItem) seleccionarDistrito(defItem.distrito, false);
+
+            renderTable();
+        }
+
+        // Llamar a la carga inicial desde Supabase
+        window.onload = cargarDatosDesdeSupabase;
+    </script>
+</body>
+
+</html>

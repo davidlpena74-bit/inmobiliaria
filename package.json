@@ -1,0 +1,24 @@
+{
+    "name": "agente-precios-inmobiliarios",
+    "version": "1.0.0",
+    "description": "Agente especializado en búsqueda de precios inmobiliarios para la Comunidad de Madrid",
+    "main": "agente_precios.js",
+    "scripts": {
+        "start": "node agente_precios.js",
+        "test": "node agente_precios.js"
+    },
+    "keywords": [
+        "inmobiliaria",
+        "precios",
+        "madrid",
+        "scraping",
+        "supabase"
+    ],
+    "author": "La Voz Del Pueblo",
+    "license": "MIT",
+    "dependencies": {
+        "@supabase/supabase-js": "^2.39.0",
+        "axios": "^1.6.0",
+        "cheerio": "^1.0.0-rc.12"
+    }
+}
