@@ -392,7 +392,7 @@
                 const { data, error } = await _supabase
                     .from('inm_propiedades')
                     .select('*')
-                    .order('created_at', { ascending: false });
+                    .order('fecha_captura', { ascending: false });
 
                 if (error) throw error;
 
@@ -451,7 +451,7 @@
                                 <span class="detail-label">m² const.</span>
                             </div>
                             <div class="detail-item">
-                                <span class="detail-value">${prop.caracteristicas?.banos || 1}</span>
+                                <span class="detail-value">${prop.banos || prop.caracteristicas?.banos || 1}</span>
                                 <span class="detail-label">Baños</span>
                             </div>
                         </div>
