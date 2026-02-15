@@ -30,17 +30,19 @@
             background: linear-gradient(135deg, #f0f4ff 0%, #e5eaff 100%);
             color: var(--dark);
             min-height: 100vh;
-            padding: 40px 20px;
+            padding: 20px;
+            /* Reducido para maximizar espacio */
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 100%;
+            /* Uso de toda la pantalla */
             margin: 0 auto;
         }
 
         header {
             text-align: center;
-            margin-bottom: 50px;
+            margin-bottom: 30px;
             position: relative;
         }
 
@@ -147,30 +149,32 @@
         /* Tabla de Propiedades */
         .table-wrapper {
             background: white;
-            border-radius: 24px;
-            overflow: hidden;
+            border-radius: 12px;
+            /* Un poco más cuadrado para modo tabla masiva */
+            overflow-x: auto;
             box-shadow: 0 15px 40px rgba(0, 0, 0, 0.04);
             border: 1px solid rgba(0, 0, 0, 0.03);
-            margin-bottom: 40px;
+            margin-bottom: 20px;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
             text-align: left;
+            table-layout: auto;
         }
 
         th {
             background: #f8fafc;
-            padding: 18px 20px;
+            padding: 12px 15px;
             font-weight: 700;
             color: #64748b;
-            font-size: 0.85rem;
+            font-size: 0.75rem;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 0.5px;
             border-bottom: 2px solid #edf2f7;
             cursor: pointer;
-            transition: background 0.2s;
+            white-space: nowrap;
         }
 
         th:hover {
@@ -178,9 +182,9 @@
         }
 
         td {
-            padding: 16px 20px;
+            padding: 12px 15px;
             border-bottom: 1px solid #f1f5f9;
-            font-size: 0.95rem;
+            font-size: 0.85rem;
             vertical-align: middle;
         }
 
@@ -198,10 +202,30 @@
             white-space: nowrap;
         }
 
+        .td-old-price {
+            text-decoration: line-through;
+            color: #94a3b8;
+            font-size: 0.75rem;
+            display: block;
+        }
+
+        .discount-badge {
+            background: #ff7675;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 800;
+            font-size: 0.7rem;
+            margin-left: 5px;
+        }
+
         .td-title {
             font-weight: 600;
             color: #475569;
-            max-width: 400px;
+            max-width: 300px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
 
         .td-title a {
@@ -367,12 +391,15 @@
                 <table>
                     <thead>
                         <tr>
-                            <th>Precio</th>
+                            <th>Fuente</th>
+                            <th>Precio Actual</th>
+                            <th>P. Anterior</th>
+                            <th>DTO.</th>
                             <th>Propiedad</th>
                             <th>Zona</th>
-                            <th class="hide-mobile">Hab.</th>
-                            <th class="hide-mobile">m²</th>
-                            <th class="hide-mobile">Portal</th>
+                            <th>Hab.</th>
+                            <th>Baños</th>
+                            <th>m²</th>
                             <th>Acción</th>
                         </tr>
                     </thead>
@@ -383,20 +410,28 @@
                 const portal = prop.caracteristicas?.portal || 'Idealista';
                 const badgeClass = `badge-${portal.toLowerCase()}`;
 
+                // Cálculo de Descuento
+                let descuento = "";
+                if (prop.precio_anterior && prop.precio_anterior > prop.precio) {
+                    const pct = Math.round(((prop.precio_anterior - prop.precio) / prop.precio_anterior) * 100);
+                    descuento = `<span class="discount-badge">-${pct}%</span>`;
+                }
+
                 return `
                     <tr>
+                        <td><span class="portal-badge ${badgeClass}">${portal}</span></td>
                         <td class="td-price">${prop.precio.toLocaleString()}€</td>
-                        <td class="td-title">
+                        <td class="td-old-price">${prop.precio_anterior ? prop.precio_anterior.toLocaleString() + '€' : '-'}</td>
+                        <td>${descuento}</td>
+                        <td class="td-title" title="${prop.titulo}">
                             <a href="${prop.url}" target="_blank">${prop.titulo}</a>
                         </td>
                         <td class="td-zona">${prop.zona}</td>
-                        <td class="hide-mobile">${prop.habitaciones}</td>
-                        <td class="hide-mobile">${prop.superficie} m²</td>
-                        <td class="hide-mobile">
-                            <span class="portal-badge ${badgeClass}">${portal}</span>
-                        </td>
+                        <td>${prop.habitaciones}</td>
+                        <td>${prop.banos || prop.caracteristicas?.banos || 1}</td>
+                        <td>${prop.superficie} m²</td>
                         <td>
-                            <a href="${prop.url}" target="_blank" style="color: var(--primary); font-weight: 700; text-decoration: none; font-size: 0.85rem;">VER ↗</a>
+                            <a href="${prop.url}" target="_blank" style="color: var(--primary); font-weight: 700; text-decoration: none; font-size: 0.8rem;">VER ↗</a>
                         </td>
                     </tr>
                 `;
