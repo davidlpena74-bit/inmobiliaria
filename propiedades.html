@@ -393,9 +393,9 @@
                         <tr>
                             <th>Fuente</th>
                             <th>Precio Actual</th>
-                            <th>P. Anterior</th>
                             <th>DTO.</th>
-                            <th>Propiedad</th>
+                            <th>Tipo</th>
+                            <th>Calle</th>
                             <th>Zona</th>
                             <th>Hab.</th>
                             <th>Baños</th>
@@ -417,15 +417,18 @@
                     descuento = `<span class="discount-badge">-${pct}%</span>`;
                 }
 
+                const calle = prop.caracteristicas?.calle || prop.zona;
+
                 return `
                     <tr>
                         <td><span class="portal-badge ${badgeClass}">${portal}</span></td>
-                        <td class="td-price">${prop.precio.toLocaleString()}€</td>
-                        <td class="td-old-price">${prop.precio_anterior ? prop.precio_anterior.toLocaleString() + '€' : '-'}</td>
-                        <td>${descuento}</td>
-                        <td class="td-title" title="${prop.titulo}">
-                            <a href="${prop.url}" target="_blank">${prop.titulo}</a>
+                        <td class="td-price">
+                            ${prop.precio.toLocaleString()}€
+                            <div class="td-old-price">${prop.precio_anterior ? prop.precio_anterior.toLocaleString() + '€' : ''}</div>
                         </td>
+                        <td>${descuento}</td>
+                        <td><a href="${prop.url}" target="_blank" style="text-decoration: none; color: inherit;">${prop.titulo}</a></td>
+                        <td class="td-title" title="${calle}">${calle}</td>
                         <td class="td-zona">${prop.zona}</td>
                         <td>${prop.habitaciones}</td>
                         <td>${prop.banos || prop.caracteristicas?.banos || 1}</td>
