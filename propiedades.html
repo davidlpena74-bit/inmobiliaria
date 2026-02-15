@@ -324,11 +324,6 @@
                 <input type="text" id="searchInput" placeholder="Buscar por calle o distrito..."
                     onkeyup="filterItems()">
             </div>
-            <select class="filter-select" id="portalFilter" onchange="filterItems()">
-                <option value="todos">Todos los portales</option>
-                <option value="Idealista">Idealista</option>
-                <option value="Fotocasa">Fotocasa</option>
-            </select>
             <select class="filter-select" id="priceFilter" onchange="filterItems()">
                 <option value="0">Cualquier precio</option>
                 <option value="200000">
@@ -391,7 +386,6 @@
                 <table>
                     <thead>
                         <tr>
-                            <th>Fuente</th>
                             <th>Precio Actual</th>
                             <th>DTO.</th>
                             <th>Tipo</th>
@@ -421,7 +415,6 @@
 
                 return `
                     <tr>
-                        <td><span class="portal-badge ${badgeClass}">${portal}</span></td>
                         <td class="td-price">
                             ${prop.precio.toLocaleString()}€
                             <div class="td-old-price">${prop.precio_anterior ? prop.precio_anterior.toLocaleString() + '€' : ''}</div>
@@ -446,17 +439,15 @@
 
         function filterItems() {
             const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-            const portal = document.getElementById('portalFilter').value;
             const maxPrice = parseInt(document.getElementById('priceFilter').value);
 
             const filtered = allProperties.filter(p => {
                 const matchSearch = p.titulo.toLowerCase().includes(searchTerm) || p.zona.toLowerCase().includes(searchTerm);
-                const matchPortal = portal === 'todos' || (p.caracteristicas?.portal || 'Idealista') === portal;
                 const matchPrice = maxPrice === 0 || p.precio <= maxPrice;
-                return matchSearch && matchPortal && matchPrice;
+                return matchSearch && matchPrice;
             });
 
-            renderGrid(filtered);
+            renderTable(filtered);
         }
 
         window.onload = loadProperties;
