@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listado de Propiedades - Madrid 2026</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #667eea;
+            --secondary: #764ba2;
+            --accent: #1dd1a1;
+            --dark: #1e293b;
+            --light: #f8fafc;
+            --glass: rgba(255, 255, 255, 0.9);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Outfit', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+            outline: none !important;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f0f4ff 0%, #e5eaff 100%);
+            color: var(--dark);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 50px;
+            position: relative;
+        }
+
+        .back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 100;
+            background: white;
+            color: var(--primary);
+            padding: 12px 24px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+        }
+
+        .back-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(102, 126, 234, 0.2);
+            background: var(--primary);
+            color: white;
+        }
+
+        h1 {
+            font-size: 3rem;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .status-bar {
+            background: var(--glass);
+            padding: 15px 30px;
+            border-radius: 20px;
+            display: inline-flex;
+            gap: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            backdrop-filter: blur(10px);
+            margin-bottom: 30px;
+        }
+
+        .status-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+            color: #64748b;
+        }
+
+        .status-item span {
+            color: var(--primary);
+        }
+
+        /* Buscador y Filtros */
+        .controls {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 300px;
+            position: relative;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 18px 25px;
+            border-radius: 20px;
+            border: none;
+            background: white;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .search-box input:focus {
+            box-shadow: 0 15px 35px rgba(102, 126, 234, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .filter-select {
+            padding: 0 25px;
+            border-radius: 20px;
+            border: none;
+            background: white;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            font-weight: 600;
+            color: #64748b;
+            cursor: pointer;
+        }
+
+        /* Grid de Propiedades */
+        .property-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+        }
+
+        .property-card {
+            background: white;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.04);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            border: 1px solid rgba(0, 0, 0, 0.03);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .property-card:hover {
+            transform: translateY(-12px);
+            box-shadow: 0 30px 60px rgba(102, 126, 234, 0.15);
+        }
+
+        .card-header {
+            padding: 25px;
+            position: relative;
+            flex-grow: 1;
+        }
+
+        .property-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(29, 209, 161, 0.1);
+            color: var(--accent);
+            padding: 6px 14px;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .property-price {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: baseline;
+            gap: 5px;
+        }
+
+        .property-price span {
+            font-size: 1rem;
+            color: #94a3b8;
+        }
+
+        .property-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #475569;
+            margin-bottom: 15px;
+            line-height: 1.4;
+        }
+
+        .property-location {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #64748b;
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+        }
+
+        .card-details {
+            padding: 20px 25px;
+            background: #f8fafc;
+            display: flex;
+            justify-content: space-between;
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .detail-item {
+            text-align: center;
+        }
+
+        .detail-value {
+            display: block;
+            font-weight: 700;
+            color: var(--dark);
+            font-size: 1rem;
+        }
+
+        .detail-label {
+            font-size: 0.75rem;
+            color: #94a3b8;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        .card-footer {
+            padding: 20px 25px;
+        }
+
+        .view-btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 16px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.2);
+        }
+
+        .view-btn:hover {
+            opacity: 0.95;
+            transform: scale(1.02);
+            box-shadow: 0 15px 30px rgba(102, 126, 234, 0.3);
+        }
+
+        .portal-tag {
+            font-size: 0.7rem;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-weight: 700;
+            margin-right: 8px;
+        }
+
+        .tag-idealista {
+            background: #fee2e2;
+            color: #ef4444;
+        }
+
+        .tag-fotocasa {
+            background: #e0e7ff;
+            color: #6366f1;
+        }
+
+        /* Loading Animation */
+        .loader {
+            display: grid;
+            place-items: center;
+            height: 300px;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #e2e8f0;
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 50px;
+            background: white;
+            border-radius: 30px;
+            grid-column: 1 / -1;
+        }
+
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            body {
+                padding: 20px 10px;
+            }
+
+            .back-btn {
+                top: 10px;
+                left: 10px;
+                padding: 10px 18px;
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <a href="index.html" class="back-btn">
+        <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18">
+            </path>
+        </svg>
+        Volver al Dashboard
+    </a>
+
+    <div class="container">
+        <header>
+            <h1>Oportunidades Inmobiliarias</h1>
+            <div class="status-bar">
+                <div class="status-item">📦 Total: <span id="total-count">0</span></div>
+                <div class="status-item">📍 Distritos: <span id="distrito-count">0</span></div>
+                <div class="status-item">📅 Hoy: <span id="sync-date">15/02/2026</span></div>
+            </div>
+        </header>
+
+        <div class="controls">
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="Buscar por calle o distrito..."
+                    onkeyup="filterItems()">
+            </div>
+            <select class="filter-select" id="portalFilter" onchange="filterItems()">
+                <option value="todos">Todos los portales</option>
+                <option value="Idealista">Idealista</option>
+                <option value="Fotocasa">Fotocasa</option>
+            </select>
+            <select class="filter-select" id="priceFilter" onchange="filterItems()">
+                <option value="0">Cualquier precio</option>
+                <option value="200000">
+                    < hasta 200k€</option>
+                <option value="400000">
+                    < hasta 400k€</option>
+                <option value="600000">
+                    < hasta 600k€</option>
+            </select>
+        </div>
+
+        <div id="propertyGrid" class="property-grid">
+            <div class="loader">
+                <div class="spinner"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const SB_URL = "https://dwbvegnxmyvpolvofkfn.supabase.co";
+        const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR3YnZlZ254bXl2cG9sdm9ma2ZuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njc1Mzg1NTUsImV4cCI6MjA4MzExNDU1NX0.eT5ZSce8H8Yk8pWKyLUYChU0HtmZljywP4eEQd5FkOI";
+        const { createClient } = supabase;
+        const _supabase = createClient(SB_URL, SB_KEY);
+
+        let allProperties = [];
+
+        async function loadProperties() {
+            const grid = document.getElementById('propertyGrid');
+            try {
+                const { data, error } = await _supabase
+                    .from('inm_propiedades')
+                    .select('*')
+                    .order('created_at', { ascending: false });
+
+                if (error) throw error;
+
+                allProperties = data;
+                updateStats(data);
+                renderGrid(data);
+            } catch (e) {
+                console.error(e);
+                grid.innerHTML = `<div class="empty-state">❌ Error cargando propiedades. Por favor intentalo de nuevo.</div>`;
+            }
+        }
+
+        function updateStats(data) {
+            document.getElementById('total-count').innerText = data.length;
+            const distritos = [...new Set(data.map(i => i.zona))];
+            document.getElementById('distrito-count').innerText = distritos.length;
+        }
+
+        function renderGrid(data) {
+            const grid = document.getElementById('propertyGrid');
+            if (data.length === 0) {
+                grid.innerHTML = `<div class="empty-state">No se han encontrado propiedades que coincidan con los filtros.</div>`;
+                return;
+            }
+
+            grid.innerHTML = data.map(prop => {
+                const portal = prop.caracteristicas?.portal || 'Idealista';
+                const tagClass = `tag-${portal.toLowerCase()}`;
+
+                return `
+                    <div class="property-card">
+                        <div class="card-header">
+                            <span class="property-badge">${prop.caracteristicas?.precio_m2 || 0} €/m²</span>
+                            <div class="property-price">
+                                ${prop.precio.toLocaleString()}€
+                            </div>
+                            <div class="property-title">
+                                <span class="portal-tag ${tagClass}">${portal}</span>
+                                ${prop.titulo}
+                            </div>
+                            <div class="property-location">
+                                <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                </svg>
+                                ${prop.zona.toUpperCase()}
+                            </div>
+                        </div>
+                        <div class="card-details">
+                            <div class="detail-item">
+                                <span class="detail-value">${prop.habitaciones}</span>
+                                <span class="detail-label">Habitaciones</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-value">${prop.superficie}</span>
+                                <span class="detail-label">m² const.</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-value">${prop.caracteristicas?.banos || 1}</span>
+                                <span class="detail-label">Baños</span>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <a href="${prop.url}" target="_blank" class="view-btn">Ver Anuncio Completo</a>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function filterItems() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const portal = document.getElementById('portalFilter').value;
+            const maxPrice = parseInt(document.getElementById('priceFilter').value);
+
+            const filtered = allProperties.filter(p => {
+                const matchSearch = p.titulo.toLowerCase().includes(searchTerm) || p.zona.toLowerCase().includes(searchTerm);
+                const matchPortal = portal === 'todos' || (p.caracteristicas?.portal || 'Idealista') === portal;
+                const matchPrice = maxPrice === 0 || p.precio <= maxPrice;
+                return matchSearch && matchPortal && matchPrice;
+            });
+
+            renderGrid(filtered);
+        }
+
+        window.onload = loadProperties;
+    </script>
+</body>
+
+</html>
