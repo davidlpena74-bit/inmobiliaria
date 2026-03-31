@@ -181,6 +181,32 @@
         .status-empty { background: #fee2e2; color: #ef4444; }
         .status-ready { background: #d1fae5; color: #10b981; }
 
+        /* Dropzone Styles */
+        .dropzone {
+            border: 2px dashed #cbd5e0;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            background: #f8fafc;
+            color: #64748b;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+            font-size: 0.8rem;
+        }
+
+        .dropzone:hover, .dropzone.active {
+            border-color: var(--accent);
+            background: #f0f7ff;
+            color: var(--accent);
+        }
+
+        .upload-status {
+            font-size: 0.7rem;
+            margin-top: 5px;
+            display: block;
+        }
+
         .back-btn {
             text-decoration: none;
             color: #636e72;
@@ -199,7 +225,7 @@
     <header>
         <div>
             <h1>📸 Gestor de Fotos</h1>
-            <p>Sincroniza tus imágenes de GitHub con Supabase para Idealista</p>
+            <p>Arrastra tus fotos o indica rutas de GitHub</p>
         </div>
         <button onclick="downloadXML()" class="btn-xml">Exportar Feed Idealista (.xml)</button>
     </header>
@@ -216,6 +242,7 @@
 <script>
     const SB_URL = "https://dwbvegnxmyvpolvofkfn.supabase.co";
     const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR3YnZlZ254bXl2cG9sdm9ma2ZuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njc1Mzg1NTUsImV4cCI6MjA4MzExNDU1NX0.eT5ZSce8H8Yk8pWKyLUYChU0HtmZljywP4eEQd5FkOI";
+    const BUCKET_NAME = "fotos"; // Asegúrate de crear este bucket en Supabase
     const GITHUB_USER = "davidlpena74-bit";
     const GITHUB_REPO = "fotos-inmobiliaria";
 
@@ -241,61 +268,139 @@
         container.innerHTML = props.map(p => {
             const fotos = p.caracteristicas?.fotos || [];
             const ref = p.caracteristicas?.referencia || "";
-            const filenames = fotos.map(f => f.split('/').pop()).join(', ');
+            const filenames = fotos.filter(f => !f.includes('supabase')).map(f => f.split('/').pop()).join(', ');
             const mainPhoto = fotos.length > 0 ? fotos[0] : null;
 
             return `
                 <div class="property-card" id="card-${p.id}">
                     <div class="main-thumb">
-                        ${mainPhoto ? `<img src="${mainPhoto}">` : '<span>SIN FOTO</span>'}
+                        ${mainPhoto ? `<img src="${mainPhoto}">` : '<span>SIN FOTOS</span>'}
+                        <div class="gallery-preview" style="position:absolute; bottom:5px; left:5px;">
+                            ${fotos.slice(1,4).map(f => `<div class="mini-thumb"><img src="${f}"></div>`).join('')}
+                        </div>
                     </div>
                     <div class="info-section">
                         <h3>${p.zona} - ${p.precio.toLocaleString()}€</h3>
                         <p style="font-size: 0.8rem; color: #636e72;">${p.titulo.substring(0,60)}...</p>
                         <div class="status-badge ${fotos.length > 0 ? 'status-ready' : 'status-empty'}">
-                            ${fotos.length > 0 ? '✓ LISTA PARA IDEALISTA' : '⚠ FALTA CONFIGURAR'}
+                            ${fotos.length > 0 ? `✓ ${fotos.length} FOTOS LISTAS` : '⚠ FALTA CONFIGURAR'}
                         </div>
+                        
+                        <div class="dropzone" id="dz-${p.id}" 
+                             ondragover="event.preventDefault(); this.classList.add('active')" 
+                             ondragleave="this.classList.remove('active')" 
+                             ondrop="handleDrop(event, ${p.id})">
+                             🖼️ Arrastra fotos aquí para subir <br> (o haz clic)
+                             <input type="file" multiple style="display:none" onchange="handleFileSelect(event, ${p.id})">
+                        </div>
+                        <span id="status-${p.id}" class="upload-status"></span>
                     </div>
                     <div class="edit-section">
                         <div class="form-group">
-                            <label>Carpeta en GitHub</label>
+                            <label>Carpeta en GitHub (fotos-inmobiliaria)</label>
                             <input type="text" id="ref-${p.id}" value="${ref}" placeholder="Ej: REF-001">
                         </div>
                         <div class="form-group">
-                            <label>Archivos (portada.jpg, s1.jpg...)</label>
-                            <input type="text" id="files-${p.id}" value="${filenames}" placeholder="portada.jpg, cocina.jpg">
+                            <label>Archivos GitHub (separados por coma)</label>
+                            <input type="text" id="files-${p.id}" value="${filenames}" placeholder="portada.jpg, s1.jpg">
                         </div>
-                        <button class="btn-save" onclick="save(${p.id})">Actualizar y Previsualizar</button>
+                        <button class="btn-save" onclick="save(${p.id})">Guardar Cambios</button>
                     </div>
                 </div>
             `;
         }).join('');
     }
 
+    // --- Lógica de Carga de Archivos ---
+
+    async function handleDrop(e, id) {
+        e.preventDefault();
+        const files = e.dataTransfer.files;
+        uploadFiles(files, id);
+    }
+
+    async function handleFileSelect(e, id) {
+        const files = e.target.files;
+        uploadFiles(files, id);
+    }
+
+    async function uploadFiles(files, id) {
+        if (files.length === 0) return;
+        
+        const statusEl = document.getElementById(`status-${id}`);
+        statusEl.innerText = `⏳ Subiendo ${files.length} archivos...`;
+        statusEl.style.color = "var(--accent)";
+
+        const p = props.find(x => x.id === id);
+        const currentPhotos = p.caracteristicas?.fotos || [];
+        const newUrls = [];
+
+        for (const file of files) {
+            const fileName = `${id}/${Date.now()}-${file.name.replace(/\s+/g, '_')}`;
+            try {
+                const { data, error } = await _supabase.storage
+                    .from(BUCKET_NAME)
+                    .upload(fileName, file);
+
+                if (error) {
+                    if (error.message.includes("not found")) {
+                        alert("⚠️ Error: El bucket 'fotos' no existe en Supabase. Por favor, créalo en tu panel de Supabase.");
+                        throw error;
+                    }
+                    throw error;
+                }
+
+                // Generar URL pública
+                const { data: publicData } = _supabase.storage
+                    .from(BUCKET_NAME)
+                    .getPublicUrl(fileName);
+                
+                newUrls.push(publicData.publicUrl);
+            } catch (err) {
+                console.error("Fallo upload:", err);
+                statusEl.innerText = "❌ Error al subir.";
+                return;
+            }
+        }
+
+        // Actualizar base de datos
+        const updatedPhotos = [...currentPhotos, ...newUrls];
+        const newData = { ...p.caracteristicas, fotos: updatedPhotos };
+
+        const { error } = await _supabase.from('inm_propiedades').update({ caracteristicas: newData }).eq('id', id);
+        
+        if (!error) {
+            statusEl.innerText = "✅ ¡Subida completa!";
+            statusEl.style.color = "var(--success)";
+            setTimeout(load, 1500);
+        }
+    }
+
     async function save(id) {
         const ref = document.getElementById(`ref-${id}`).value.trim();
         const filesStr = document.getElementById(`files-${id}`).value.trim();
         
-        if (!ref || !filesStr) {
-            alert("Completa la referencia y al menos un archivo.");
-            return;
+        const p = props.find(x => x.id === id);
+        // Mantener fotos de Supabase, actualizar solo las manuales de GitHub
+        const currentSupabasePhotos = (p.caracteristicas?.fotos || []).filter(url => url.includes('supabase'));
+        
+        let manualUrls = [];
+        if (ref && filesStr) {
+            const files = filesStr.split(',').map(f => f.trim()).filter(f => f !== "");
+            manualUrls = files.map(f => `https://raw.githubusercontent.com/${GITHUB_USER}/${GITHUB_REPO}/main/${ref}/${f}`);
         }
 
-        const files = filesStr.split(',').map(f => f.trim()).filter(f => f !== "");
-        const urls = files.map(f => `https://raw.githubusercontent.com/${GITHUB_USER}/${GITHUB_REPO}/main/${ref}/${f}`);
-
-        const p = props.find(x => x.id === id);
         const newData = {
             ...p.caracteristicas,
             referencia: ref,
-            fotos: urls
+            fotos: [...currentSupabasePhotos, ...manualUrls]
         };
 
         try {
             const { error } = await _supabase.from('inm_propiedades').update({ caracteristicas: newData }).eq('id', id);
             if (error) throw error;
             alert("✓ Cambios guardados para esta propiedad.");
-            load(); // Recargar para actualizar miniaturas
+            load();
         } catch (e) {
             alert("Error al guardar: " + e.message);
         }
@@ -311,7 +416,7 @@
         let xml = `<?xml version="1.0" encoding="UTF-8"?>\n<properties>\n`;
         ready.forEach(p => {
             xml += `  <property>\n`;
-            xml += `    <propertyCode>${p.caracteristicas.referencia}</propertyCode>\n`;
+            xml += `    <propertyCode>${p.caracteristicas.referencia || 'REF-'+p.id}</propertyCode>\n`;
             xml += `    <propertyOperation>sale</propertyOperation>\n`;
             xml += `    <propertyType>flat</propertyType>\n`;
             xml += `    <address><municipality>${p.zona}</municipality></address>\n`;
