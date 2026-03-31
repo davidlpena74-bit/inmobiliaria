@@ -299,11 +299,175 @@
             border-radius: 30px;
         }
 
-        @media (max-width: 900px) {
-            .hide-mobile {
-                display: none;
-            }
+        /* Estilos del Gestor de Fotos */
+        .td-foto {
+            width: 80px;
+            height: 60px;
+            border-radius: 8px;
+            background: #e2e8f0;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.2s;
         }
+
+        .td-foto:hover {
+            border-color: var(--primary);
+            transform: scale(1.05);
+        }
+
+        .td-foto img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .btn-action {
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+            text-transform: uppercase;
+        }
+
+        .btn-photos {
+            background: #edf2f7;
+            color: #4a5568;
+        }
+
+        .btn-photos:hover {
+            background: #e2e8f0;
+            color: var(--primary);
+        }
+
+        .btn-xml {
+            background: #2d3436;
+            color: white !important;
+            text-decoration: none;
+            padding: 12px 25px;
+            border-radius: 50px;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            width: 90%;
+            max-width: 600px;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+            position: relative;
+        }
+
+        .modal-header {
+            margin-bottom: 20px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #64748b;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #1e293b;
+            font-size: 0.9rem;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 1rem;
+        }
+
+        .photo-preview-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 10px;
+            margin-top: 15px;
+            max-height: 200px;
+            overflow-y: auto;
+            padding: 10px;
+            background: #f8fafc;
+            border-radius: 10px;
+        }
+
+        .preview-item {
+            aspect-ratio: 1;
+            border-radius: 8px;
+            overflow: hidden;
+            background: #cbd5e0;
+        }
+
+        .preview-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .btn-save {
+            background: var(--primary);
+            color: white;
+            width: 100%;
+            padding: 15px;
+            border-radius: 12px;
+            border: none;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-save:hover {
+            background: var(--secondary);
+            transform: translateY(-2px);
+        }
+
     </style>
 </head>
 
@@ -317,6 +481,11 @@
                 <div class="status-item">📦 Total: <span id="total-count">0</span></div>
                 <div class="status-item">📍 Distritos: <span id="distrito-count">0</span></div>
                 <div class="status-item">📅 Hoy: <span id="sync-date">15/02/2026</span></div>
+            </div>
+            <div style="margin-top: 20px;">
+                <button onclick="downloadIdealistaXML()" class="btn-xml">
+                    📄 Descargar XML para Idealista
+                </button>
             </div>
         </header>
 
@@ -343,13 +512,44 @@
         </div>
     </div>
 
+    <!-- Modal de Gestión de Fotos -->
+    <div id="photoModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Gestionar Fotos</h2>
+                <button class="modal-close" onclick="closeModal()">×</button>
+            </div>
+            <div class="form-group">
+                <label>Referencia / Carpeta en GitHub (fotos-inmobiliaria)</label>
+                <input type="text" id="refInput" placeholder="Ej: REF-001" oninput="updatePreviews()">
+            </div>
+            <div class="form-group">
+                <label>Archivos de imagen (separados por coma)</label>
+                <input type="text" id="filesInput" placeholder="Ej: portada.jpg, cocina.jpg, salon.jpg" oninput="updatePreviews()">
+                <small style="color: #64748b; font-size: 0.75rem;">Se generarán automáticamente las URLs Raw de GitHub.</small>
+            </div>
+            
+            <div id="previews" class="photo-preview-grid">
+                <!-- Previsualización -->
+            </div>
+
+            <div style="margin-top: 20px;">
+                <button class="btn-save" onclick="savePhotos()">Guardar y Sincronizar</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         const SB_URL = "https://dwbvegnxmyvpolvofkfn.supabase.co";
         const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR3YnZlZ254bXl2cG9sdm9ma2ZuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njc1Mzg1NTUsImV4cCI6MjA4MzExNDU1NX0.eT5ZSce8H8Yk8pWKyLUYChU0HtmZljywP4eEQd5FkOI";
+        const GITHUB_USER = "davidlpena74-bit";
+        const GITHUB_REPO = "fotos-inmobiliaria";
+        
         const { createClient } = supabase;
         const _supabase = createClient(SB_URL, SB_KEY);
 
         let allProperties = [];
+        let currentEditingId = null;
 
         async function loadProperties() {
             const area = document.getElementById('content-area');
@@ -370,10 +570,9 @@
             }
         }
 
-        function updateStats(data) {
-            document.getElementById('total-count').innerText = data.length;
-            const distritos = [...new Set(data.map(i => i.zona))];
-            document.getElementById('distrito-count').innerText = distritos.length;
+        function getGitHubUrl(ref, file) {
+            if (!ref || !file) return null;
+            return `https://raw.githubusercontent.com/${GITHUB_USER}/${GITHUB_REPO}/main/${ref}/${file.trim()}`;
         }
 
         function renderTable(data) {
@@ -387,23 +586,24 @@
                 <table>
                     <thead>
                         <tr>
+                            <th>Foto</th>
                             <th>Precio Actual</th>
                             <th>DTO.</th>
                             <th>Tipo</th>
-                            <th>Calle</th>
                             <th>Zona</th>
-                            <th>Hab.</th>
-                            <th>Baños</th>
                             <th>m²</th>
-                            <th>Acción</th>
+                            <th class="hide-mobile">Ref.</th>
+                            <th>Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
             `;
 
             html += data.map(prop => {
-                const portal = prop.caracteristicas?.portal || 'Idealista';
-                const badgeClass = `badge-${portal.toLowerCase()}`;
+                // Extraer fotos y referencia de caracteristicas
+                const fotos = prop.caracteristicas?.fotos || [];
+                const referencia = prop.caracteristicas?.referencia || "SIN REF";
+                const fotoPrincipal = fotos.length > 0 ? fotos[0] : null;
 
                 // Cálculo de Descuento
                 let descuento = "";
@@ -412,23 +612,27 @@
                     descuento = `<span class="discount-badge">-${pct}%</span>`;
                 }
 
-                const calle = prop.caracteristicas?.calle || prop.zona;
-
                 return `
-                    <tr>
+                    <tr id="row-${prop.id}">
+                        <td>
+                            <div class="td-foto" onclick="openPhotoManager(${prop.id})">
+                                ${fotoPrincipal ? `<img src="${fotoPrincipal}" onerror="this.src='https://placehold.co/80x60?text=Error'">` : '<span style="font-size: 10px; color: #94a3b8;">SIN FOTO</span>'}
+                            </div>
+                        </td>
                         <td class="td-price">
                             ${prop.precio.toLocaleString()}€
                             <div class="td-old-price">${prop.precio_anterior ? prop.precio_anterior.toLocaleString() + '€' : ''}</div>
                         </td>
                         <td>${descuento}</td>
-                        <td><a href="${prop.url}" target="_blank" style="text-decoration: none; color: inherit;">${prop.titulo}</a></td>
-                        <td class="td-title" title="${calle}">${calle}</td>
+                        <td><a href="${prop.url}" target="_blank" style="text-decoration: none; color: inherit; font-weight:600;">${prop.titulo.substring(0, 30)}...</a></td>
                         <td class="td-zona">${prop.zona}</td>
-                        <td>${prop.habitaciones}</td>
-                        <td>${prop.banos || prop.caracteristicas?.banos || 1}</td>
                         <td>${prop.superficie} m²</td>
+                        <td class="hide-mobile"><span style="font-family: monospace; font-weight:700;">${referencia}</span></td>
                         <td>
-                            <a href="${prop.url}" target="_blank" style="color: var(--primary); font-weight: 700; text-decoration: none; font-size: 0.8rem;">VER ↗</a>
+                            <div style="display: flex; gap: 5px;">
+                                <button class="btn-action btn-photos" onclick="openPhotoManager(${prop.id})">Fotos</button>
+                                <a href="${prop.url}" target="_blank" style="text-decoration: none;" class="btn-action btn-photos">Ver ↗</a>
+                            </div>
                         </td>
                     </tr>
                 `;
@@ -436,6 +640,153 @@
 
             html += `</tbody></table>`;
             area.innerHTML = html;
+        }
+
+        // --- Funciones del Gestor de Fotos ---
+
+        function openPhotoManager(id) {
+            currentEditingId = id;
+            const prop = allProperties.find(p => p.id === id);
+            if (!prop) return;
+
+            document.getElementById('modalTitle').innerText = `Gestión: ${prop.zona}`;
+            document.getElementById('refInput').value = prop.caracteristicas?.referencia || "";
+            
+            // Los archivos de fotos los guardábamos como URLs completas, intentamos extraer solo el nombre del archivo
+            const currentPhotos = prop.caracteristicas?.fotos || [];
+            const fileNames = currentPhotos.map(url => {
+                const parts = url.split('/');
+                return parts[parts.length - 1];
+            }).join(', ');
+            
+            document.getElementById('filesInput').value = fileNames;
+            updatePreviews();
+            
+            document.getElementById('photoModal').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('photoModal').classList.remove('active');
+            currentEditingId = null;
+        }
+
+        function updatePreviews() {
+            const ref = document.getElementById('refInput').value;
+            const filesStr = document.getElementById('filesInput').value;
+            const container = document.getElementById('previews');
+            container.innerHTML = "";
+
+            if (!ref || !filesStr) return;
+
+            const files = filesStr.split(',').filter(f => f.trim() !== "");
+            files.forEach(f => {
+                const url = getGitHubUrl(ref, f);
+                const div = document.createElement('div');
+                div.className = 'preview-item';
+                div.innerHTML = `<img src="${url}" onerror="this.parentElement.style.background='#ff7675'">`;
+                container.appendChild(div);
+            });
+        }
+
+        async function savePhotos() {
+            if (!currentEditingId) return;
+            const ref = document.getElementById('refInput').value;
+            const filesStr = document.getElementById('filesInput').value;
+            
+            const btn = document.querySelector('.btn-save');
+            const originalText = btn.innerText;
+            btn.innerText = "💾 Guardando...";
+            btn.disabled = true;
+
+            const files = filesStr.split(',').map(f => f.trim()).filter(f => f !== "");
+            const urls = files.map(f => getGitHubUrl(ref, f));
+
+            const prop = allProperties.find(p => p.id === currentEditingId);
+            const nuevasCaracteristicas = {
+                ...(prop.caracteristicas || {}),
+                referencia: ref,
+                fotos: urls
+            };
+
+            try {
+                const { error } = await _supabase
+                    .from('inm_propiedades')
+                    .update({ caracteristicas: nuevasCaracteristicas })
+                    .eq('id', currentEditingId);
+
+                if (error) throw error;
+                
+                alert("✅ Fotos vinculadas correctamente.");
+                closeModal();
+                loadProperties(); // Recargar tabla
+            } catch (e) {
+                alert("❌ Error al guardar: " + e.message);
+            } finally {
+                btn.innerText = originalText;
+                btn.disabled = false;
+            }
+        }
+
+        // --- Generación de XML para Idealista ---
+
+        function downloadIdealistaXML() {
+            const readyProps = allProperties.filter(p => p.caracteristicas?.fotos?.length > 0);
+            
+            if (readyProps.length === 0) {
+                alert("⚠️ No hay propiedades con fotos configuradas para exportar.");
+                return;
+            }
+
+            let xml = `<?xml version="1.0" encoding="UTF-8"?>\n<properties>\n`;
+            
+            readyProps.forEach(p => {
+                xml += `  <property>\n`;
+                xml += `    <propertyCode>${p.caracteristicas?.referencia || p.id}</propertyCode>\n`;
+                xml += `    <propertyOperation>sale</propertyOperation>\n`;
+                xml += `    <propertyType>flat</propertyType>\n`;
+                xml += `    <address>\n`;
+                xml += `      <country>ES</country>\n`;
+                xml += `      <province>Madrid</province>\n`;
+                xml += `      <municipality>${p.zona}</municipality>\n`;
+                xml += `      <streetName>${p.caracteristicas?.calle || p.zona}</streetName>\n`;
+                xml += `    </address>\n`;
+                xml += `    <features>\n`;
+                xml += `      <constructedArea>${p.superficie}</constructedArea>\n`;
+                xml += `      <rooms>${p.habitaciones}</rooms>\n`;
+                xml += `      <bathrooms>${p.banos || 1}</bathrooms>\n`;
+                xml += `    </features>\n`;
+                xml += `    <price>${p.precio}</price>\n`;
+                xml += `    <images>\n`;
+                
+                p.caracteristicas.fotos.forEach((url, index) => {
+                    xml += `      <image>\n`;
+                    xml += `        <url>${url}</url>\n`;
+                    xml += `        <order>${index + 1}</order>\n`;
+                    xml += `        <label>${index === 0 ? 'principal' : ''}</label>\n`;
+                    xml += `      </image>\n`;
+                });
+                
+                xml += `    </images>\n`;
+                xml += `  </property>\n`;
+            });
+            
+            xml += `</properties>`;
+
+            const blob = new Blob([xml], { type: 'application/xml' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `feed_idealista_${new Date().toISOString().split('T')[0]}.xml`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        function updateStats(data) {
+            document.getElementById('total-count').innerText = data.length;
+            const distritos = [...new Set(data.map(i => i.zona))];
+            document.getElementById('distrito-count').innerText = distritos.length;
         }
 
         function filterItems() {
@@ -452,6 +803,7 @@
         }
 
         window.onload = loadProperties;
+
     </script>
 </body>
 

@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestor de Fotos - La Voz Del Pueblo</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2d3436;
+            --accent: #0984e3;
+            --success: #00b894;
+            --danger: #d63031;
+            --bg: #f5f6fa;
+            --card: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--primary);
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: var(--primary);
+        }
+
+        .btn-xml {
+            background: var(--primary);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+        }
+
+        .btn-xml:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+        }
+
+        .property-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+
+        .property-card {
+            background: var(--card);
+            border-radius: 20px;
+            padding: 25px;
+            display: grid;
+            grid-template-columns: 200px 1fr 1fr;
+            gap: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            transition: transform 0.2s;
+        }
+
+        .property-card:hover {
+            transform: scale(1.01);
+        }
+
+        .main-thumb {
+            width: 200px;
+            height: 150px;
+            background: #e2e8f0;
+            border-radius: 15px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #eee;
+        }
+
+        .main-thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .info-section h3 {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: #636e72;
+            margin-bottom: 5px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #dfe6e9;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            transition: border-color 0.3s;
+        }
+
+        input:focus {
+            border-color: var(--accent);
+            outline: none;
+        }
+
+        .gallery-preview {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+
+        .mini-thumb {
+            width: 40px;
+            height: 40px;
+            border-radius: 6px;
+            background: #eee;
+            overflow: hidden;
+        }
+
+        .mini-thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .btn-save {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .btn-save:hover {
+            background: #0873c4;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 5px;
+            font-size: 0.7rem;
+            font-weight: 800;
+            margin-top: 10px;
+        }
+
+        .status-empty { background: #fee2e2; color: #ef4444; }
+        .status-ready { background: #d1fae5; color: #10b981; }
+
+        .back-btn {
+            text-decoration: none;
+            color: #636e72;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <a href="propiedades.html" class="back-btn">← Volver al Listado General</a>
+    <header>
+        <div>
+            <h1>📸 Gestor de Fotos</h1>
+            <p>Sincroniza tus imágenes de GitHub con Supabase para Idealista</p>
+        </div>
+        <button onclick="downloadXML()" class="btn-xml">Exportar Feed Idealista (.xml)</button>
+    </header>
+
+    <div id="loading" style="text-align: center; padding: 50px;">
+        <h2>Cargando propiedades...</h2>
+    </div>
+
+    <div id="properties" class="property-grid">
+        <!-- Renderizado dinámico -->
+    </div>
+</div>
+
+<script>
+    const SB_URL = "https://dwbvegnxmyvpolvofkfn.supabase.co";
+    const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR3YnZlZ254bXl2cG9sdm9ma2ZuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njc1Mzg1NTUsImV4cCI6MjA4MzExNDU1NX0.eT5ZSce8H8Yk8pWKyLUYChU0HtmZljywP4eEQd5FkOI";
+    const GITHUB_USER = "davidlpena74-bit";
+    const GITHUB_REPO = "fotos-inmobiliaria";
+
+    const { createClient } = supabase;
+    const _supabase = createClient(SB_URL, SB_KEY);
+
+    let props = [];
+
+    async function load() {
+        try {
+            const { data, error } = await _supabase.from('inm_propiedades').select('*').order('fecha_captura', { ascending: false });
+            if (error) throw error;
+            props = data;
+            render();
+            document.getElementById('loading').style.display = 'none';
+        } catch (e) {
+            alert("Error: " + e.message);
+        }
+    }
+
+    function render() {
+        const container = document.getElementById('properties');
+        container.innerHTML = props.map(p => {
+            const fotos = p.caracteristicas?.fotos || [];
+            const ref = p.caracteristicas?.referencia || "";
+            const filenames = fotos.map(f => f.split('/').pop()).join(', ');
+            const mainPhoto = fotos.length > 0 ? fotos[0] : null;
+
+            return `
+                <div class="property-card" id="card-${p.id}">
+                    <div class="main-thumb">
+                        ${mainPhoto ? `<img src="${mainPhoto}">` : '<span>SIN FOTO</span>'}
+                    </div>
+                    <div class="info-section">
+                        <h3>${p.zona} - ${p.precio.toLocaleString()}€</h3>
+                        <p style="font-size: 0.8rem; color: #636e72;">${p.titulo.substring(0,60)}...</p>
+                        <div class="status-badge ${fotos.length > 0 ? 'status-ready' : 'status-empty'}">
+                            ${fotos.length > 0 ? '✓ LISTA PARA IDEALISTA' : '⚠ FALTA CONFIGURAR'}
+                        </div>
+                    </div>
+                    <div class="edit-section">
+                        <div class="form-group">
+                            <label>Carpeta en GitHub</label>
+                            <input type="text" id="ref-${p.id}" value="${ref}" placeholder="Ej: REF-001">
+                        </div>
+                        <div class="form-group">
+                            <label>Archivos (portada.jpg, s1.jpg...)</label>
+                            <input type="text" id="files-${p.id}" value="${filenames}" placeholder="portada.jpg, cocina.jpg">
+                        </div>
+                        <button class="btn-save" onclick="save(${p.id})">Actualizar y Previsualizar</button>
+                    </div>
+                </div>
+            `;
+        }).join('');
+    }
+
+    async function save(id) {
+        const ref = document.getElementById(`ref-${id}`).value.trim();
+        const filesStr = document.getElementById(`files-${id}`).value.trim();
+        
+        if (!ref || !filesStr) {
+            alert("Completa la referencia y al menos un archivo.");
+            return;
+        }
+
+        const files = filesStr.split(',').map(f => f.trim()).filter(f => f !== "");
+        const urls = files.map(f => `https://raw.githubusercontent.com/${GITHUB_USER}/${GITHUB_REPO}/main/${ref}/${f}`);
+
+        const p = props.find(x => x.id === id);
+        const newData = {
+            ...p.caracteristicas,
+            referencia: ref,
+            fotos: urls
+        };
+
+        try {
+            const { error } = await _supabase.from('inm_propiedades').update({ caracteristicas: newData }).eq('id', id);
+            if (error) throw error;
+            alert("✓ Cambios guardados para esta propiedad.");
+            load(); // Recargar para actualizar miniaturas
+        } catch (e) {
+            alert("Error al guardar: " + e.message);
+        }
+    }
+
+    function downloadXML() {
+        const ready = props.filter(p => p.caracteristicas?.fotos?.length > 0);
+        if (ready.length === 0) {
+            alert("No hay propiedades configuradas con fotos.");
+            return;
+        }
+
+        let xml = `<?xml version="1.0" encoding="UTF-8"?>\n<properties>\n`;
+        ready.forEach(p => {
+            xml += `  <property>\n`;
+            xml += `    <propertyCode>${p.caracteristicas.referencia}</propertyCode>\n`;
+            xml += `    <propertyOperation>sale</propertyOperation>\n`;
+            xml += `    <propertyType>flat</propertyType>\n`;
+            xml += `    <address><municipality>${p.zona}</municipality></address>\n`;
+            xml += `    <price>${p.precio}</price>\n`;
+            xml += `    <images>\n`;
+            p.caracteristicas.fotos.forEach((url, i) => {
+                xml += `      <image><url>${url}</url><order>${i+1}</order><label>${i===0?'principal':''}</label></image>\n`;
+            });
+            xml += `    </images>\n`;
+            xml += `  </property>\n`;
+        });
+        xml += `</properties>`;
+
+        const blob = new Blob([xml], { type: 'application/xml' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = `idealista_feed.xml`;
+        a.click();
+    }
+
+    load();
+</script>
+
+</body>
+</html>
