@@ -1,0 +1,223 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap');
+
+:root {
+    --primary: hsl(155, 100%, 45%);
+    --bg-main: hsl(220, 25%, 10%);
+    --bg-card: hsla(220, 25%, 15%, 0.8);
+    --text-main: hsl(0, 0%, 95%);
+    --text-dim: hsl(220, 10%, 65%);
+    --accent: hsl(200, 100%, 50%);
+    --danger: hsl(0, 85%, 60%);
+    --glass: hsla(0, 0%, 100%, 0.05);
+    --glass-border: hsla(0, 0%, 100%, 0.1);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Outfit', sans-serif;
+}
+
+body {
+    background-color: var(--bg-main);
+    color: var(--text-main);
+    min-height: 100vh;
+    background-image: 
+        radial-gradient(circle at 10% 20%, hsla(155, 100%, 45%, 0.05) 0%, transparent 40%),
+        radial-gradient(circle at 90% 80%, hsla(200, 100%, 50%, 0.05) 0%, transparent 40%);
+    overflow-x: hidden;
+}
+
+/* Glassmorphism Sidebar */
+nav {
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 100vh;
+    width: 280px;
+    background: var(--glass);
+    backdrop-filter: blur(20px);
+    border-right: 1px solid var(--glass-border);
+    padding: 40px 20px;
+    z-index: 100;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: 800;
+    background: linear-gradient(to right, var(--primary), var(--accent));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 50px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.nav-links {
+    list-style: none;
+}
+
+.nav-item {
+    padding: 15px 20px;
+    border-radius: 12px;
+    margin-bottom: 8px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    color: var(--text-dim);
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.nav-item:hover, .nav-item.active {
+    background: var(--glass);
+    color: var(--text-main);
+    transform: translateX(5px);
+}
+
+.nav-item.active {
+    border-left: 4px solid var(--primary);
+}
+
+/* Main Dashboard Area */
+main {
+    margin-left: 280px;
+    padding: 40px 60px;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 50px;
+}
+
+header h1 {
+    font-size: 32px;
+    font-weight: 600;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 25px;
+    margin-bottom: 50px;
+}
+
+.stat-card {
+    background: var(--bg-card);
+    border: 1px solid var(--glass-border);
+    padding: 25px;
+    border-radius: 20px;
+    transition: transform 0.3s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--primary);
+}
+
+.stat-val {
+    font-size: 28px;
+    font-weight: 800;
+    margin: 10px 0;
+}
+
+.stat-label {
+    color: var(--text-dim);
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Portals Dashboard */
+.portals-section {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 30px;
+}
+
+.portal-glass-card {
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(10px);
+    border-radius: 24px;
+    padding: 35px;
+    position: relative;
+    overflow: hidden;
+}
+
+.portal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.status-indicator {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    box-shadow: 0 0 15px var(--primary);
+}
+
+.status-online { background-color: var(--primary); }
+.status-offline { background-color: var(--danger); box-shadow: 0 0 15px var(--danger); }
+
+.portal-action-btn {
+    background: var(--primary);
+    color: var(--bg-main);
+    border: none;
+    padding: 12px 25px;
+    border-radius: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 20px;
+    width: 100%;
+}
+
+.portal-action-btn:hover {
+    filter: brightness(1.1);
+    transform: scale(1.02);
+}
+
+/* Inputs Premium */
+.input-group {
+    margin-bottom: 15px;
+}
+
+.input-label {
+    display: block;
+    font-size: 13px;
+    color: var(--text-dim);
+    margin-bottom: 8px;
+}
+
+input {
+    width: 100%;
+    background: hsla(0, 0%, 0%, 0.2);
+    border: 1px solid var(--glass-border);
+    padding: 12px 15px;
+    border-radius: 10px;
+    color: white;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+input:focus {
+    border-color: var(--primary);
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.2); opacity: 0.7; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+.loading-dots span {
+    animation: pulse 1.5s infinite;
+}
