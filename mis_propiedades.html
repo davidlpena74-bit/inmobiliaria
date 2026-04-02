@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mis Propiedades | Weperty CRM</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="sidebar.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        :root {
+            --inmoweb-blue: #3f51b5;
+            --inmoweb-light: #f4f6f8;
+            --danger: #e74c3c;
+            --success: #27ae60;
+            --warning: #f39c12;
+            --gray-text: #64748b;
+            --border: #e2e8f0;
+        }
+
+        * { margin:0; padding:0; box-sizing:border-box; font-family:'Roboto',sans-serif; }
+        body { background: var(--inmoweb-light); display:flex; min-height:100vh; color: #334155; }
+
+        /* Header */
+        .header-section { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+        h1 { font-size: 24px; color: #1e293b; font-weight: 700; }
+        .subtitle { font-size: 13px; color: var(--gray-text); margin-top: 4px; }
+
+        .header-actions { display: flex; gap: 10px; }
+        .btn { border: none; padding: 11px 22px; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 600; transition: 0.2s; display: inline-flex; align-items: center; gap: 8px; text-decoration: none; }
+        .btn-primary { background: var(--inmoweb-blue); color: white; box-shadow: 0 4px 10px rgba(63,81,181,0.2); }
+        .btn-primary:hover { background: #303f9f; transform: translateY(-1px); }
+        .btn-success { background: var(--success); color: white; }
+        .btn-outline { background: white; color: #475569; border: 1px solid var(--border); }
+        .btn-outline:hover { background: #f8fafc; }
+        .btn-danger-sm { background: white; color: var(--danger); border: 1px solid #fecaca; padding: 5px 10px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 600; }
+        .btn-danger-sm:hover { background: #fef2f2; }
+
+        /* Stats Cards */
+        .sync-dashboard { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; margin-bottom: 30px; }
+        .sync-card { background: white; padding: 22px; border-radius: 12px; border: 1px solid var(--border); text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
+        .sync-label { display: block; font-size: 10px; font-weight: 800; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+        .sync-val { font-size: 32px; font-weight: 700; color: #1e293b; }
+
+        /* Search */
+        .search-area { margin-bottom: 25px; }
+        .search-bar { width: 100%; padding: 14px 20px; border-radius: 10px; border: 1px solid var(--border); background: white; font-size: 14px; outline: none; transition: 0.2s; color: #334155; }
+        .search-bar:focus { border-color: var(--inmoweb-blue); box-shadow: 0 0 0 3px rgba(63,81,181,0.08); }
+
+        /* Table */
+        .table-card { background: white; border-radius: 12px; overflow: hidden; border: 1px solid var(--border); box-shadow: 0 4px 6px rgba(0,0,0,0.03); }
+        table { width: 100%; border-collapse: collapse; }
+        th { background: #f8fafc; padding: 14px 20px; text-align: left; font-size: 11px; text-transform: uppercase; color: #64748b; font-weight: 800; letter-spacing: 0.5px; border-bottom: 2px solid #f1f5f9; }
+        td { padding: 16px 20px; border-bottom: 1px solid #f1f5f9; font-size: 13px; color: #334155; }
+        tr:last-child td { border-bottom: none; }
+        tr:hover { background: #fafbff; }
+        .ref-text { font-size: 11px; color: #94a3b8; margin-top: 2px; }
+        .price-text { font-weight: 700; color: #1e293b; }
+
+        /* Status badges */
+        .badge { display: inline-flex; align-items: center; gap: 4px; padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 700; }
+        .badge-ok { background: #d1fae5; color: #059669; }
+        .badge-pending { background: #fef3c7; color: #d97706; }
+        .badge-off { background: #f1f5f9; color: #94a3b8; }
+        .badge-draft { background: #e0e7ff; color: #4f46e5; }
+
+        /* Action buttons */
+        .actions-cell { display: flex; gap: 6px; align-items: center; }
+        .btn-edit { background: #f0f4ff; color: var(--inmoweb-blue); border: 1px solid #c7d2fe; padding: 6px 12px; border-radius: 6px; font-size: 11px; font-weight: 700; cursor: pointer; text-decoration: none; transition: 0.2s; }
+        .btn-edit:hover { background: var(--inmoweb-blue); color: white; }
+
+        /* Empty state */
+        .empty-state { text-align: center; padding: 60px 20px; color: var(--gray-text); }
+        .empty-state h3 { font-size: 18px; color: #475569; margin-bottom: 8px; }
+
+        /* Loading */
+        .loading { text-align: center; padding: 40px; color: var(--gray-text); }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="logo-box">WEPERTY CRM</div>
+        <a href="index.html" class="nav-item">Dashboard Inversion</a>
+        <a href="mis_propiedades.html" class="nav-item active">Mis Propiedades</a>
+        <a href="ficha_inmueble.html" class="nav-item">Ficha Inmueble</a>
+        <a href="portales.html" class="nav-item">Pasarelas (API)</a>
+    </nav>
+
+    <main class="main-content">
+        <div class="header-section">
+            <div>
+                <h1>⚓ Mis Propiedades | Alicante & Costa Blanca</h1>
+                <p class="subtitle">Gestion de cartera inmobiliaria</p>
+            </div>
+            <div class="header-actions">
+                <a href="ficha_inmueble.html" class="btn btn-primary">+ Nuevo Inmueble</a>
+            </div>
+        </div>
+
+        <!-- Stats -->
+        <div class="sync-dashboard">
+            <div class="sync-card">
+                <span class="sync-label">Total Cartera</span>
+                <span class="sync-val" id="count-total">-</span>
+            </div>
+            <div class="sync-card">
+                <span class="sync-label">Publicados</span>
+                <span class="sync-val" id="count-pub" style="color:var(--success)">-</span>
+            </div>
+            <div class="sync-card">
+                <span class="sync-label">Borradores</span>
+                <span class="sync-val" id="count-draft" style="color:var(--inmoweb-blue)">-</span>
+            </div>
+            <div class="sync-card">
+                <span class="sync-label">Con errores</span>
+                <span class="sync-val" id="count-error" style="color:var(--danger)">-</span>
+            </div>
+        </div>
+
+        <!-- Search -->
+        <div class="search-area">
+            <input type="text" class="search-bar" placeholder="Buscar por titulo, referencia o poblacion..." id="searchText" onkeyup="filtrarTabla()">
+        </div>
+
+        <!-- Table -->
+        <div class="table-card">
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width:30%;">Inmueble</th>
+                        <th>Tipo</th>
+                        <th>Precio</th>
+                        <th>Poblacion</th>
+                        <th>Estado</th>
+                        <th style="text-align:center;">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="tabla-body">
+                    <tr><td colspan="6" class="loading">Cargando propiedades...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <script>
+        const SUPABASE_URL = 'https://dwbvegnxmyvpolvofkfn.supabase.co';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR3YnZlZ254bXl2cG9sdm9ma2ZuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njc1Mzg1NTUsImV4cCI6MjA4MzExNDU1NX0.eT5ZSce8H8Yk8pWKyLUYChU0HtmZljywP4eEQd5FkOI';
+        const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        let propiedades = [];
+
+        document.addEventListener('DOMContentLoaded', cargarPropiedades);
+
+        async function cargarPropiedades() {
+            const { data, error } = await db.from('inm_propiedades').select('*').order('created_at', { ascending: false });
+
+            if (error) {
+                document.getElementById('tabla-body').innerHTML = '<tr><td colspan="6" class="empty-state"><h3>Error al cargar</h3><p>' + error.message + '</p></td></tr>';
+                return;
+            }
+
+            propiedades = data || [];
+            actualizarContadores();
+            renderTabla();
+        }
+
+        function actualizarContadores() {
+            document.getElementById('count-total').textContent = propiedades.length;
+            document.getElementById('count-pub').textContent = propiedades.filter(p => p.estado === 'publicado').length;
+            document.getElementById('count-draft').textContent = propiedades.filter(p => p.estado === 'borrador' || !p.estado).length;
+            document.getElementById('count-error').textContent = propiedades.filter(p => p.estado === 'error').length;
+        }
+
+        function renderTabla() {
+            const tbody = document.getElementById('tabla-body');
+            const search = (document.getElementById('searchText').value || '').toLowerCase();
+
+            const filtered = propiedades.filter(p => {
+                const text = `${p.titulo} ${p.referencia} ${p.zona} ${p.tipo}`.toLowerCase();
+                return text.includes(search);
+            });
+
+            if (filtered.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" class="empty-state"><h3>No hay propiedades</h3><p>Haz clic en "+ Nuevo Inmueble" para empezar</p></td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = filtered.map(p => {
+                const c = p.caracteristicas || {};
+                const estado = (c.estado) || 'sin_estado';
+                const estadoBadge = {
+                    'publicado': '<span class="badge badge-ok">Publicado</span>',
+                    'borrador': '<span class="badge badge-draft">Borrador</span>',
+                    'error': '<span class="badge badge-pending">Error</span>',
+                }[estado] || '<span class="badge badge-off">Sin estado</span>';
+
+                const precio = p.precio ? p.precio.toLocaleString('es-ES') + ' EUR' : '-';
+
+                return `<tr>
+                    <td>
+                        <strong>${p.titulo || 'Sin titulo'}</strong>
+                        <div class="ref-text">Ref: ${p.referencia || p.id}</div>
+                    </td>
+                    <td>${p.tipo || '-'}</td>
+                    <td><span class="price-text">${precio}</span></td>
+                    <td>${p.zona || '-'}</td>
+                    <td>${estadoBadge}</td>
+                    <td>
+                        <div class="actions-cell">
+                            <a href="ficha_inmueble.html?id=${p.id}" class="btn-edit">Editar</a>
+                            <button class="btn-danger-sm" onclick="eliminar('${p.id}')">Eliminar</button>
+                        </div>
+                    </td>
+                </tr>`;
+            }).join('');
+        }
+
+        function filtrarTabla() { renderTabla(); }
+
+        async function eliminar(id) {
+            if (!confirm('Seguro que quieres eliminar este inmueble?')) return;
+            const { error } = await db.from('inm_propiedades').delete().eq('id', id);
+            if (error) { alert('Error: ' + error.message); return; }
+            propiedades = propiedades.filter(p => p.id !== id);
+            actualizarContadores();
+            renderTabla();
+        }
+    </script>
+</body>
+</html>

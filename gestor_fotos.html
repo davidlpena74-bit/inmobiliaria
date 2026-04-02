@@ -364,7 +364,10 @@
                                 <textarea id="desc-${p.id}" placeholder="Escribe aquí la descripción para Idealista...">${p.caracteristicas?.descripcion || ''}</textarea>
                             </div>
                         </div>
-                        <button class="btn-save" onclick="save(${p.id})">Guardar Ficha Permanente</button>
+                        <div style="display: flex; gap: 10px; margin-top: 15px;">
+                            <button class="btn-save" style="flex: 2;" onclick="save(${p.id})">Guardar Ficha Permanente</button>
+                            <button class="btn-save" style="flex: 1; background: #2d3436;" onclick="queueAPI(${p.id})">🚀 Publicar API</button>
+                        </div>
                     </div>
                 </div>
             `;
@@ -472,6 +475,23 @@
             load();
         } catch (e) {
             alert("Error al guardar: " + e.message);
+        }
+    }
+
+    async function queueAPI(id) {
+        const p = props.find(x => x.id === id);
+        const newData = {
+            ...p.caracteristicas,
+            pendiente_pub: true // Marca para el script local
+        };
+
+        try {
+            const { error } = await _supabase.from('inm_propiedades').update({ caracteristicas: newData }).eq('id', id);
+            if (error) throw error;
+            alert("🚀 ¡Orden enviada! La propiedad se publicará en Idealista en unos segundos desde tu PC.");
+            load();
+        } catch (e) {
+            alert("Error al enviar orden: " + e.message);
         }
     }
 

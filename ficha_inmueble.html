@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ficha de Inmueble | Weperty CRM</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="sidebar.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        :root {
+            --inmoweb-blue: #3f51b5;
+            --inmoweb-light: #f4f6f8;
+            --danger: #e74c3c;
+            --success: #27ae60;
+            --warning: #f39c12;
+            --gray-text: #64748b;
+            --border: #e2e8f0;
+            --card-shadow: 0 4px 6px rgba(0,0,0,0.04);
+        }
+
+        * { margin:0; padding:0; box-sizing:border-box; font-family:'Roboto',sans-serif; }
+        body { background: var(--inmoweb-light); display:flex; min-height:100vh; color: #334155; }
+
+        /* Header */
+        .page-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 30px; }
+        .page-header h1 { font-size: 24px; color: #1e293b; font-weight: 700; }
+        .page-header .subtitle { font-size: 13px; color: var(--gray-text); margin-top: 4px; }
+        .header-actions { display: flex; gap: 10px; }
+
+        .btn { border: none; padding: 11px 22px; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 600; transition: 0.2s; display: inline-flex; align-items: center; gap: 8px; }
+        .btn-primary { background: var(--inmoweb-blue); color: white; box-shadow: 0 4px 10px rgba(63,81,181,0.2); }
+        .btn-primary:hover { background: #303f9f; transform: translateY(-1px); }
+        .btn-success { background: var(--success); color: white; }
+        .btn-success:hover { background: #219a52; }
+        .btn-outline { background: white; color: #475569; border: 1px solid var(--border); }
+        .btn-outline:hover { background: #f8fafc; border-color: #cbd5e1; }
+        .btn-danger { background: var(--danger); color: white; }
+        .btn-danger:hover { background: #c0392b; }
+
+        /* Tabs */
+        .tabs { display: flex; gap: 0; margin-bottom: 25px; border-bottom: 2px solid var(--border); }
+        .tab { padding: 12px 24px; cursor: pointer; font-size: 14px; font-weight: 500; color: var(--gray-text); border-bottom: 2px solid transparent; margin-bottom: -2px; transition: 0.2s; }
+        .tab:hover { color: #334155; }
+        .tab.active { color: var(--inmoweb-blue); border-bottom-color: var(--inmoweb-blue); font-weight: 600; }
+
+        /* Cards/Sections */
+        .card { background: white; border-radius: 12px; border: 1px solid var(--border); padding: 28px; margin-bottom: 20px; box-shadow: var(--card-shadow); }
+        .card-title { font-size: 15px; font-weight: 700; color: #1e293b; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .card-title span { font-size: 18px; }
+
+        /* Form Grid */
+        .form-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 18px; }
+        .form-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+        .form-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 18px; }
+        .form-full { grid-column: 1 / -1; }
+
+        .form-group { display: flex; flex-direction: column; }
+        .form-group label { font-size: 12px; font-weight: 600; color: var(--gray-text); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+        .form-group input, .form-group select, .form-group textarea {
+            padding: 10px 14px; border-radius: 8px; border: 1px solid var(--border);
+            font-size: 14px; color: #334155; background: #fafbfc; transition: 0.2s; outline: none;
+        }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            border-color: var(--inmoweb-blue); background: white; box-shadow: 0 0 0 3px rgba(63,81,181,0.1);
+        }
+        .form-group textarea { resize: vertical; min-height: 100px; }
+        .form-group input[type="number"] { appearance: textfield; -moz-appearance: textfield; }
+
+        /* Checkbox row */
+        .check-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 10px; }
+        .check-item { display: flex; align-items: center; gap: 8px; font-size: 13px; color: #475569; cursor: pointer; padding: 8px 12px; background: #f8fafc; border-radius: 8px; border: 1px solid var(--border); transition: 0.2s; }
+        .check-item:hover { border-color: var(--inmoweb-blue); background: #f0f4ff; }
+        .check-item input[type="checkbox"] { accent-color: var(--inmoweb-blue); width: 16px; height: 16px; }
+
+        /* Photo manager */
+        .photos-area { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; }
+        .photo-slot { aspect-ratio: 4/3; border: 2px dashed var(--border); border-radius: 10px; display: flex; align-items: center; justify-content: center; cursor: pointer; position: relative; overflow: hidden; transition: 0.2s; background: #fafbfc; }
+        .photo-slot:hover { border-color: var(--inmoweb-blue); background: #f0f4ff; }
+        .photo-slot.has-photo { border-style: solid; border-color: transparent; }
+        .photo-slot img { width: 100%; height: 100%; object-fit: cover; border-radius: 8px; }
+        .photo-slot .remove-photo { position: absolute; top: 6px; right: 6px; background: rgba(231,76,60,0.9); color: white; border: none; width: 24px; height: 24px; border-radius: 50%; cursor: pointer; font-size: 14px; display: none; align-items: center; justify-content: center; }
+        .photo-slot:hover .remove-photo { display: flex; }
+        .photo-add-text { color: var(--gray-text); font-size: 13px; text-align: center; }
+        .photo-principal { position: absolute; bottom: 6px; left: 6px; background: var(--inmoweb-blue); color: white; padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: 700; }
+
+        /* Status badges */
+        .status-badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 20px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+        .status-draft { background: #f1f5f9; color: #64748b; }
+        .status-published { background: #d1fae5; color: #059669; }
+        .status-error { background: #fee2e2; color: #dc2626; }
+
+        /* Portal sections: Status row then Actions row */
+        .portal-status-grid, .portal-actions-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+        .portal-actions-grid { margin-top: 20px; }
+        
+        .portal-status-card { padding: 22px; border-radius: 12px; border: 1px solid var(--border); background: white; text-align: center; display: flex; flex-direction: column; align-items: center; box-shadow: var(--card-shadow); }
+        .portal-actions-card { padding: 16px; border-radius: 12px; border: 1px solid var(--border); background: #f8fafc; display: flex; flex-direction: column; gap: 8px; }
+        
+        .portal-name { font-size: 14px; font-weight: 700; color: #1e293b; margin-bottom: 2px; }
+        .portal-state { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+        .portal-state.ok { color: var(--success); }
+        .portal-state.pending { color: var(--warning); }
+        .portal-state.off { color: var(--gray-text); }
+
+        .btn-mini { padding: 9px 12px; font-size: 11px; font-weight: 600; border-radius: 8px; width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; border: 1px solid transparent; cursor: pointer; transition: 0.2s; }
+        .btn-mini-pub { background: #ecfdf5; color: #059669; border-color: #d1fae5; }
+        .btn-mini-pub:hover { background: #d1fae5; }
+        .btn-mini-ret { background: #fef2f2; color: #dc2626; border-color: #fee2e2; }
+        .btn-mini-ret:hover { background: #fee2e2; }
+
+        /* Toast notifications */
+        .toast { position: fixed; bottom: 30px; right: 30px; padding: 16px 24px; border-radius: 10px; color: white; font-size: 14px; font-weight: 500; z-index: 9999; transform: translateY(100px); opacity: 0; transition: 0.4s; box-shadow: 0 10px 30px rgba(0,0,0,0.15); }
+        .toast.show { transform: translateY(0); opacity: 1; }
+        .toast-success { background: var(--success); }
+        .toast-error { background: var(--danger); }
+
+        /* Tab content */
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        /* Loading */
+        .spinner { display: inline-block; width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.3); border-radius: 50%; border-top-color: #fff; animation: spin 0.6s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+
+<!-- Sidebar 240px -->
+<nav>
+    <div class="logo-box">WEPERTY CRM</div>
+    <a href="index.html" class="nav-item">Dashboard Inversion</a>
+    <a href="mis_propiedades.html" class="nav-item">Mis Propiedades</a>
+    <a href="ficha_inmueble.html" class="nav-item active">Ficha Inmueble</a>
+    <a href="portales.html" class="nav-item">Pasarelas (API)</a>
+</nav>
+
+<!-- Main -->
+<div class="main-content">
+
+    <!-- Header -->
+    <div class="page-header">
+        <div>
+            <h1 id="page-title">⚓ Nuevo Inmueble | Alicante & Costa Blanca</h1>
+            <div class="subtitle" id="page-subtitle">Completa los datos para publicar en los portales</div>
+        </div>
+        <div class="header-actions">
+            <button class="btn btn-outline" onclick="window.location='mis_propiedades.html'">Cancelar</button>
+            <button class="btn btn-primary" id="btn-save" onclick="guardarInmueble()">Guardar Inmueble</button>
+        </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="tabs">
+        <div class="tab active" data-tab="datos" onclick="switchTab('datos')">Datos Generales</div>
+        <div class="tab" data-tab="ubicacion" onclick="switchTab('ubicacion')">Ubicacion</div>
+        <div class="tab" data-tab="caracteristicas" onclick="switchTab('caracteristicas')">Caracteristicas</div>
+        <div class="tab" data-tab="descripcion" onclick="switchTab('descripcion')">Descripcion</div>
+        <div class="tab" data-tab="fotos" onclick="switchTab('fotos')">Fotos</div>
+        <div class="tab" data-tab="portales" onclick="switchTab('portales')">Portales</div>
+    </div>
+
+    <!-- TAB 1: Datos Generales -->
+    <div class="tab-content active" id="tab-datos">
+        <div class="card">
+            <div class="card-title"><span>&#128206;</span> Informacion Basica</div>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>Referencia</label>
+                    <input type="text" id="referencia" placeholder="WP-001">
+                </div>
+                <div class="form-group">
+                    <label>Familia / Tipo</label>
+                    <select id="familia">
+                        <option value="1">Apartamento</option>
+                        <option value="2">Bungalow</option>
+                        <option value="3">Chalet</option>
+                        <option value="4">Estudio</option>
+                        <option value="5">Parcela</option>
+                        <option value="6">Villa de lujo</option>
+                        <option value="9">Finca rustica</option>
+                        <option value="10">Local comercial</option>
+                        <option value="16">Casa de campo</option>
+                        <option value="18">Atico</option>
+                        <option value="20">Casa de pueblo</option>
+                        <option value="21">Casa adosada</option>
+                        <option value="22">Duplex</option>
+                        <option value="24">Piso</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Operacion</label>
+                    <select id="operacion">
+                        <option value="1">Venta</option>
+                        <option value="2">Alquiler</option>
+                        <option value="3">Traspaso</option>
+                        <option value="4">Alquiler opcion a compra</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Estado</label>
+                    <select id="estado">
+                        <option value="ON">Obra nueva</option>
+                        <option value="SM">Segunda mano</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Precio (EUR)</label>
+                    <input type="number" id="precio" placeholder="155000">
+                </div>
+                <div class="form-group">
+                    <label>Precio anterior (si hay rebaja)</label>
+                    <input type="number" id="precio_anterior" placeholder="">
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-title"><span>&#128207;</span> Superficies y Distribucion</div>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>Superficie habitable (m2)</label>
+                    <input type="number" id="sup_habitable" placeholder="120">
+                </div>
+                <div class="form-group">
+                    <label>Superficie construida (m2)</label>
+                    <input type="number" id="sup_construida" placeholder="140">
+                </div>
+                <div class="form-group">
+                    <label>Parcela (m2)</label>
+                    <input type="number" id="sup_parcela" placeholder="0">
+                </div>
+                <div class="form-group">
+                    <label>Dormitorios</label>
+                    <input type="number" id="dormitorios" placeholder="2" min="0">
+                </div>
+                <div class="form-group">
+                    <label>Banos</label>
+                    <input type="number" id="banos" placeholder="1" min="0">
+                </div>
+                <div class="form-group">
+                    <label>Aseos</label>
+                    <input type="number" id="aseos" placeholder="1" min="0">
+                </div>
+                <div class="form-group">
+                    <label>Planta</label>
+                    <input type="number" id="planta" placeholder="3">
+                </div>
+                <div class="form-group">
+                    <label>Ano de construccion</label>
+                    <input type="number" id="ano_construccion" placeholder="2005" min="1900" max="2030">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TAB 2: Ubicacion -->
+    <div class="tab-content" id="tab-ubicacion">
+        <div class="card">
+            <div class="card-title"><span>&#128205;</span> Localizacion</div>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>Provincia</label>
+                    <input type="text" id="provincia" value="Alicante">
+                </div>
+                <div class="form-group">
+                    <label>Poblacion</label>
+                    <select id="poblacion">
+                        <option value="">Seleccionar...</option>
+                        <option>Alicante</option>
+                        <option>Altea</option>
+                        <option>Benidorm</option>
+                        <option>Calpe</option>
+                        <option>Denia</option>
+                        <option>Elche</option>
+                        <option>Javea / Xabia</option>
+                        <option>Moraira</option>
+                        <option>Orihuela Costa</option>
+                        <option>Santa Pola</option>
+                        <option>Torrevieja</option>
+                        <option>Villajoyosa</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Codigo Postal</label>
+                    <input type="text" id="cp" placeholder="03501" maxlength="5">
+                </div>
+                <div class="form-group">
+                    <label>Zona / Barrio</label>
+                    <input type="text" id="zona" placeholder="Centro">
+                </div>
+                <div class="form-group form-full">
+                    <label>Direccion completa (visible solo en mapa)</label>
+                    <input type="text" id="direccion" placeholder="Calle Mayor, 15">
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-title"><span>&#127758;</span> Posicion en el mapa</div>
+            <div class="form-grid-2">
+                <div class="form-group">
+                    <label>Latitud</label>
+                    <input type="text" id="lat" placeholder="38.5410">
+                </div>
+                <div class="form-group">
+                    <label>Longitud</label>
+                    <input type="text" id="lng" placeholder="-0.1225">
+                </div>
+            </div>
+            <p style="margin-top:12px;font-size:12px;color:var(--gray-text);">Idealista requiere posicion exacta en mapa. Puedes obtener las coordenadas desde Google Maps.</p>
+        </div>
+    </div>
+
+    <!-- TAB 3: Caracteristicas -->
+    <div class="tab-content" id="tab-caracteristicas">
+        <div class="card">
+            <div class="card-title"><span>&#9881;</span> Equipamiento</div>
+            <div class="form-grid-3">
+                <div class="form-group">
+                    <label>Amueblado</label>
+                    <select id="amueblado">
+                        <option value="">Sin indicar</option>
+                        <option value="amueblado">Amueblado</option>
+                        <option value="semi amueblado">Semi amueblado</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Orientacion</label>
+                    <select id="orientacion">
+                        <option value="">Sin indicar</option>
+                        <option value="N">Norte</option><option value="S">Sur</option>
+                        <option value="E">Este</option><option value="O">Oeste</option>
+                        <option value="NE">Noreste</option><option value="NO">Noroeste</option>
+                        <option value="SE">Sureste</option><option value="SO">Suroeste</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Vistas</label>
+                    <select id="vistas">
+                        <option value="">Sin indicar</option>
+                        <option value="mar">Mar</option><option value="montana">Montana</option>
+                        <option value="despejadas">Despejadas</option><option value="panoramicas">Panoramicas</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Piscina</label>
+                    <select id="piscina">
+                        <option value="">Sin piscina</option>
+                        <option value="privada">Privada</option>
+                        <option value="comunitaria">Comunitaria</option>
+                        <option value="climatizada">Climatizada</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Calefaccion</label>
+                    <select id="calefaccion">
+                        <option value="">No disponible</option>
+                        <option value="individual">Individual</option>
+                        <option value="central">Central</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Tipo calefaccion</label>
+                    <select id="tipo_calefaccion">
+                        <option value="">Sin indicar</option>
+                        <option value="electrica">Electrica</option>
+                        <option value="gas">Gas</option>
+                        <option value="radiante">Radiante</option>
+                        <option value="solar">Solar</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Tipo suelo</label>
+                    <select id="tipo_suelo">
+                        <option value="">Sin indicar</option>
+                        <option value="parquet">Parquet</option>
+                        <option value="tarima flotante">Tarima flotante</option>
+                        <option value="marmol">Marmol</option>
+                        <option value="ceramica">Ceramica</option>
+                        <option value="gres">Gres</option>
+                        <option value="terrazo">Terrazo</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Tipo cocina</label>
+                    <select id="tipo_cocina">
+                        <option value="">Sin indicar</option>
+                        <option value="individual">Individual</option>
+                        <option value="americana">Americana</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Certificacion energetica</label>
+                    <select id="cert_energetica">
+                        <option value="NO">No disponible</option>
+                        <option value="A">A</option><option value="B">B</option>
+                        <option value="C">C</option><option value="D">D</option>
+                        <option value="E">E</option><option value="F">F</option>
+                        <option value="G">G</option>
+                        <option value="EX">Exento</option>
+                        <option value="TA">En Tramite</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-title"><span>&#9989;</span> Extras</div>
+            <div class="check-grid">
+                <label class="check-item"><input type="checkbox" id="chk_ascensor"> Ascensor</label>
+                <label class="check-item"><input type="checkbox" id="chk_aa"> Aire acondicionado</label>
+                <label class="check-item"><input type="checkbox" id="chk_terraza"> Terraza</label>
+                <label class="check-item"><input type="checkbox" id="chk_garaje"> Garaje</label>
+                <label class="check-item"><input type="checkbox" id="chk_trastero"> Trastero</label>
+                <label class="check-item"><input type="checkbox" id="chk_armarios"> Armarios empotrados</label>
+                <label class="check-item"><input type="checkbox" id="chk_chimenea"> Chimenea</label>
+                <label class="check-item"><input type="checkbox" id="chk_puerta_blindada"> Puerta blindada</label>
+                <label class="check-item"><input type="checkbox" id="chk_primera_linea"> Primera linea de mar</label>
+                <label class="check-item"><input type="checkbox" id="chk_sotano"> Sotano</label>
+                <label class="check-item"><input type="checkbox" id="chk_reformado"> Reformado</label>
+                <label class="check-item"><input type="checkbox" id="chk_doble_cristal"> Doble acristalamiento</label>
+            </div>
+        </div>
+    </div>
+
+    <!-- TAB 4: Descripcion -->
+    <div class="tab-content" id="tab-descripcion">
+        <div class="card">
+            <div class="card-title"><span>&#128221;</span> Titulo y Descripcion (Espanol)</div>
+            <div class="form-group" style="margin-bottom:18px;">
+                <label>Titulo del anuncio</label>
+                <input type="text" id="titulo_es" placeholder="Apartamento con vistas al mar en Benidorm">
+            </div>
+            <div class="form-group">
+                <label>Descripcion completa</label>
+                <textarea id="desc_es" rows="6" placeholder="Describe el inmueble con todo detalle..."></textarea>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-title"><span>&#127468;&#127463;</span> Titulo y Descripcion (Ingles)</div>
+            <div class="form-group" style="margin-bottom:18px;">
+                <label>Title</label>
+                <input type="text" id="titulo_en" placeholder="Apartment with sea views in Benidorm">
+            </div>
+            <div class="form-group">
+                <label>Description</label>
+                <textarea id="desc_en" rows="6" placeholder="Full property description in English..."></textarea>
+            </div>
+        </div>
+    </div>
+
+    <!-- TAB 5: Fotos -->
+    <div class="tab-content" id="tab-fotos">
+        <div class="card">
+            <div class="card-title"><span>&#128247;</span> Galeria de imagenes</div>
+            <p style="font-size:13px;color:var(--gray-text);margin-bottom:15px;">Arrastra o haz clic para anadir fotos. La primera sera la imagen principal.</p>
+            <div class="photos-area" id="photos-area">
+                <!-- Slots generados por JS -->
+            </div>
+            <input type="file" id="photo-input" multiple accept="image/*" style="display:none;" onchange="handlePhotos(event)">
+        </div>
+    </div>
+
+    <!-- TAB 6: Portales -->
+    <div class="tab-content" id="tab-portales">
+        <div class="card">
+            <div class="card-title"><span>📡</span> Estado y Conectividad</div>
+            <div class="portal-status-grid">
+                <!-- Row 1: STATUS -->
+                <div class="portal-status-card">
+                    <img src="img/logo_idealista.svg" alt="Idealista" style="width:40px;height:40px;margin-bottom:10px;border-radius:8px;">
+                    <div class="portal-name">Idealista</div>
+                    <div class="portal-state pending" id="portal-idealista">Pendiente</div>
+                </div>
+                <div class="portal-status-card">
+                    <img src="img/logo_fotocasa.svg" alt="Fotocasa" style="width:40px;height:40px;margin-bottom:10px;border-radius:8px;">
+                    <div class="portal-name">Fotocasa</div>
+                    <div class="portal-state pending" id="portal-fotocasa">Pendiente</div>
+                </div>
+                <div class="portal-status-card">
+                    <img src="img/logo_thinkspain.svg" alt="ThinkSpain" style="width:40px;height:40px;margin-bottom:10px;border-radius:8px;">
+                    <div class="portal-name">ThinkSpain</div>
+                    <div class="portal-state pending" id="portal-thinkspain">Pendiente</div>
+                </div>
+            </div>
+
+            <!-- Row 2: ACTIONS -->
+            <div class="portal-actions-grid">
+                <div class="portal-actions-card">
+                    <button class="btn-mini btn-mini-pub" onclick="publicarEn('idealista')">
+                        <span style="color:#059669;">⬆</span> Publicar en Idealista
+                    </button>
+                    <button class="btn-mini btn-mini-ret" onclick="despublicarDe('idealista')">
+                        ✕ Retirar de Idealista
+                    </button>
+                </div>
+                <div class="portal-actions-card">
+                    <button class="btn-mini btn-mini-pub" onclick="publicarEn('fotocasa')">
+                        <span style="color:#059669;">⬆</span> Publicar en Fotocasa
+                    </button>
+                    <button class="btn-mini btn-mini-ret" onclick="despublicarDe('fotocasa')">
+                        ✕ Retirar de Fotocasa
+                    </button>
+                </div>
+                <div class="portal-actions-card">
+                    <button class="btn-mini btn-mini-pub" onclick="publicarEn('thinkspain')">
+                        <span style="color:#059669;">⬆</span> Publicar en ThinkSpain
+                    </button>
+                    <button class="btn-mini btn-mini-ret" onclick="despublicarDe('thinkspain')">
+                        ✕ Retirar de ThinkSpain
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+    // ===================== SUPABASE =====================
+    const SUPABASE_URL = 'https://dwbvegnxmyvpolvofkfn.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR3YnZlZ254bXl2cG9sdm9ma2ZuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njc1Mzg1NTUsImV4cCI6MjA4MzExNDU1NX0.eT5ZSce8H8Yk8pWKyLUYChU0HtmZljywP4eEQd5FkOI';
+    const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    let editingId = null;
+    let photos = [];
+
+    // ===================== INIT =====================
+    document.addEventListener('DOMContentLoaded', () => {
+        // Check if editing existing property
+        const params = new URLSearchParams(window.location.search);
+        editingId = params.get('id');
+        if (editingId) {
+            cargarInmueble(editingId);
+        }
+        renderPhotoSlots();
+    });
+
+    // ===================== TABS =====================
+    function switchTab(tabName) {
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+        document.querySelector(`.tab[data-tab="${tabName}"]`).classList.add('active');
+        document.getElementById(`tab-${tabName}`).classList.add('active');
+    }
+
+    // ===================== PHOTOS =====================
+    function renderPhotoSlots() {
+        const area = document.getElementById('photos-area');
+        area.innerHTML = '';
+        for (let i = 0; i < Math.max(photos.length + 2, 8); i++) {
+            const slot = document.createElement('div');
+            slot.className = 'photo-slot' + (photos[i] ? ' has-photo' : '');
+            if (photos[i]) {
+                slot.innerHTML = `
+                    <img src="${photos[i]}" alt="Foto ${i+1}">
+                    <button class="remove-photo" onclick="removePhoto(${i})">x</button>
+                    ${i === 0 ? '<div class="photo-principal">PRINCIPAL</div>' : ''}
+                `;
+            } else {
+                slot.innerHTML = '<div class="photo-add-text">+ Anadir foto</div>';
+                slot.onclick = () => document.getElementById('photo-input').click();
+            }
+            area.appendChild(slot);
+        }
+    }
+
+    function handlePhotos(event) {
+        const files = event.target.files;
+        for (const file of files) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                photos.push(e.target.result);
+                renderPhotoSlots();
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+
+    function removePhoto(index) {
+        photos.splice(index, 1);
+        renderPhotoSlots();
+    }
+
+    // ===================== SAVE =====================
+    async function guardarInmueble() {
+        const btn = document.getElementById('btn-save');
+        btn.innerHTML = '<span class="spinner"></span> Guardando...';
+        btn.disabled = true;
+
+        const familiaSelect = document.getElementById('familia');
+        const data = {
+            referencia: document.getElementById('referencia').value,
+            titulo: document.getElementById('titulo_es').value || `${familiaSelect.options[familiaSelect.selectedIndex].text} en ${document.getElementById('poblacion').value}`,
+            tipo: familiaSelect.options[familiaSelect.selectedIndex].text.toLowerCase(),
+            precio: parseFloat(document.getElementById('precio').value) || 0,
+            zona: `${document.getElementById('poblacion').value}, ${document.getElementById('zona').value}`,
+            superficie: parseInt(document.getElementById('sup_habitable').value) || 0,
+            habitaciones: parseInt(document.getElementById('dormitorios').value) || 0,
+            estado: 'borrador',
+            caracteristicas: {
+                familia_id: familiaSelect.value,
+                operacion_id: document.getElementById('operacion').value,
+                estado_obra: document.getElementById('estado').value,
+                precio_anterior: document.getElementById('precio_anterior').value,
+                sup_construida: document.getElementById('sup_construida').value,
+                sup_parcela: document.getElementById('sup_parcela').value,
+                banos: document.getElementById('banos').value,
+                aseos: document.getElementById('aseos').value,
+                planta: document.getElementById('planta').value,
+                ano_construccion: document.getElementById('ano_construccion').value,
+                // Ubicacion
+                provincia: document.getElementById('provincia').value,
+                poblacion: document.getElementById('poblacion').value,
+                cp: document.getElementById('cp').value,
+                zona_barrio: document.getElementById('zona').value,
+                direccion: document.getElementById('direccion').value,
+                lat: document.getElementById('lat').value,
+                lng: document.getElementById('lng').value,
+                // Caracteristicas
+                amueblado: document.getElementById('amueblado').value,
+                orientacion: document.getElementById('orientacion').value,
+                vistas: document.getElementById('vistas').value,
+                piscina: document.getElementById('piscina').value,
+                calefaccion: document.getElementById('calefaccion').value,
+                tipo_calefaccion: document.getElementById('tipo_calefaccion').value,
+                tipo_suelo: document.getElementById('tipo_suelo').value,
+                tipo_cocina: document.getElementById('tipo_cocina').value,
+                cert_energetica: document.getElementById('cert_energetica').value,
+                // Extras (checkboxes)
+                ascensor: document.getElementById('chk_ascensor').checked ? 1 : 0,
+                aa: document.getElementById('chk_aa').checked ? 1 : 0,
+                terraza: document.getElementById('chk_terraza').checked ? 1 : 0,
+                garaje: document.getElementById('chk_garaje').checked ? 1 : 0,
+                trastero: document.getElementById('chk_trastero').checked ? 1 : 0,
+                armarios_empotrados: document.getElementById('chk_armarios').checked ? 1 : 0,
+                chimenea: document.getElementById('chk_chimenea').checked ? 1 : 0,
+                puerta_blindada: document.getElementById('chk_puerta_blindada').checked ? 1 : 0,
+                primera_linea: document.getElementById('chk_primera_linea').checked ? 1 : 0,
+                sotano: document.getElementById('chk_sotano').checked ? 1 : 0,
+                reformado: document.getElementById('chk_reformado').checked ? 1 : 0,
+                doble_cristal: document.getElementById('chk_doble_cristal').checked ? 1 : 0,
+                // Descripciones
+                titulo_es: document.getElementById('titulo_es').value,
+                desc_es: document.getElementById('desc_es').value,
+                titulo_en: document.getElementById('titulo_en').value,
+                desc_en: document.getElementById('desc_en').value,
+                // Fotos
+                fotos: photos,
+                // Estado portales
+                idealista_status: 'pendiente',
+                fotocasa_status: 'pendiente',
+                thinkspain_status: 'pendiente'
+            }
+        };
+
+        try {
+            let result;
+            if (editingId) {
+                result = await db.from('inm_propiedades').update(data).eq('id', editingId);
+            } else {
+                result = await db.from('inm_propiedades').insert(data);
+            }
+
+            if (result.error) throw result.error;
+            showToast(editingId ? 'Inmueble actualizado correctamente' : 'Inmueble creado correctamente', 'success');
+            setTimeout(() => window.location = 'mis_propiedades.html', 1500);
+        } catch (err) {
+            showToast('Error al guardar: ' + err.message, 'error');
+        } finally {
+            btn.innerHTML = 'Guardar Inmueble';
+            btn.disabled = false;
+        }
+    }
+
+    // ===================== LOAD (edit mode) =====================
+    async function cargarInmueble(id) {
+        document.getElementById('page-title').innerHTML = '⚓ Editar Inmueble | Alicante & Costa Blanca';
+        document.getElementById('page-subtitle').textContent = 'Modificar datos del inmueble existente';
+
+        const { data, error } = await db.from('inm_propiedades').select('*').eq('id', id).single();
+        if (error || !data) { showToast('No se encontro el inmueble', 'error'); return; }
+
+        const c = data.caracteristicas || {};
+
+        // Basic fields
+        document.getElementById('referencia').value = data.referencia || '';
+        document.getElementById('familia').value = c.familia_id || '1';
+        document.getElementById('operacion').value = c.operacion_id || '1';
+        document.getElementById('estado').value = c.estado_obra || 'SM';
+        document.getElementById('precio').value = data.precio || '';
+        document.getElementById('precio_anterior').value = c.precio_anterior || '';
+
+        // Surfaces
+        document.getElementById('sup_habitable').value = data.superficie || '';
+        document.getElementById('sup_construida').value = c.sup_construida || '';
+        document.getElementById('sup_parcela').value = c.sup_parcela || '';
+        document.getElementById('dormitorios').value = data.habitaciones || '';
+        document.getElementById('banos').value = c.banos || '';
+        document.getElementById('aseos').value = c.aseos || '';
+        document.getElementById('planta').value = c.planta || '';
+        document.getElementById('ano_construccion').value = c.ano_construccion || '';
+
+        // Location
+        document.getElementById('provincia').value = c.provincia || 'Alicante';
+        document.getElementById('poblacion').value = c.poblacion || '';
+        document.getElementById('cp').value = c.cp || '';
+        document.getElementById('zona').value = c.zona_barrio || '';
+        document.getElementById('direccion').value = c.direccion || '';
+        document.getElementById('lat').value = c.lat || '';
+        document.getElementById('lng').value = c.lng || '';
+
+        // Features
+        document.getElementById('amueblado').value = c.amueblado || '';
+        document.getElementById('orientacion').value = c.orientacion || '';
+        document.getElementById('vistas').value = c.vistas || '';
+        document.getElementById('piscina').value = c.piscina || '';
+        document.getElementById('calefaccion').value = c.calefaccion || '';
+        document.getElementById('tipo_calefaccion').value = c.tipo_calefaccion || '';
+        document.getElementById('tipo_suelo').value = c.tipo_suelo || '';
+        document.getElementById('tipo_cocina').value = c.tipo_cocina || '';
+        document.getElementById('cert_energetica').value = c.cert_energetica || 'NO';
+
+        // Checkboxes
+        document.getElementById('chk_ascensor').checked = c.ascensor == 1;
+        document.getElementById('chk_aa').checked = c.aa == 1;
+        document.getElementById('chk_terraza').checked = c.terraza == 1;
+        document.getElementById('chk_garaje').checked = c.garaje == 1;
+        document.getElementById('chk_trastero').checked = c.trastero == 1;
+        document.getElementById('chk_armarios').checked = c.armarios_empotrados == 1;
+        document.getElementById('chk_chimenea').checked = c.chimenea == 1;
+        document.getElementById('chk_puerta_blindada').checked = c.puerta_blindada == 1;
+        document.getElementById('chk_primera_linea').checked = c.primera_linea == 1;
+        document.getElementById('chk_sotano').checked = c.sotano == 1;
+        document.getElementById('chk_reformado').checked = c.reformado == 1;
+        document.getElementById('chk_doble_cristal').checked = c.doble_cristal == 1;
+
+        // Descriptions
+        document.getElementById('titulo_es').value = c.titulo_es || data.titulo || '';
+        document.getElementById('desc_es').value = c.desc_es || '';
+        document.getElementById('titulo_en').value = c.titulo_en || '';
+        document.getElementById('desc_en').value = c.desc_en || '';
+
+        // Photos
+        photos = c.fotos || [];
+        renderPhotoSlots();
+
+        // Portal status
+        updatePortalStatus('idealista', c.idealista_status);
+        updatePortalStatus('fotocasa', c.fotocasa_status);
+        updatePortalStatus('thinkspain', c.thinkspain_status);
+    }
+
+    function updatePortalStatus(portal, status) {
+        const el = document.getElementById(`portal-${portal}`);
+        if (!el) return;
+        const map = { publicado: ['Publicado', 'ok'], pendiente: ['Pendiente', 'pending'], error: ['Error', 'off'], inactivo: ['No activo', 'off'] };
+        const [text, cls] = map[status] || map['pendiente'];
+        el.textContent = text;
+        el.className = `portal-state ${cls}`;
+    }
+
+    // ===================== PUBLISH / UNPUBLISH =====================
+    async function publicarEn(portal) {
+        showToast(`Publicando en ${portal}... (Motor de sincronizacion pendiente de API Secret)`, 'success');
+    }
+
+    async function despublicarDe(portal) {
+        showToast(`Retirando de ${portal}... (Motor de sincronizacion pendiente de API Secret)`, 'error');
+    }
+
+    // ===================== TOAST =====================
+    function showToast(msg, type) {
+        const t = document.getElementById('toast');
+        t.textContent = msg;
+        t.className = `toast toast-${type} show`;
+        setTimeout(() => t.classList.remove('show'), 3500);
+    }
+</script>
+</body>
+</html>

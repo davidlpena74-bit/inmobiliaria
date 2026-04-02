@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pasarelas | Weperty CRM (Estilo Inmoweb)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="sidebar.css">
+    <style>
+        :root {
+            --inmoweb-blue: #3f51b5;
+            --inmoweb-light: #f4f6f8;
+            --danger: #e74c3c;
+            --success: #27ae60;
+            --warning: #f1c40f;
+        }
+
+        * { margin:0; padding:0; box-sizing:border-box; font-family:'Roboto',sans-serif; }
+        body { background: var(--inmoweb-light); display:flex; min-height:100vh; color: #444; }
+ Black Inmoweb Style */
+        .header-title { font-size: 24px; color: #333; margin-bottom: 30px; display: flex; align-items: center; gap: 10px; }
+
+        .extension-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(450px, 1fr)); gap: 25px; }
+
+        /* Tarjeta Clon Inmoweb */
+        .ext-card { background: white; border-radius: 12px; padding: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); position: relative; border: 1px solid #e1e4e8; display: flex; justify-content: space-between; }
+        
+        .ext-info { flex: 1; }
+        .ext-status-date { font-size: 12px; color: #999; margin-bottom: 5px; }
+        .ext-name { font-size: 18px; font-weight: 500; color: #2c3e50; margin-bottom: 15px; }
+        
+        .ext-stats { font-size: 13px; color: #666; line-height: 1.8; }
+        .stat-row { display: flex; align-items: center; gap: 10px; }
+        .error-badge { background: #fee; color: var(--danger); padding: 0 6px; border-radius: 50%; font-weight: bold; font-size: 11px; }
+
+        .ext-visual { width: 100px; text-align: center; }
+        .ext-logo { width: 80px; height: 80px; border-radius: 12px; margin-bottom: 15px; display: flex; align-items: center; justify-content: center; background: #fff; border: 1px solid #f0f0f0; }
+        .ext-tags { display: flex; flex-direction: column; gap: 5px; }
+        .tag { font-size: 10px; color: #777; background: #f8f9fa; border: 1px solid #eee; padding: 2px 4px; border-radius: 4px; text-transform: uppercase; font-weight: bold; }
+
+        /* Botón "Instalada" con despliegue */
+        .btn-installed { background: var(--inmoweb-blue); color: white; border: none; padding: 10px 15px; border-radius: 6px; font-size: 13px; font-weight: 500; cursor: pointer; display: flex; align-items: center; gap: 8px; margin-top: 20px; transition: 0.2s; }
+        .btn-installed:hover { background: #303f9f; }
+        
+        /* Códigos Reales Inyectados */
+        .real-code { background: #fdfdfd; border: 1px dashed #ddd; padding: 10px; font-family: monospace; font-size: 10px; color: #7f8c8d; margin-top: 15px; border-radius: 6px; word-break: break-all; }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="logo-box">WEPERTY CRM</div>
+        <a href="index.html" class="nav-item">Dashboard Inversion</a>
+        <a href="mis_propiedades.html" class="nav-item">Mis Propiedades</a>
+        <a href="ficha_inmueble.html" class="nav-item">Ficha Inmueble</a>
+        <a href="portales.html" class="nav-item active">Pasarelas (API)</a>
+    </nav>
+
+    <main class="main-content">
+        <div class="header-title">⚓ Pasarelas (API) | Alicante & Costa Blanca</div>
+
+        <div class="extension-grid">
+            <!-- IDEALISTA CLONE -->
+            <div class="ext-card">
+                <div class="ext-info">
+                    <div class="ext-status-date">Activa desde 27 dic. 2020</div>
+                    <div class="ext-name">Conexión con idealista</div>
+                    <div class="ext-stats">
+                        <div class="stat-row">Seleccionados: <strong>39 (Alicante)</strong></div>
+                        <div class="stat-row">Errores: <span class="error-badge">16</span> ⚠️</div>
+                        <div class="stat-row">Sincronizado: <strong>Automático</strong></div>
+                    </div>
+                    
+                    <div class="real-code">ClientID: ilc8b226043a4bf870e9095c2e33cbc74f183d52cf4</div>
+
+                    <button class="btn-installed" onclick="alert('Lanzando Sincronización Real con Código ilc8b...')">⚙️ Instalada ▾</button>
+                    <div style="font-size: 10px; color: #999; margin-top: 10px;">Pulse para: Probar / Descargar</div>
+                </div>
+                <div class="ext-visual">
+                    <div class="ext-logo"><img src="img/logo_idealista.svg" style="width: 50px; height: 50px; border-radius: 8px;" alt="idealista"></div>
+                    <div class="ext-tags">
+                        <div class="tag">Portal</div>
+                        <div class="tag">Tiempo real</div>
+                        <div class="tag">Alicante</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FOTOCASA CLONE -->
+            <div class="ext-card">
+                <div class="ext-info">
+                    <div class="ext-status-date">Activa desde 26 mar. 2026</div>
+                    <div class="ext-name">Conexión con Fotocasa PRO 1</div>
+                    <div class="ext-stats">
+                        <div class="stat-row">Seleccionados: <strong>39 (Alicante)</strong></div>
+                        <div class="stat-row">Errores: <span class="error-badge">9</span> ⚠️</div>
+                        <div class="stat-row">Sincronizado: <strong>Automático</strong></div>
+                    </div>
+
+                    <div class="real-code">API Key: 12T1t5JY0sP4jV0lFwlKFF12wQSc3kOtMZiZ...</div>
+
+                    <button class="btn-installed" onclick="alert('Iniciando Handshake Adevinta con Token 12T1t...')">⚙️ Instalada ▾</button>
+                    <div style="font-size: 10px; color: #999; margin-top: 10px;">Pulse para: Probar / Descargar</div>
+                </div>
+                <div class="ext-visual">
+                    <div class="ext-logo"><img src="img/logo_fotocasa.svg" style="width: 50px; height: 50px; border-radius: 8px;" alt="fotocasa"></div>
+                    <div class="ext-tags">
+                        <div class="tag">Adevinta</div>
+                        <div class="tag">Premium</div>
+                        <div class="tag">PRO 1</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- THINKSPAIN CLONE -->
+            <div class="ext-card">
+                <div class="ext-info">
+                    <div class="ext-status-date">Nueva extensión</div>
+                    <div class="ext-name">Kyero XML (ThinkSpain)</div>
+                    <div class="ext-stats">
+                        <div class="stat-row">Feed: <strong>Costa Blanca Export</strong></div>
+                        <div class="stat-row">Errores: <span class="error-badge" style="background:#e8f5e9; color:#27ae60; border-radius:50%; padding:0 3px;">0</span> ✅</div>
+                        <div class="stat-row">Sincronizado: <strong>Manual</strong></div>
+                    </div>
+
+                    <div class="real-code">Inmoweb XML: https://export.inmoweb.com/feeds/kyero.xml</div>
+
+                    <button class="btn-installed" style="background:#27ae60;">⚙️ Activar ▾</button>
+                    <div style="font-size: 10px; color: #999; margin-top: 10px;">En espera de Feed Real de David.</div>
+                </div>
+                <div class="ext-visual">
+                    <div class="ext-logo"><img src="img/logo_thinkspain.svg" style="width: 50px; height: 50px; border-radius: 8px;" alt="thinkspain"></div>
+                    <div class="ext-tags">
+                        <div class="tag">Kyero v3</div>
+                        <div class="tag">International</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>
