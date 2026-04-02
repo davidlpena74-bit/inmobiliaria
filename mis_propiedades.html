@@ -188,12 +188,12 @@
 
             tbody.innerHTML = filtered.map(p => {
                 const c = p.caracteristicas || {};
-                const estado = (c.estado) || 'sin_estado';
+                const estadoVal = p.estado || c.estado || 'borrador';
                 const estadoBadge = {
                     'publicado': '<span class="badge badge-ok">Publicado</span>',
                     'borrador': '<span class="badge badge-draft">Borrador</span>',
                     'error': '<span class="badge badge-pending">Error</span>',
-                }[estado] || '<span class="badge badge-off">Sin estado</span>';
+                }[estadoVal] || '<span class="badge badge-off">Sin estado</span>';
 
                 const precio = p.precio ? p.precio.toLocaleString('es-ES') + ' EUR' : '-';
 
