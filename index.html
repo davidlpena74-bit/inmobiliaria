@@ -3,168 +3,155 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Inversión | Weperty CRM</title>
+    <title>Inicio | Weperty CRM</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link rel="stylesheet" href="shell.css">
     <style>
-        /* Dashboard-specific styles */
-        .dash-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 22px;
-        }
-        .dash-header h1 {
-            font-size: 20px;
-            font-weight: 700;
-            color: var(--text);
-        }
-        .dash-header .subtitle {
-            font-size: 12px;
-            color: var(--text-light);
-            margin-top: 2px;
-        }
+        /* Inicio-specific styles */
+        .dash-container { display: flex; gap: 24px; padding: 2px; }
+        .main-column { flex: 1; }
+        .side-column { width: 320px; flex-shrink: 0; }
 
-        /* Stat cards */
-        .stat-row {
+        /* Banner */
+        .promo-banner {
+            background: linear-gradient(135deg, #0d1b3e 0%, #1e3a8a 100%);
+            border-radius: 12px;
+            color: #fff;
+            padding: 30px 40px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            overflow: hidden;
+            margin-bottom: 24px;
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+        }
+        .promo-banner::after {
+            content: '¡NOVEDAD!';
+            position: absolute;
+            top: 20px; right: -30px;
+            background: #ffd700;
+            color: #000;
+            padding: 4px 40px;
+            font-size: 10px;
+            font-weight: 700;
+            transform: rotate(45deg);
+        }
+        .promo-content { max-width: 55%; }
+        .promo-content h2 { font-size: 20px; font-weight: 700; line-height: 1.3; margin-bottom: 12px; }
+        .promo-content p { font-size: 13px; opacity: 0.85; margin-bottom: 20px; line-height: 1.5; }
+        .promo-btn {
+            background: rgba(255,255,255,0.15);
+            border: 1px solid rgba(255,255,255,0.3);
+            color: #fff;
+            padding: 8px 18px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .promo-btn:hover { background: rgba(255,255,255,0.25); }
+        .promo-img { width: 40%; display: flex; justify-content: flex-end; }
+        .promo-img img { max-width: 100%; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+
+        /* Cards Grid */
+        .stats-grid {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
             gap: 16px;
-            margin-bottom: 22px;
         }
         .stat-card {
-            background: var(--white);
+            background: #fff;
             border: 1px solid var(--border);
             border-radius: 10px;
-            padding: 18px 20px;
+            padding: 16px;
             display: flex;
+            flex-direction: column;
             align-items: center;
-            gap: 16px;
+            text-align: center;
+            transition: 0.2s;
+            position: relative;
         }
-        .stat-icon {
-            width: 42px; height: 42px;
-            border-radius: 10px;
+        .stat-card:hover { transform: translateY(-3px); box-shadow: 0 6px 12px rgba(0,0,0,0.05); }
+        .stat-header {
+            width: 100%;
             display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
-            color: #fff;
-        }
-        .stat-value {
-            font-size: 22px;
-            font-weight: 700;
+            justify-content: space-between;
+            font-size: 12px;
+            font-weight: 600;
             color: var(--text);
+            margin-bottom: 12px;
         }
-        .stat-label {
-            font-size: 11px;
-            color: var(--text-light);
-            text-transform: uppercase;
-            letter-spacing: 0.3px;
-            margin-top: 2px;
-        }
+        .stat-header .ver-todo { color: var(--link-blue); text-decoration: none; font-size: 10px; font-weight: 400; }
+        .stat-value { font-size: 24px; font-weight: 700; margin-bottom: 4px; color: #1e293b; }
+        .stat-subtext { font-size: 11px; color: var(--text-light); }
+        .stat-subtext.blue { color: var(--link-blue); }
 
-        /* Grid layouts */
-        .grid-2 {
-            display: grid;
-            grid-template-columns: 280px 1fr;
-            gap: 16px;
-            margin-bottom: 22px;
+        .hosting-bar {
+            width: 100%; height: 6px;
+            background: #f1f5f9;
+            border-radius: 3px;
+            margin: 10px 0 6px;
+            overflow: hidden;
         }
-        .grid-full {
-            margin-bottom: 22px;
-        }
+        .hosting-fill { height: 100%; background: #ef4444; width: 95%; }
 
-        .card {
-            background: var(--white);
+        /* Sidebar content */
+        .side-panel {
+            background: #fff;
             border: 1px solid var(--border);
             border-radius: 10px;
             padding: 20px;
+            margin-bottom: 20px;
         }
-        .card-title {
-            font-size: 13px;
-            font-weight: 700;
-            color: var(--text);
-            text-transform: uppercase;
-            letter-spacing: 0.3px;
-            margin-bottom: 16px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        /* Map */
-        #map {
-            height: 380px;
-            width: 100%;
-            border-radius: 8px;
-        }
-
-        /* Ranking */
-        .rank-item {
+        .side-title {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 10px 0;
-            border-bottom: 1px solid #f0f3f6;
             font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 16px;
         }
-        .rank-item:last-child { border-bottom: none; }
-        .rank-pos {
-            width: 24px; height: 24px;
+        .side-title.red { color: #dc2626; justify-content: flex-end; letter-spacing: 0.5px; }
+
+        .alert-box {
+            background: #fff5f5;
+            border: 1px solid #fee2e2;
+            padding: 10px;
             border-radius: 6px;
+            font-size: 12px;
             display: flex;
             align-items: center;
-            justify-content: center;
-            font-size: 11px;
-            font-weight: 700;
-            color: #fff;
-            margin-right: 10px;
-            flex-shrink: 0;
+            gap: 10px;
+            margin-top: 20px;
         }
-        .rank-name { flex: 1; font-weight: 500; }
-        .rank-value { font-weight: 700; color: var(--accent); }
+        .alert-box i { color: #dc2626; font-size: 14px; }
+        .alert-box .plus { margin-left: auto; color: #dc2626; cursor: pointer; }
 
-        /* Table */
-        table {
-            width: 100%;
-            border-collapse: collapse;
+        .task-list { margin-top: 15px; }
+        .task-item {
+            border-bottom: 1px solid #f1f5f9;
+            padding: 15px 0;
+            position: relative;
         }
-        thead { background: #f8fafc; }
-        thead th {
-            padding: 10px 14px;
+        .task-item:last-child { border-bottom: none; }
+        .task-meta { display: flex; align-items: center; gap: 8px; font-size: 11px; color: var(--text-light); margin-bottom: 8px; }
+        .task-meta i { font-size: 12px; }
+        .task-user { display: flex; align-items: center; gap: 6px; font-weight: 500; color: var(--text); }
+        .task-avatar { width: 20px; height: 20px; border-radius: 50%; background: #e2e8f0; display: flex; align-items: center; justify-content: center; font-size: 10px; }
+        .task-text {
+            background: #fffbeb;
+            padding: 8px 12px;
+            border-radius: 6px;
             font-size: 11px;
-            font-weight: 600;
-            color: var(--text-light);
-            text-align: left;
-            text-transform: uppercase;
-            border-bottom: 2px solid var(--border);
+            border-left: 3px solid #fcd34d;
+            margin: 8px 0;
+            line-height: 1.4;
         }
-        tbody tr { border-bottom: 1px solid #f0f3f6; transition: background 0.1s; }
-        tbody tr:hover { background: #fafbfd; }
-        tbody td {
-            padding: 11px 14px;
-            font-size: 13px;
-        }
-        .status-dot {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 12px;
-            font-weight: 500;
-        }
-        .status-dot::before {
-            content: '';
-            width: 8px; height: 8px;
-            border-radius: 50%;
-            background: var(--accent);
-        }
-
-        /* Chart containers */
-        .chart-container { position: relative; height: 200px; }
+        .task-time { font-size: 10px; color: #dc2626; font-weight: 600; display: flex; align-items: center; gap: 4px; }
     </style>
 </head>
 <body>
@@ -176,7 +163,11 @@
         <i class="fa-solid fa-bars hamburger"></i>
     </div>
     <nav class="s-nav">
-        <a href="index.html" class="s-item active"><i class="fa-solid fa-chart-line"></i> Dashboard</a>
+        <div class="s-item active"><i class="fa-solid fa-house"></i> Inicio <i class="fa-solid fa-chevron-down chevron"></i></div>
+        <div class="s-sub">
+            <a href="index.html" class="active">Resumen</a>
+            <a href="dashboard_financiero.html">Dashboard financiero</a>
+        </div>
         <div class="s-item"><i class="fa-solid fa-building"></i> Inmuebles <i class="fa-solid fa-chevron-down chevron"></i></div>
         <div class="s-sub">
             <a href="ficha_inmueble.html">Nuevo inmueble</a>
@@ -211,131 +202,129 @@
     </header>
 
     <div class="page-content">
-        <div class="dash-header">
-            <div>
-                <h1><i class="fa-solid fa-anchor" style="color:var(--link-blue);"></i> Alicante | Análisis Regional Costa Blanca</h1>
-                <div class="subtitle">Dashboard de inversión y rentabilidad inmobiliaria</div>
-            </div>
-        </div>
+        <div class="dash-container">
+            <!-- MAIN COLUMN -->
+            <div class="main-column">
+                <!-- Promo banner -->
+                <div class="promo-banner">
+                    <div class="promo-content">
+                        <h2>¿Necesitas una herramienta de captación de particulares?</h2>
+                        <p>Gracias a Weperty GO, disfrutarás de una herramienta complementaria para captar inmuebles de particulares con teléfono.</p>
+                        <a href="#" class="promo-btn">Me interesa <i class="fa-solid fa-angles-right"></i></a>
+                    </div>
+                    <div class="promo-img">
+                        <img src="https://via.placeholder.com/200x120/0f172a/ffffff?text=Weperty+GO" alt="Promo">
+                    </div>
+                </div>
 
-        <!-- Stats -->
-        <div class="stat-row" id="stat-row">
-            <div class="stat-card">
-                <div class="stat-icon" style="background:linear-gradient(135deg,#3b82f6,#6366f1);"><i class="fa-solid fa-building"></i></div>
-                <div><div class="stat-value" id="stat-total">0</div><div class="stat-label">Inmuebles</div></div>
+                <!-- Stats grid -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-header"><span>Inmuebles</span> <a href="mis_propiedades.html" class="ver-todo">Ver todo</a></div>
+                        <div class="stat-value">99</div>
+                        <div class="stat-subtext"><span style="color:var(--accent);">0</span> nuevos esta semana</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-header"><span>Promociones</span></div>
+                        <div class="stat-value">0</div>
+                        <div class="stat-subtext blue">Añade tu primer promoción (?)</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-header"><span>Contactos</span> <a href="#" class="ver-todo">Ver todo</a></div>
+                        <div class="stat-value">12.679</div>
+                        <div class="stat-subtext blue">3 nuevos esta semana</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-header"><span>Demandas</span> <a href="#" class="ver-todo">Ver todo</a></div>
+                        <div class="stat-value">16.828</div>
+                        <div class="stat-subtext"><span style="color:var(--accent);">0</span> nuevos esta semana</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-header"><span>Ofertas</span></div>
+                        <div class="stat-value">0</div>
+                        <div class="stat-subtext blue">Añada tu primer oferta (?)</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-header"><span>Tareas</span> <a href="#" class="ver-todo">Ver todo</a></div>
+                        <div class="stat-value">5.975</div>
+                        <div class="stat-subtext blue">3 nuevos esta semana</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-header"><span>Visitas</span> <a href="#" class="ver-todo">Ver todo</a></div>
+                        <div class="stat-value">31</div>
+                        <div class="stat-subtext"><span style="color:var(--accent);">0</span> nuevos esta semana</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-header"><span>Operaciones</span> <a href="#" class="ver-todo">Ver todo</a></div>
+                        <div class="stat-value">8</div>
+                        <div class="stat-subtext"><span style="color:var(--accent);">0</span> nuevos esta semana</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-header"><span>Créditos</span> <a href="#" class="ver-todo">Ver todo</a></div>
+                        <div class="stat-value">0,00</div>
+                        <div class="stat-subtext">Saldo disponible</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-header"><span>Hosting</span> <a href="#" class="ver-todo">Ver todo</a></div>
+                        <div class="stat-value" style="font-size: 16px; margin-top: 8px;">1.998MB</div>
+                        <div class="stat-subtext">de 2.048MB</div>
+                        <div class="hosting-bar"><div class="hosting-fill"></div></div>
+                        <div class="stat-subtext" style="color:#ef4444; font-weight: 600;">98% ocupado</div>
+                    </div>
+                </div>
             </div>
-            <div class="stat-card">
-                <div class="stat-icon" style="background:linear-gradient(135deg,#10b981,#059669);"><i class="fa-solid fa-euro-sign"></i></div>
-                <div><div class="stat-value" id="stat-avg-price">0€</div><div class="stat-label">Precio medio</div></div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-icon" style="background:linear-gradient(135deg,#f59e0b,#d97706);"><i class="fa-solid fa-percent"></i></div>
-                <div><div class="stat-value" id="stat-rent">0%</div><div class="stat-label">Rentabilidad media</div></div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-icon" style="background:linear-gradient(135deg,#ef4444,#dc2626);"><i class="fa-solid fa-eye"></i></div>
-                <div><div class="stat-value" id="stat-visits">0</div><div class="stat-label">Visitas portales/mes</div></div>
-            </div>
-        </div>
 
-        <!-- Map + Ranking -->
-        <div class="grid-2">
-            <div class="card">
-                <div class="card-title"><i class="fa-solid fa-trophy" style="color:#f59e0b;"></i> Rentabilidad Top</div>
-                <div id="rankingList"></div>
-            </div>
-            <div class="card">
-                <div class="card-title"><i class="fa-solid fa-map-location-dot" style="color:var(--link-blue);"></i> Mapa de densidad</div>
-                <div id="map"></div>
-            </div>
-        </div>
+            <!-- SIDE COLUMN -->
+            <div class="side-column">
+                <div class="side-panel">
+                    <div class="side-title red">Advertencias</div>
+                    <div class="alert-box">
+                        <i class="fa-solid fa-circle-exclamation"></i>
+                        <span>Se han encontrado 4 cosas por mejorar</span>
+                        <div class="plus"><i class="fa-regular fa-square-plus"></i></div>
+                    </div>
 
-        <!-- Comparison Table -->
-        <div class="card grid-full">
-            <div class="card-title"><i class="fa-solid fa-chart-bar" style="color:#6366f1;"></i> Comparativa de Poblaciones</div>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Población</th>
-                        <th>Venta Media (€/m²)</th>
-                        <th>Alquiler (€/m²)</th>
-                        <th>Rentabilidad (%)</th>
-                        <th>Estado</th>
-                    </tr>
-                </thead>
-                <tbody id="tableBody"></tbody>
-            </table>
+                    <div class="side-title" style="margin-top: 30px;">Tareas atrasadas</div>
+                    <div class="task-list">
+                        <div class="task-item">
+                            <div class="task-meta">
+                                <i class="fa-regular fa-calendar-check"></i> Actividad de tipo formularios de contacto
+                                <i class="fa-solid fa-ellipsis-vertical" style="margin-left:auto;"></i>
+                            </div>
+                            <div class="task-user">
+                                <div class="task-avatar">MC</div> Marina Cherkasova
+                            </div>
+                            <div class="task-submeta" style="font-size:10px; color:var(--text-light); margin: 4px 0;">
+                                <i class="fa-solid fa-building"></i> AP0314 <i class="fa-solid fa-trash" style="margin-left:4px;"></i>
+                            </div>
+                            <div class="task-text">
+                                Neem contact met mij op over dit vastgoed. Neem contact met mij op...
+                            </div>
+                            <div class="task-time"><i class="fa-regular fa-clock"></i> 25/11/21 17:58 (atrasado)</div>
+                        </div>
+
+                        <div class="task-item">
+                            <div class="task-meta">
+                                <i class="fa-regular fa-calendar-check"></i> Actividad de tipo formularios de contacto
+                                <i class="fa-solid fa-ellipsis-vertical" style="margin-left:auto;"></i>
+                            </div>
+                            <div class="task-user">
+                                <div class="task-avatar">J</div> Jasmin
+                            </div>
+                            <div class="task-submeta" style="font-size:10px; color:var(--text-light); margin: 4px 0;">
+                                <i class="fa-solid fa-building"></i> AP0318 <i class="fa-solid fa-trash" style="margin-left:4px;"></i>
+                            </div>
+                            <div class="task-text">
+                                Hola quiero alquilar la apartamento aun esta disponible...
+                            </div>
+                            <div class="task-time"><i class="fa-regular fa-clock"></i> 25/11/21 18:50 (atrasado)</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 
-<script>
-    const SB_URL = "https://dwbvegnxmyvpolvofkfn.supabase.co";
-    const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR3YnZlZ254bXl2cG9sdm9ma2ZuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njc1Mzg1NTUsImV4cCI6MjA4MzExNDU1NX0.eT5ZSce8H8Yk8pWKyLUYChU0HtmZljywP4eEQd5FkOI";
-    const db = supabase.createClient(SB_URL, SB_KEY);
-
-    const poblaciones = [
-        { nombre: "Alicante", precio: 2450, alquiler: 12.5, rentabilidad: 6.1, lat: 38.345, lon: -0.481 },
-        { nombre: "Elche", precio: 1550, alquiler: 8.5, rentabilidad: 6.6, lat: 38.262, lon: -0.697 },
-        { nombre: "Benidorm", precio: 3800, alquiler: 19.5, rentabilidad: 6.2, lat: 38.541, lon: -0.124 },
-        { nombre: "Torrevieja", precio: 1850, alquiler: 10.5, rentabilidad: 6.8, lat: 37.978, lon: -0.683 },
-        { nombre: "Altea", precio: 3300, alquiler: 16.5, rentabilidad: 6.0, lat: 38.598, lon: -0.051 }
-    ];
-
-    let map;
-
-    function initMap() {
-        map = L.map('map', { zoomControl: false }).setView([38.450, -0.350], 10);
-        L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png').addTo(map);
-        poblaciones.forEach(p => {
-            const marker = L.circleMarker([p.lat, p.lon], {
-                radius: 10, fillColor: '#3b6fe0', color: "#fff", weight: 2, fillOpacity: 0.9
-            }).addTo(map);
-            marker.bindPopup(`<b>${p.nombre}</b><br>Rent: ${p.rentabilidad}%`);
-        });
-    }
-
-    function renderData() {
-        // Table
-        const table = document.getElementById('tableBody');
-        table.innerHTML = poblaciones.map(p => `
-            <tr>
-                <td><strong>${p.nombre}</strong></td>
-                <td>${p.precio}€</td>
-                <td>${p.alquiler}€</td>
-                <td><strong style="color:var(--accent)">${p.rentabilidad}%</strong></td>
-                <td><span class="status-dot" style="color:var(--accent);">Activo</span></td>
-            </tr>
-        `).join('');
-
-        // Ranking
-        const ranking = document.getElementById('rankingList');
-        const colors = ['#f59e0b', '#6366f1', '#10b981', '#3b82f6', '#ef4444'];
-        ranking.innerHTML = [...poblaciones].sort((a,b) => b.rentabilidad - a.rentabilidad).map((p,i) => `
-            <div class="rank-item">
-                <span class="rank-pos" style="background:${colors[i]};">${i+1}</span>
-                <span class="rank-name">${p.nombre}</span>
-                <span class="rank-value">${p.rentabilidad}%</span>
-            </div>
-        `).join('');
-    }
-
-    async function loadStats() {
-        const { data, error } = await db.from('inm_propiedades').select('precio');
-        if (!data) return;
-        const total = data.length;
-        const avg = total > 0 ? Math.round(data.reduce((s, p) => s + (p.precio || 0), 0) / total) : 0;
-        document.getElementById('stat-total').textContent = total;
-        document.getElementById('stat-avg-price').textContent = avg.toLocaleString('es-ES') + '€';
-        document.getElementById('stat-rent').textContent = '6.4%';
-        document.getElementById('stat-visits').textContent = Math.floor(total * 28).toLocaleString('es-ES');
-    }
-
-    window.onload = () => {
-        initMap();
-        renderData();
-        loadStats();
-    };
-</script>
 </body>
 </html>
