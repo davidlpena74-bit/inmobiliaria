@@ -78,9 +78,11 @@ body {
 .s-item i { width: 18px; text-align: center; font-size: 14px; }
 .s-item:hover { background: var(--sidebar-hover); color: rgba(255,255,255,0.9); }
 .s-item.active { background: var(--sidebar-active); color: #fff; }
-.s-item .chevron { margin-left: auto; font-size: 10px; }
+.s-item .chevron { margin-left: auto; font-size: 10px; transition: 0.2s; }
+.s-item.open .chevron { transform: rotate(180deg); }
 
-.s-sub { background: rgba(0,0,0,0.12); }
+.s-sub { background: rgba(0,0,0,0.12); display: none; }
+.s-item.open + .s-sub { display: block; }
 .s-sub a {
     display: block;
     padding: 8px 18px 8px 46px;
