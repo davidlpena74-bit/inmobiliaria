@@ -26,13 +26,11 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // 2. Hamburguesa (Mobile) - Opcional
+    // 2. Hamburguesa (Colapsar Sidebar)
     const hamburger = document.querySelector('.hamburger');
-    const sidebar = document.querySelector('.sidebar');
-    if (hamburger && sidebar) {
+    if (hamburger) {
         hamburger.addEventListener('click', () => {
-            // Lógica simple para colapsar sidebar (se puede expandir con clases de CSS)
-            console.log('Toggle sidebar');
+            document.body.classList.toggle('collapsed-sidebar');
         });
     }
 

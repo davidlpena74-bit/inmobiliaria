@@ -32,7 +32,6 @@ body {
     color: var(--text);
 }
 
-/* ========= SIDEBAR ========= */
 .sidebar {
     width: 200px;
     min-width: 200px;
@@ -43,6 +42,7 @@ body {
     top: 0; left: 0; bottom: 0;
     z-index: 100;
     overflow-y: auto;
+    transition: width 0.25s ease;
 }
 .sidebar-logo {
     padding: 16px 18px;
@@ -109,7 +109,55 @@ body {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
+    transition: margin-left 0.25s ease;
 }
+
+/* ========= SIDEBAR TOGGLE (COLLAPSED) ========= */
+body.collapsed-sidebar .sidebar { width: 68px; min-width: 68px; }
+body.collapsed-sidebar .main { margin-left: 68px; }
+
+/* CSS-only text hiding (no spans needed) */
+body.collapsed-sidebar .sidebar .brand,
+body.collapsed-sidebar .sidebar .chevron,
+body.collapsed-sidebar .sidebar .s-sub,
+body.collapsed-sidebar .sidebar .sidebar-bottom {
+    display: none !important;
+}
+body.collapsed-sidebar .sidebar .s-item {
+    justify-content: center;
+    padding: 14px 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-indent: -999px; /* Hide text nodes */
+}
+body.collapsed-sidebar .sidebar .s-item i {
+    text-indent: 0;
+    margin: 0;
+    font-size: 18px;
+    width: 100%;
+}
+
+body.collapsed-sidebar .sidebar-logo {
+    flex-direction: column;
+    padding: 16px 0;
+    gap: 15px;
+}
+body.collapsed-sidebar .sidebar-logo .hamburger { margin: 0; order: -1; }
+
+/* Mini Logo */
+.mini-logo {
+    display: none;
+    width: 34px; height: 34px;
+    background: #6366f1;
+    border-radius: 8px;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 18px;
+    font-weight: 800;
+    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.2);
+}
+body.collapsed-sidebar .mini-logo { display: flex; }
 
 /* ========= TOP BAR ========= */
 .topbar {
