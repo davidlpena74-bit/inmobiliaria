@@ -3,140 +3,277 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pasarelas | Weperty CRM (Estilo Inmoweb)</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="sidebar.css">
+    <title>Pasarelas (API) | Weperty CRM</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="shell.css">
     <style>
-        :root {
-            --inmoweb-blue: #3f51b5;
-            --inmoweb-light: #f4f6f8;
-            --danger: #e74c3c;
-            --success: #27ae60;
-            --warning: #f1c40f;
+        .page-header { margin-bottom: 22px; }
+        .page-header h1 { font-size: 20px; font-weight: 700; }
+        .page-header .subtitle { font-size: 12px; color: var(--text-light); margin-top: 2px; }
+
+        .ext-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+            gap: 18px;
         }
 
-        * { margin:0; padding:0; box-sizing:border-box; font-family:'Roboto',sans-serif; }
-        body { background: var(--inmoweb-light); display:flex; min-height:100vh; color: #444; }
- Black Inmoweb Style */
-        .header-title { font-size: 24px; color: #333; margin-bottom: 30px; display: flex; align-items: center; gap: 10px; }
+        .ext-card {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: box-shadow 0.2s;
+        }
+        .ext-card:hover { box-shadow: 0 6px 20px rgba(0,0,0,0.06); }
 
-        .extension-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(450px, 1fr)); gap: 25px; }
+        .ext-card-top {
+            padding: 22px;
+            display: flex;
+            gap: 16px;
+        }
+        .ext-logo {
+            width: 52px; height: 52px;
+            border-radius: 10px;
+            overflow: hidden;
+            flex-shrink: 0;
+            border: 1px solid var(--border);
+        }
+        .ext-logo img { width: 100%; height: 100%; object-fit: contain; }
 
-        /* Tarjeta Clon Inmoweb */
-        .ext-card { background: white; border-radius: 12px; padding: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); position: relative; border: 1px solid #e1e4e8; display: flex; justify-content: space-between; }
-        
         .ext-info { flex: 1; }
-        .ext-status-date { font-size: 12px; color: #999; margin-bottom: 5px; }
-        .ext-name { font-size: 18px; font-weight: 500; color: #2c3e50; margin-bottom: 15px; }
-        
-        .ext-stats { font-size: 13px; color: #666; line-height: 1.8; }
-        .stat-row { display: flex; align-items: center; gap: 10px; }
-        .error-badge { background: #fee; color: var(--danger); padding: 0 6px; border-radius: 50%; font-weight: bold; font-size: 11px; }
+        .ext-name { font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+        .ext-date { font-size: 11px; color: var(--text-light); margin-bottom: 10px; }
 
-        .ext-visual { width: 100px; text-align: center; }
-        .ext-logo { width: 80px; height: 80px; border-radius: 12px; margin-bottom: 15px; display: flex; align-items: center; justify-content: center; background: #fff; border: 1px solid #f0f0f0; }
-        .ext-tags { display: flex; flex-direction: column; gap: 5px; }
-        .tag { font-size: 10px; color: #777; background: #f8f9fa; border: 1px solid #eee; padding: 2px 4px; border-radius: 4px; text-transform: uppercase; font-weight: bold; }
+        .ext-stats {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .ext-stat-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: var(--text);
+        }
+        .ext-stat-row span { color: var(--text-light); }
+        .ext-stat-row strong { font-weight: 600; }
 
-        /* Botón "Instalada" con despliegue */
-        .btn-installed { background: var(--inmoweb-blue); color: white; border: none; padding: 10px 15px; border-radius: 6px; font-size: 13px; font-weight: 500; cursor: pointer; display: flex; align-items: center; gap: 8px; margin-top: 20px; transition: 0.2s; }
-        .btn-installed:hover { background: #303f9f; }
-        
-        /* Códigos Reales Inyectados */
-        .real-code { background: #fdfdfd; border: 1px dashed #ddd; padding: 10px; font-family: monospace; font-size: 10px; color: #7f8c8d; margin-top: 15px; border-radius: 6px; word-break: break-all; }
+        .error-badge {
+            background: #fee2e2;
+            color: #dc2626;
+            padding: 1px 8px;
+            border-radius: 10px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+        .error-badge.ok {
+            background: #d1fae5;
+            color: #059669;
+        }
+
+        .ext-tags {
+            display: flex;
+            gap: 6px;
+            margin-top: 12px;
+            flex-wrap: wrap;
+        }
+        .tag {
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 10px;
+            font-weight: 600;
+            background: #f1f5f9;
+            color: var(--text-light);
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .ext-card-bottom {
+            padding: 14px 22px;
+            background: #f8fafc;
+            border-top: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-ext {
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: 0.15s;
+            font-family: inherit;
+        }
+        .btn-ext-installed {
+            background: var(--link-blue);
+            color: white;
+        }
+        .btn-ext-installed:hover { filter: brightness(0.9); }
+        .btn-ext-activate {
+            background: var(--accent);
+            color: white;
+        }
+        .btn-ext-activate:hover { filter: brightness(0.9); }
+
+        .ext-hint {
+            font-size: 10px;
+            color: var(--text-light);
+            margin-left: auto;
+        }
+
+        .api-code {
+            margin-top: 12px;
+            background: #f8fafc;
+            border: 1px dashed var(--border);
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-family: 'Menlo', 'Consolas', monospace;
+            font-size: 10px;
+            color: var(--text-light);
+            word-break: break-all;
+        }
     </style>
 </head>
 <body>
 
-    <nav>
-        <div class="logo-box">WEPERTY CRM</div>
-        <a href="index.html" class="nav-item">Dashboard Inversion</a>
-        <a href="mis_propiedades.html" class="nav-item">Mis Propiedades</a>
-        <a href="ficha_inmueble.html" class="nav-item">Ficha Inmueble</a>
-        <a href="portales.html" class="nav-item active">Pasarelas (API)</a>
+<!-- SIDEBAR -->
+<aside class="sidebar">
+    <div class="sidebar-logo">
+        <div class="brand">weperty<small>software inmobiliario</small></div>
+        <i class="fa-solid fa-bars hamburger"></i>
+    </div>
+    <nav class="s-nav">
+        <a href="index.html" class="s-item"><i class="fa-solid fa-chart-line"></i> Dashboard</a>
+        <div class="s-item"><i class="fa-solid fa-building"></i> Inmuebles <i class="fa-solid fa-chevron-down chevron"></i></div>
+        <div class="s-sub">
+            <a href="ficha_inmueble.html">Nuevo inmueble</a>
+            <a href="mis_propiedades.html">Mis inmuebles</a>
+            <a href="#">Tipos de cartera</a>
+            <a href="#">Gestor de zonas</a>
+        </div>
+        <a href="#" class="s-item"><i class="fa-solid fa-address-book"></i> Contactos</a>
+        <a href="portales.html" class="s-item active"><i class="fa-solid fa-satellite-dish"></i> Pasarelas (API)</a>
+        <a href="#" class="s-item"><i class="fa-solid fa-screwdriver-wrench"></i> Herramientas</a>
+        <a href="#" class="s-item"><i class="fa-solid fa-display"></i> Web</a>
+        <a href="#" class="s-item"><i class="fa-solid fa-envelope"></i> Cuentas de email</a>
     </nav>
+    <div class="sidebar-bottom"><i class="fa-solid fa-gear"></i> Administración</div>
+</aside>
 
-    <main class="main-content">
-        <div class="header-title">⚓ Pasarelas (API) | Alicante & Costa Blanca</div>
+<!-- MAIN -->
+<div class="main">
+    <header class="topbar">
+        <div class="search-box">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" placeholder="Buscar...">
+        </div>
+        <i class="fa-solid fa-plus t-icon"></i>
+        <i class="fa-solid fa-shop t-icon"></i>
+        <i class="fa-solid fa-bullhorn t-icon"></i>
+        <i class="fa-solid fa-bell t-icon"></i>
+        <i class="fa-solid fa-circle-question t-icon"></i>
+        <i class="fa-regular fa-calendar t-icon"></i>
+        <i class="fa-solid fa-box-archive t-icon"></i>
+        <div class="avatar"><i class="fa-solid fa-user"></i></div>
+    </header>
 
-        <div class="extension-grid">
-            <!-- IDEALISTA CLONE -->
+    <div class="page-content">
+        <div class="page-header">
+            <h1><i class="fa-solid fa-satellite-dish" style="color:var(--link-blue);"></i> Pasarelas (API) | Conexiones de Portales</h1>
+            <div class="subtitle">Gestiona las integraciones con Idealista, Fotocasa, Kyero y más</div>
+        </div>
+
+        <div class="ext-grid">
+            <!-- IDEALISTA -->
             <div class="ext-card">
-                <div class="ext-info">
-                    <div class="ext-status-date">Activa desde 27 dic. 2020</div>
-                    <div class="ext-name">Conexión con idealista</div>
-                    <div class="ext-stats">
-                        <div class="stat-row">Seleccionados: <strong>39 (Alicante)</strong></div>
-                        <div class="stat-row">Errores: <span class="error-badge">16</span> ⚠️</div>
-                        <div class="stat-row">Sincronizado: <strong>Automático</strong></div>
+                <div class="ext-card-top">
+                    <div class="ext-logo"><img src="img/logo_idealista.svg" alt="Idealista"></div>
+                    <div class="ext-info">
+                        <div class="ext-name">Conexión con idealista</div>
+                        <div class="ext-date">Activa desde 27 dic. 2020</div>
+                        <div class="ext-stats">
+                            <div class="ext-stat-row"><span>Seleccionados:</span> <strong>121 (Alicante)</strong></div>
+                            <div class="ext-stat-row"><span>Errores:</span> <span class="error-badge">16</span></div>
+                            <div class="ext-stat-row"><span>Sincronizado:</span> <strong>Automático</strong></div>
+                        </div>
+                        <div class="api-code">ClientID: ilc8b226043a4bf870e9095c2e33cbc74f183d52cf4</div>
+                        <div class="ext-tags">
+                            <span class="tag">Portal</span>
+                            <span class="tag">Tiempo real</span>
+                            <span class="tag">Alicante</span>
+                        </div>
                     </div>
-                    
-                    <div class="real-code">ClientID: ilc8b226043a4bf870e9095c2e33cbc74f183d52cf4</div>
-
-                    <button class="btn-installed" onclick="alert('Lanzando Sincronización Real con Código ilc8b...')">⚙️ Instalada ▾</button>
-                    <div style="font-size: 10px; color: #999; margin-top: 10px;">Pulse para: Probar / Descargar</div>
                 </div>
-                <div class="ext-visual">
-                    <div class="ext-logo"><img src="img/logo_idealista.svg" style="width: 50px; height: 50px; border-radius: 8px;" alt="idealista"></div>
-                    <div class="ext-tags">
-                        <div class="tag">Portal</div>
-                        <div class="tag">Tiempo real</div>
-                        <div class="tag">Alicante</div>
-                    </div>
+                <div class="ext-card-bottom">
+                    <button class="btn-ext btn-ext-installed" onclick="alert('Lanzando sincronización con idealista...')">
+                        <i class="fa-solid fa-gear"></i> Instalada
+                    </button>
+                    <span class="ext-hint">Probar / Descargar</span>
                 </div>
             </div>
 
-            <!-- FOTOCASA CLONE -->
+            <!-- FOTOCASA -->
             <div class="ext-card">
-                <div class="ext-info">
-                    <div class="ext-status-date">Activa desde 26 mar. 2026</div>
-                    <div class="ext-name">Conexión con Fotocasa PRO 1</div>
-                    <div class="ext-stats">
-                        <div class="stat-row">Seleccionados: <strong>39 (Alicante)</strong></div>
-                        <div class="stat-row">Errores: <span class="error-badge">9</span> ⚠️</div>
-                        <div class="stat-row">Sincronizado: <strong>Automático</strong></div>
+                <div class="ext-card-top">
+                    <div class="ext-logo"><img src="img/logo_fotocasa.svg" alt="Fotocasa"></div>
+                    <div class="ext-info">
+                        <div class="ext-name">Conexión con Fotocasa PRO 1</div>
+                        <div class="ext-date">Activa desde 26 mar. 2026</div>
+                        <div class="ext-stats">
+                            <div class="ext-stat-row"><span>Seleccionados:</span> <strong>121 (Alicante)</strong></div>
+                            <div class="ext-stat-row"><span>Errores:</span> <span class="error-badge">9</span></div>
+                            <div class="ext-stat-row"><span>Sincronizado:</span> <strong>Automático</strong></div>
+                        </div>
+                        <div class="api-code">API Key: 12T1t5JY0sP4jV0lFwlKFF12wQSc3kOtMZiZ...</div>
+                        <div class="ext-tags">
+                            <span class="tag">Adevinta</span>
+                            <span class="tag">Premium</span>
+                            <span class="tag">PRO 1</span>
+                        </div>
                     </div>
-
-                    <div class="real-code">API Key: 12T1t5JY0sP4jV0lFwlKFF12wQSc3kOtMZiZ...</div>
-
-                    <button class="btn-installed" onclick="alert('Iniciando Handshake Adevinta con Token 12T1t...')">⚙️ Instalada ▾</button>
-                    <div style="font-size: 10px; color: #999; margin-top: 10px;">Pulse para: Probar / Descargar</div>
                 </div>
-                <div class="ext-visual">
-                    <div class="ext-logo"><img src="img/logo_fotocasa.svg" style="width: 50px; height: 50px; border-radius: 8px;" alt="fotocasa"></div>
-                    <div class="ext-tags">
-                        <div class="tag">Adevinta</div>
-                        <div class="tag">Premium</div>
-                        <div class="tag">PRO 1</div>
-                    </div>
+                <div class="ext-card-bottom">
+                    <button class="btn-ext btn-ext-installed" onclick="alert('Lanzando sincronización con Fotocasa...')">
+                        <i class="fa-solid fa-gear"></i> Instalada
+                    </button>
+                    <span class="ext-hint">Probar / Descargar</span>
                 </div>
             </div>
 
-            <!-- THINKSPAIN CLONE -->
+            <!-- THINKSPAIN / KYERO -->
             <div class="ext-card">
-                <div class="ext-info">
-                    <div class="ext-status-date">Nueva extensión</div>
-                    <div class="ext-name">Kyero XML (ThinkSpain)</div>
-                    <div class="ext-stats">
-                        <div class="stat-row">Feed: <strong>Costa Blanca Export</strong></div>
-                        <div class="stat-row">Errores: <span class="error-badge" style="background:#e8f5e9; color:#27ae60; border-radius:50%; padding:0 3px;">0</span> ✅</div>
-                        <div class="stat-row">Sincronizado: <strong>Manual</strong></div>
+                <div class="ext-card-top">
+                    <div class="ext-logo"><img src="img/logo_thinkspain.svg" alt="ThinkSpain"></div>
+                    <div class="ext-info">
+                        <div class="ext-name">Kyero XML (ThinkSpain)</div>
+                        <div class="ext-date">Nueva extensión</div>
+                        <div class="ext-stats">
+                            <div class="ext-stat-row"><span>Feed:</span> <strong>Costa Blanca Export</strong></div>
+                            <div class="ext-stat-row"><span>Errores:</span> <span class="error-badge ok">0</span></div>
+                            <div class="ext-stat-row"><span>Sincronizado:</span> <strong>Manual</strong></div>
+                        </div>
+                        <div class="api-code">Weperty XML: https://weperty.com/feeds/kyero.xml</div>
+                        <div class="ext-tags">
+                            <span class="tag">Kyero v3</span>
+                            <span class="tag">International</span>
+                        </div>
                     </div>
-
-                    <div class="real-code">Inmoweb XML: https://export.inmoweb.com/feeds/kyero.xml</div>
-
-                    <button class="btn-installed" style="background:#27ae60;">⚙️ Activar ▾</button>
-                    <div style="font-size: 10px; color: #999; margin-top: 10px;">En espera de Feed Real de David.</div>
                 </div>
-                <div class="ext-visual">
-                    <div class="ext-logo"><img src="img/logo_thinkspain.svg" style="width: 50px; height: 50px; border-radius: 8px;" alt="thinkspain"></div>
-                    <div class="ext-tags">
-                        <div class="tag">Kyero v3</div>
-                        <div class="tag">International</div>
-                    </div>
+                <div class="ext-card-bottom">
+                    <button class="btn-ext btn-ext-activate">
+                        <i class="fa-solid fa-plug"></i> Activar
+                    </button>
+                    <span class="ext-hint">En espera de Feed Real</span>
                 </div>
             </div>
         </div>
-    </main>
+    </div>
+</div>
 </body>
 </html>
