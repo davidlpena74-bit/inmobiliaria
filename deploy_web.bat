@@ -4,10 +4,8 @@ echo 🚀 Desplegando Dashboard Inmobiliario (Limpieza Total)
 echo ==========================================
 
 REM 1. Definir rutas
-set SOURCE_HTML="precios_distritos_madrid.html"
 set WEB_PROJECT_DIR="."
-set TARGET_ROOT="inmobiliaria.html"
-set TARGET_PUBLIC="public\inmobiliaria.html"
+set TARGET_ROOT="index.html"
 
 REM 2. Copiar archivo HTML actualizado
 echo 📂 Copiando archivos...
@@ -25,8 +23,8 @@ REM git reset
 REM Limpiar cualquier rastro de archivos no deseados del index
 REM Solo queremos subir el dashboard. El resto se quedar en local sin commitear.
 
-echo ➕ Añadiendo SOLO el dashboard...
-git add %SOURCE_HTML%
+echo ➕ Añadiendo archivos del CRM...
+git add index.html dashboard_financiero.html ficha_inmueble.html mis_inmuebles.html mis_propiedades.html portales.html web.html shell.css shell.js CNAME fotos/
 
 REM Commit limpio
 git commit -m "Actualizacion dashboard inmobiliario"
