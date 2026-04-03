@@ -372,6 +372,14 @@
             display: block;
             background: #f1f5f9;
         }
+        .thumb.no-image {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #cbd5e1;
+            font-size: 16px;
+            border: 1px dashed #e2e8f0;
+        }
 
         .ref-cell {
             display: flex;
@@ -782,8 +790,8 @@
             const fotos = c.fotos || [];
             const imgUrl = fotos.length > 0 ? fotos[0] : '';
             const imgHtml = imgUrl
-                ? `<img src="${imgUrl}" class="thumb" loading="lazy" onerror="this.style.display='none'">`
-                : `<div class="thumb" style="background:#e2e8f0;"></div>`;
+                ? `<img src="${imgUrl}" class="thumb" loading="lazy">`
+                : `<div class="thumb no-image"><i class="fa-regular fa-image"></i></div>`;
             const transaction = c.transaction || '';
             const visits = Math.floor(Math.random() * 120) + 10;
 
