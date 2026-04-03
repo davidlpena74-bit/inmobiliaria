@@ -62,8 +62,27 @@ body {
     color: rgba(255,255,255,0.35);
     font-weight: 400;
     letter-spacing: 0.5px;
+    margin-top: 2px;
 }
-.sidebar-logo .hamburger { color: rgba(255,255,255,0.5); cursor: pointer; }
+.sidebar-logo .hamburger { 
+    color: rgba(255,255,255,0.5); 
+    cursor: pointer; 
+    font-size: 18px;
+    transition: 0.2s;
+}
+.sidebar-logo .hamburger:hover { color: #fff; }
+
+.icon-box {
+    width: 28px; height: 28px;
+    background: #6366f1;
+    border-radius: 6px;
+    display: flex;
+    align-items: center; justify-content: center;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 800;
+    flex-shrink: 0;
+}
 
 .s-nav { flex: 1; }
 .s-item {
@@ -116,33 +135,37 @@ body {
 body.collapsed-sidebar .sidebar { width: 68px; min-width: 68px; }
 body.collapsed-sidebar .main { margin-left: 68px; }
 
-/* CSS-only text hiding (no spans needed) */
+/* CSS-only text hiding */
 body.collapsed-sidebar .sidebar .brand,
 body.collapsed-sidebar .sidebar .chevron,
 body.collapsed-sidebar .sidebar .s-sub,
-body.collapsed-sidebar .sidebar .sidebar-bottom {
+body.collapsed-sidebar .sidebar .s-item span,
+body.collapsed-sidebar .sidebar .sidebar-bottom span {
     display: none !important;
 }
+
 body.collapsed-sidebar .sidebar .s-item {
     justify-content: center;
-    padding: 14px 0;
-    overflow: hidden;
-    white-space: nowrap;
-    text-indent: -999px; /* Hide text nodes */
+    padding: 12px 0;
 }
-body.collapsed-sidebar .sidebar .s-item i {
-    text-indent: 0;
+body.collapsed-sidebar .sidebar .s-item i,
+body.collapsed-sidebar .sidebar .s-item .icon-box {
     margin: 0;
-    font-size: 18px;
-    width: 100%;
 }
 
 body.collapsed-sidebar .sidebar-logo {
     flex-direction: column;
-    padding: 16px 0;
-    gap: 15px;
+    padding: 20px 0;
+    gap: 20px;
 }
-body.collapsed-sidebar .sidebar-logo .hamburger { margin: 0; order: -1; }
+body.collapsed-sidebar .sidebar-logo .mini-logo { display: none; } /* Hide mini logo in top if redundant */
+body.collapsed-sidebar .sidebar-logo .hamburger { margin: 0; }
+
+body.collapsed-sidebar .sidebar-bottom {
+    justify-content: center;
+    padding: 20px 0;
+}
+body.collapsed-sidebar .sidebar-bottom i { font-size: 18px; margin: 0; }
 
 /* Mini Logo */
 .mini-logo {
