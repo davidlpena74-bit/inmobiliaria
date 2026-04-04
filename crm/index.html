@@ -269,22 +269,7 @@
     </div>
 </div>
 
-<script>
-    // Toggle sidebars dropdowns (simple)
-    document.querySelectorAll('.s-item').forEach(item => {
-        item.addEventListener('click', () => {
-            const next = item.nextElementSibling;
-            if (next && next.classList.contains('s-sub')) {
-                next.classList.toggle('active');
-                const chevron = item.querySelector('.chevron');
-                if (chevron) {
-                    chevron.classList.toggle('fa-chevron-down');
-                    chevron.classList.toggle('fa-chevron-up');
-                }
-            }
-        });
-    });
-</script>
+<script src="shell.js"></script>
 
 </body>
 </html>
