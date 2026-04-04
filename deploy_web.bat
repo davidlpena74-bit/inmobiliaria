@@ -24,7 +24,7 @@ REM Limpiar cualquier rastro de archivos no deseados del index
 REM Solo queremos subir el dashboard. El resto se quedar en local sin commitear.
 
 echo ➕ Añadiendo archivos del CRM...
-git add index.html dashboard_financiero.html ficha_inmueble.html mis_inmuebles.html mis_propiedades.html portales.html web.html shell.css shell.js CNAME fotos/
+git add index.html dashboard_financiero.html ficha_inmueble.html mis_inmuebles.html mis_propiedades.html portales.html web.html shell.css shell.js fotos/
 
 REM Commit limpio
 git commit -m "Actualizacion dashboard inmobiliario"
