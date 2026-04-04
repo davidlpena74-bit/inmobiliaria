@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Actualizar Datos de Alquiler - Supabase</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 900px;
+            margin: 50px auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: transform 0.2s;
+            margin-right: 10px;
+        }
+
+        button:hover {
+            transform: scale(1.05);
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        #log {
+            background: #f5f5f5;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 20px;
+            max-height: 500px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+        }
+
+        .log-item {
+            padding: 5px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .success {
+            color: #10ac84;
+        }
+
+        .error {
+            color: #ee5a6f;
+        }
+
+        .info {
+            color: #667eea;
+        }
+
+        .warning {
+            color: #f39c12;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>🔄 Actualizar Datos de Alquiler</h1>
+        <p class="subtitle">Este script actualizará los 69 municipios con las variaciones de alquiler (1, 5 y 10 años)
+        </p>
+
+        <button id="btnActualizar" onclick="actualizarDatos()">Actualizar Datos de Alquiler</button>
+
+        <div id="log"></div>
+    </div>
+
+    <script>
+        const SB_URL = "https://dwbvegnxmyvpolvofkfn.supabase.co";
+        const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR3YnZlZ254bXl2cG9sdm9ma2ZuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njc1Mzg1NTUsImV4cCI6MjA4MzExNDU1NX0.eT5ZSce8H8Yk8pWKyLUYChU0HtmZljywP4eEQd5FkOI";
+
+        const { createClient } = supabase;
+        const _supabase = createClient(SB_URL, SB_KEY);
+
+        // Datos con variaciones de alquiler
+        const datosAlquiler = [
+            // MADRID CAPITAL
+            { nombre: "Salamanca", alv1y: 13.3, alv5y: 54.2, alv10y: 95.8 },
+            { nombre: "Chamberí", alv1y: 12.5, alv5y: 52.8, alv10y: 92.4 },
+            { nombre: "Retiro", alv1y: 11.2, alv5y: 50.4, alv10y: 88.6 },
+            { nombre: "Centro", alv1y: 14.8, alv5y: 58.1, alv10y: 98.2 },
+            { nombre: "Chamartín", alv1y: 11.5, alv5y: 51.2, alv10y: 89.4 },
+            { nombre: "Moncloa-Aravaca", alv1y: 10.2, alv5y: 48.5, alv10y: 85.1 },
+            { nombre: "Tetuán", alv1y: 12.4, alv5y: 53.6, alv10y: 94.2 },
+            { nombre: "Arganzuela", alv1y: 11.8, alv5y: 52.1, alv10y: 91.5 },
+            { nombre: "Hortaleza", alv1y: 9.8, alv5y: 46.4, alv10y: 82.3 },
+            { nombre: "Ciudad Lineal", alv1y: 12.1, alv5y: 50.8, alv10y: 89.6 },
+            { nombre: "Fuencarral-El Pardo", alv1y: 11.4, alv5y: 49.5, alv10y: 87.2 },
+            { nombre: "Moratalaz", alv1y: 10.7, alv5y: 48.2, alv10y: 85.4 },
+            { nombre: "Latina", alv1y: 13.5, alv5y: 52.4, alv10y: 96.2 },
+            { nombre: "Vicálvaro", alv1y: 14.3, alv5y: 54.1, alv10y: 102.0 },
+            { nombre: "Carabanchel", alv1y: 15.2, alv5y: 56.8, alv10y: 108.4 },
+            { nombre: "San Blas-Canillejas", alv1y: 12.8, alv5y: 49.6, alv10y: 92.1 },
+            { nombre: "Usera", alv1y: 14.5, alv5y: 53.2, alv10y: 101.4 },
+            { nombre: "Puente de Vallecas", alv1y: 16.5, alv5y: 58.4, alv10y: 112.5 },
+            { nombre: "Villa de Vallecas", alv1y: 13.7, alv5y: 51.5, alv10y: 98.4 },
+            { nombre: "Barajas", alv1y: 11.2, alv5y: 47.8, alv10y: 89.2 },
+            { nombre: "Villaverde", alv1y: 15.0, alv5y: 55.0, alv10y: 101.2 },
+
+            // COMUNIDAD DE MADRID
+            { nombre: "Pozuelo de Alarcón", alv1y: 12.5, alv5y: 45.1, alv10y: 85.3 },
+            { nombre: "Majadahonda", alv1y: 11.2, alv5y: 40.5, alv10y: 80.1 },
+            { nombre: "Boadilla del Monte", alv1y: 12.8, alv5y: 42.4, alv10y: 84.4 },
+            { nombre: "Las Rozas de Madrid", alv1y: 10.8, alv5y: 39.2, alv10y: 78.4 },
+            { nombre: "Alcobendas", alv1y: 11.5, alv5y: 42.4, alv10y: 84.1 },
+            { nombre: "San Sebastián de los Reyes", alv1y: 14.2, alv5y: 45.8, alv10y: 88.2 },
+            { nombre: "Tres Cantos", alv1y: 11.2, alv5y: 38.5, alv10y: 75.2 },
+            { nombre: "Villaviciosa de Odón", alv1y: 9.5, alv5y: 35.2, alv10y: 70.4 },
+            { nombre: "Torrelodones", alv1y: 10.1, alv5y: 37.4, alv10y: 72.1 },
+            { nombre: "Rivas-Vaciamadrid", alv1y: 13.2, alv5y: 48.4, alv10y: 92.4 },
+            { nombre: "Alcorcón", alv1y: 15.2, alv5y: 52.3, alv10y: 98.4 },
+            { nombre: "Getafe", alv1y: 14.8, alv5y: 50.1, alv10y: 95.2 },
+            { nombre: "Leganés", alv1y: 14.2, alv5y: 49.5, alv10y: 92.1 },
+            { nombre: "Móstoles", alv1y: 15.8, alv5y: 54.2, alv10y: 102.1 },
+            { nombre: "Torrejón de Ardoz", alv1y: 13.5, alv5y: 48.2, alv10y: 89.2 },
+            { nombre: "Alcalá de Henares", alv1y: 14.1, alv5y: 50.1, alv10y: 92.4 },
+            { nombre: "Fuenlabrada", alv1y: 16.2, alv5y: 55.4, alv10y: 104.2 },
+            { nombre: "Pinto", alv1y: 12.4, alv5y: 45.2, alv10y: 88.4 },
+            { nombre: "Valdemoro", alv1y: 13.2, alv5y: 47.1, alv10y: 90.1 },
+            { nombre: "Parla", alv1y: 15.5, alv5y: 58.2, alv10y: 110.1 },
+            { nombre: "Arganda del Rey", alv1y: 11.8, alv5y: 42.1, alv10y: 80.4 },
+            { nombre: "Aranjuez", alv1y: 10.5, alv5y: 38.2, alv10y: 72.1 },
+            { nombre: "Colmenar Viejo", alv1y: 11.2, alv5y: 40.1, alv10y: 78.4 },
+            { nombre: "San Fernando de Henares", alv1y: 10.8, alv5y: 39.4, alv10y: 76.5 },
+            { nombre: "Coslada", alv1y: 12.1, alv5y: 44.2, alv10y: 82.3 },
+            { nombre: "Arroyomolinos", alv1y: 10.2, alv5y: 38.4, alv10y: 75.2 },
+            { nombre: "Brunete", alv1y: 9.5, alv5y: 35.2, alv10y: 70.1 },
+            { nombre: "Ciempozuelos", alv1y: 8.4, alv5y: 32.1, alv10y: 65.4 },
+            { nombre: "Navalcarnero", alv1y: 10.5, alv5y: 39.2, alv10y: 78.4 },
+            { nombre: "Collado Villalba", alv1y: 11.4, alv5y: 40.1, alv10y: 80.2 },
+            { nombre: "San Agustín del Guadalix", alv1y: 12.1, alv5y: 45.4, alv10y: 88.4 },
+            { nombre: "Algete", alv1y: 9.8, alv5y: 36.2, alv10y: 72.4 },
+            { nombre: "Galapagar", alv1y: 10.2, alv5y: 38.1, alv10y: 76.5 },
+            { nombre: "Villanueva de la Cañada", alv1y: 13.4, alv5y: 48.2, alv10y: 95.1 },
+            { nombre: "San Lorenzo de El Escorial", alv1y: 11.5, alv5y: 42.1, alv10y: 84.4 },
+            { nombre: "Buitrago del Lozoya", alv1y: 7.2, alv5y: 28.1, alv10y: 55.4 },
+            { nombre: "Paracuellos de Jarama", alv1y: 11.2, alv5y: 40.4, alv10y: 82.1 },
+            { nombre: "Humanes de Madrid", alv1y: 13.5, alv5y: 48.1, alv10y: 92.4 },
+            { nombre: "San Martín de la Vega", alv1y: 12.4, alv5y: 45.2, alv10y: 88.2 },
+            { nombre: "Griñón", alv1y: 11.2, alv5y: 40.2, alv10y: 80.4 },
+            { nombre: "Villa del Prado", alv1y: 8.4, alv5y: 30.1, alv10y: 60.4 },
+            { nombre: "Manzanares el Real", alv1y: 10.5, alv5y: 38.4, alv10y: 78.2 },
+            { nombre: "Daganzo de Arriba", alv1y: 9.8, alv5y: 36.2, alv10y: 72.4 },
+            { nombre: "Meco", alv1y: 8.8, alv5y: 34.1, alv10y: 68.2 },
+            { nombre: "Torrelaguna", alv1y: 7.5, alv5y: 30.1, alv10y: 62.4 },
+            { nombre: "Campo Real", alv1y: 7.4, alv5y: 28.4, alv10y: 58.2 }
+        ];
+
+        function log(mensaje, tipo = 'info') {
+            const logDiv = document.getElementById('log');
+            const item = document.createElement('div');
+            item.className = `log-item ${tipo}`;
+            item.textContent = mensaje;
+            logDiv.appendChild(item);
+            logDiv.scrollTop = logDiv.scrollHeight;
+        }
+
+        async function actualizarDatos() {
+            const btn = document.getElementById('btnActualizar');
+            btn.disabled = true;
+            btn.textContent = 'Actualizando...';
+
+            document.getElementById('log').innerHTML = '';
+            log(`🚀 Iniciando actualización de ${datosAlquiler.length} municipios...`, 'info');
+            log('📝 Agregando variaciones de alquiler (1y, 5y, 10y)', 'info');
+            log('', 'info');
+
+            let exitosos = 0;
+            let errores = 0;
+
+            for (const dato of datosAlquiler) {
+                try {
+                    const { data, error } = await _supabase
+                        .from('inm_municipios')
+                        .update({
+                            variacion_alquiler_1y: dato.alv1y,
+                            variacion_alquiler_5y: dato.alv5y,
+                            variacion_alquiler_10y: dato.alv10y
+                        })
+                        .eq('nombre', dato.nombre);
+
+                    if (error) throw error;
+                    exitosos++;
+                    log(`✅ ${dato.nombre} - ${dato.alv1y}% / ${dato.alv5y}% / ${dato.alv10y}%`, 'success');
+                } catch (error) {
+                    errores++;
+                    log(`❌ Error en ${dato.nombre}: ${error.message}`, 'error');
+                }
+            }
+
+            log('', 'info');
+            log('═══════════════════════════════════════', 'info');
+            log(`📊 RESUMEN DE LA ACTUALIZACIÓN`, 'info');
+            log(`✅ Exitosos: ${exitosos}`, 'success');
+            log(`❌ Errores: ${errores}`, 'error');
+            log(`📊 Total: ${datosAlquiler.length}`, 'info');
+            log('═══════════════════════════════════════', 'info');
+
+            btn.textContent = 'Actualización Completada ✓';
+
+            if (exitosos > 0) {
+                setTimeout(() => {
+                    alert(`🎉 ¡Actualización completada!\n\n✅ ${exitosos} municipios actualizados\n\nAhora recarga el dashboard principal para ver los datos de alquiler.`);
+                }, 500);
+            }
+        }
+    </script>
+</body>
+
+</html>

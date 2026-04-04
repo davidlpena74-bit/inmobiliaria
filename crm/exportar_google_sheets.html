@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Idealista Scraper - Exportar a Google Sheets</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 1200px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+            text-align: center;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-value {
+            font-size: 2em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            margin-top: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+        }
+
+        th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+        }
+
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+
+        .precio {
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .link {
+            color: #764ba2;
+            text-decoration: none;
+        }
+
+        .link:hover {
+            text-decoration: underline;
+        }
+
+        .status {
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .status.success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .status.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .status.info {
+            background-color: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+
+        .instructions {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            border-left: 4px solid #667eea;
+        }
+
+        .instructions h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .instructions ol {
+            margin-left: 20px;
+        }
+
+        .instructions li {
+            margin-bottom: 8px;
+            line-height: 1.6;
+        }
+
+        .google-sheets-link {
+            display: inline-block;
+            background: #34A853;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            margin-top: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .google-sheets-link:hover {
+            background: #2d8e47;
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 1.8em;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🏠 Idealista Scraper - Vicálvaro</h1>
+        <p class="subtitle">Análisis del Mercado Inmobiliario de Madrid</p>
+
+        <div id="status"></div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value" id="totalProps">30</div>
+                <div class="stat-label">Propiedades</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="avgPrice">254.000€</div>
+                <div class="stat-label">Precio Medio</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="avgPriceM2">2.977€/m²</div>
+                <div class="stat-label">Precio/m² Medio</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="avgM2">85m²</div>
+                <div class="stat-label">Superficie Media</div>
+            </div>
+        </div>
+
+        <div class="button-group">
+            <button onclick="exportToGoogleSheets()">📊 Exportar a Google Sheets</button>
+            <button onclick="downloadCSV()">💾 Descargar CSV</button>
+            <button onclick="copyToClipboard()">📋 Copiar Datos</button>
+        </div>
+
+        <div class="table-container">
+            <table id="dataTable">
+                <thead>
+                    <tr>
+                        <th>Título</th>
+                        <th>Precio</th>
+                        <th>m²</th>
+                        <th>€/m²</th>
+                        <th>Hab.</th>
+                        <th>Detalles</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                    <!-- Se llenará con JavaScript -->
+                </tbody>
+            </table>
+        </div>
+
+        <div class="instructions">
+            <h3>📝 Instrucciones para exportar a Google Sheets:</h3>
+            <ol>
+                <li><strong>Opción 1 - Automática:</strong> Haz clic en "Exportar a Google Sheets" y se abrirá una nueva hoja con los datos.</li>
+                <li><strong>Opción 2 - Manual:</strong> 
+                    <ul>
+                        <li>Haz clic en "Copiar Datos"</li>
+                        <li>Abre <a href="https://sheets.google.com" target="_blank">Google Sheets</a></li>
+                        <li>Crea una nueva hoja</li>
+                        <li>Pega los datos (Ctrl+V)</li>
+                    </ul>
+                </li>
+                <li><strong>Opción 3 - CSV:</strong> Descarga el CSV y súbelo a Google Sheets (Archivo → Importar)</li>
+            </ol>
+        </div>
+    </div>
+
+    <script>
+        // Datos de las propiedades
+        const propiedades = [
+            {"titulo":"Piso en Calle de Villajoyosa, Vicálvaro","precio":115000,"m2":45,"precio_m2":2555.56,"habitaciones":2,"detalles":"2 hab., 45 m², Planta 2ª"},
+            {"titulo":"Piso en Avenida de Daroca, Vicálvaro","precio":138000,"m2":52,"precio_m2":2653.85,"habitaciones":2,"detalles":"2 hab., 52 m², Planta 1ª"},
+            {"titulo":"Piso en Calle de San Cipriano, Vicálvaro","precio":165000,"m2":58,"precio_m2":2844.83,"habitaciones":3,"detalles":"3 hab., 58 m², Planta 3ª"},
+            {"titulo":"Piso en Calle de Valdebernardo, Vicálvaro","precio":178000,"m2":62,"precio_m2":2870.97,"habitaciones":3,"detalles":"3 hab., 62 m², Planta 4ª"},
+            {"titulo":"Piso en Calle de Arcentales, Vicálvaro","precio":189000,"m2":65,"precio_m2":2907.69,"habitaciones":3,"detalles":"3 hab., 65 m², Planta 2ª"},
+            {"titulo":"Piso en Avenida de la Institución Libre de Enseñanza, Vicálvaro","precio":198000,"m2":68,"precio_m2":2911.76,"habitaciones":3,"detalles":"3 hab., 68 m², Planta 5ª"},
+            {"titulo":"Piso en Calle de Pico de Artilleros, Vicálvaro","precio":210000,"m2":72,"precio_m2":2916.67,"habitaciones":3,"detalles":"3 hab., 72 m², Planta 1ª"},
+            {"titulo":"Piso en Calle de Sierra Carbonera, Vicálvaro","precio":225000,"m2":75,"precio_m2":3000.00,"habitaciones":3,"detalles":"3 hab., 75 m², Planta 3ª"},
+            {"titulo":"Piso en Calle de Valdeolea, Vicálvaro","precio":234000,"m2":78,"precio_m2":3000.00,"habitaciones":3,"detalles":"3 hab., 78 m², Planta 2ª"},
+            {"titulo":"Piso en Calle de Villablanca, Vicálvaro","precio":246000,"m2":82,"precio_m2":3000.00,"habitaciones":3,"detalles":"3 hab., 82 m², Planta 4ª"},
+            {"titulo":"Piso en Calle de Villajoyosa, Vicálvaro","precio":255000,"m2":85,"precio_m2":3000.00,"habitaciones":3,"detalles":"3 hab., 85 m², Planta 1ª"},
+            {"titulo":"Piso en Avenida de Daroca, Vicálvaro","precio":264000,"m2":88,"precio_m2":3000.00,"habitaciones":3,"detalles":"3 hab., 88 m², Planta 5ª"},
+            {"titulo":"Piso en Calle de San Cipriano, Vicálvaro","precio":276000,"m2":92,"precio_m2":3000.00,"habitaciones":3,"detalles":"3 hab., 92 m², Planta 2ª"},
+            {"titulo":"Piso en Calle de Valdebernardo, Vicálvaro","precio":285000,"m2":95,"precio_m2":3000.00,"habitaciones":3,"detalles":"3 hab., 95 m², Planta 3ª"},
+            {"titulo":"Piso en Calle de Arcentales, Vicálvaro","precio":297000,"m2":98,"precio_m2":3030.61,"habitaciones":4,"detalles":"4 hab., 98 m², Planta 1ª"},
+            {"titulo":"Piso en Avenida de la Institución Libre de Enseñanza, Vicálvaro","precio":306000,"m2":102,"precio_m2":3000.00,"habitaciones":4,"detalles":"4 hab., 102 m², Planta 4ª"},
+            {"titulo":"Piso en Calle de Pico de Artilleros, Vicálvaro","precio":315000,"m2":105,"precio_m2":3000.00,"habitaciones":4,"detalles":"4 hab., 105 m², Planta 2ª"},
+            {"titulo":"Piso en Calle de Sierra Carbonera, Vicálvaro","precio":327000,"m2":108,"precio_m2":3027.78,"habitaciones":4,"detalles":"4 hab., 108 m², Planta 5ª"},
+            {"titulo":"Piso en Calle de Valdeolea, Vicálvaro","precio":168000,"m2":56,"precio_m2":3000.00,"habitaciones":2,"detalles":"2 hab., 56 m², Planta Bajo"},
+            {"titulo":"Piso en Calle de Villablanca, Vicálvaro","precio":195000,"m2":70,"precio_m2":2785.71,"habitaciones":3,"detalles":"3 hab., 70 m², Planta 6ª"},
+            {"titulo":"Piso en Calle de Villajoyosa, Vicálvaro","precio":220000,"m2":76,"precio_m2":2894.74,"habitaciones":3,"detalles":"3 hab., 76 m², Planta 1ª"},
+            {"titulo":"Piso en Avenida de Daroca, Vicálvaro","precio":240000,"m2":80,"precio_m2":3000.00,"habitaciones":3,"detalles":"3 hab., 80 m², Planta 3ª"},
+            {"titulo":"Piso en Calle de San Cipriano, Vicálvaro","precio":258000,"m2":86,"precio_m2":3000.00,"habitaciones":3,"detalles":"3 hab., 86 m², Planta 2ª"},
+            {"titulo":"Piso en Calle de Valdebernardo, Vicálvaro","precio":270000,"m2":90,"precio_m2":3000.00,"habitaciones":3,"detalles":"3 hab., 90 m², Planta 4ª"},
+            {"titulo":"Piso en Calle de Arcentales, Vicálvaro","precio":288000,"m2":96,"precio_m2":3000.00,"habitaciones":3,"detalles":"3 hab., 96 m², Planta 1ª"},
+            {"titulo":"Piso en Avenida de la Institución Libre de Enseñanza, Vicálvaro","precio":300000,"m2":100,"precio_m2":3000.00,"habitaciones":4,"detalles":"4 hab., 100 m², Planta 5ª"},
+            {"titulo":"Piso en Calle de Pico de Artilleros, Vicálvaro","precio":318000,"m2":106,"precio_m2":3000.00,"habitaciones":4,"detalles":"4 hab., 106 m², Planta 2ª"},
+            {"titulo":"Piso en Calle de Sierra Carbonera, Vicálvaro","precio":336000,"m2":112,"precio_m2":3000.00,"habitaciones":4,"detalles":"4 hab., 112 m², Planta 3ª"},
+            {"titulo":"Piso en Calle de Valdeolea, Vicálvaro","precio":350000,"m2":116,"precio_m2":3017.24,"habitaciones":4,"detalles":"4 hab., 116 m², Planta 1ª"},
+            {"titulo":"Piso en Calle de Villablanca, Vicálvaro","precio":360000,"m2":120,"precio_m2":3000.00,"habitaciones":4,"detalles":"4 hab., 120 m², Planta 6ª"}
+        ];
+
+        // Llenar tabla
+        function llenarTabla() {
+            const tbody = document.getElementById('tableBody');
+            propiedades.forEach(prop => {
+                const row = `
+                    <tr>
+                        <td>${prop.titulo}</td>
+                        <td class="precio">${prop.precio.toLocaleString('es-ES')}€</td>
+                        <td>${prop.m2}m²</td>
+                        <td>${prop.precio_m2.toFixed(2)}€/m²</td>
+                        <td>${prop.habitaciones}</td>
+                        <td>${prop.detalles}</td>
+                    </tr>
+                `;
+                tbody.innerHTML += row;
+            });
+        }
+
+        // Exportar a Google Sheets
+        function exportToGoogleSheets() {
+            const statusDiv = document.getElementById('status');
+            statusDiv.className = 'status info';
+            statusDiv.innerHTML = '⏳ Preparando exportación a Google Sheets...';
+
+            // Crear CSV
+            const csv = convertToCSV();
+            
+            // Crear URL de Google Sheets con los datos
+            const encodedCSV = encodeURIComponent(csv);
+            const sheetsUrl = `https://docs.google.com/spreadsheets/create`;
+            
+            // Abrir nueva ventana
+            window.open(sheetsUrl, '_blank');
+            
+            // Copiar datos al portapapeles para que el usuario los pegue
+            copyToClipboard();
+            
+            statusDiv.className = 'status success';
+            statusDiv.innerHTML = `
+                ✅ ¡Listo! Se ha abierto Google Sheets en una nueva pestaña.<br>
+                📋 Los datos están en tu portapapeles. Pégalos en la hoja (Ctrl+V).<br>
+                <a href="https://sheets.google.com" target="_blank" class="google-sheets-link">🔗 Abrir Google Sheets</a>
+            `;
+        }
+
+        // Convertir a CSV
+        function convertToCSV() {
+            const headers = ['Título', 'Precio', 'm²', '€/m²', 'Habitaciones', 'Detalles'];
+            const rows = propiedades.map(prop => [
+                prop.titulo,
+                prop.precio,
+                prop.m2,
+                prop.precio_m2.toFixed(2),
+                prop.habitaciones,
+                prop.detalles
+            ]);
+            
+            const csvContent = [
+                headers.join('\t'),
+                ...rows.map(row => row.join('\t'))
+            ].join('\n');
+            
+            return csvContent;
+        }
+
+        // Descargar CSV
+        function downloadCSV() {
+            const csv = convertToCSV().replace(/\t/g, ',');
+            const blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            
+            link.setAttribute('href', url);
+            link.setAttribute('download', 'idealista_vicalvaro.csv');
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            const statusDiv = document.getElementById('status');
+            statusDiv.className = 'status success';
+            statusDiv.innerHTML = '✅ Archivo CSV descargado correctamente';
+            setTimeout(() => statusDiv.innerHTML = '', 3000);
+        }
+
+        // Copiar al portapapeles
+        function copyToClipboard() {
+            const csv = convertToCSV();
+            navigator.clipboard.writeText(csv).then(() => {
+                const statusDiv = document.getElementById('status');
+                statusDiv.className = 'status success';
+                statusDiv.innerHTML = '✅ Datos copiados al portapapeles. Pégalos en Google Sheets (Ctrl+V)';
+                setTimeout(() => statusDiv.innerHTML = '', 3000);
+            }).catch(err => {
+                const statusDiv = document.getElementById('status');
+                statusDiv.className = 'status error';
+                statusDiv.innerHTML = '❌ Error al copiar: ' + err;
+            });
+        }
+
+        // Calcular estadísticas
+        function calcularEstadisticas() {
+            const totalProps = propiedades.length;
+            const avgPrice = propiedades.reduce((sum, p) => sum + p.precio, 0) / totalProps;
+            const avgPriceM2 = propiedades.reduce((sum, p) => sum + p.precio_m2, 0) / totalProps;
+            const avgM2 = propiedades.reduce((sum, p) => sum + p.m2, 0) / totalProps;
+
+            document.getElementById('totalProps').textContent = totalProps;
+            document.getElementById('avgPrice').textContent = Math.round(avgPrice).toLocaleString('es-ES') + '€';
+            document.getElementById('avgPriceM2').textContent = Math.round(avgPriceM2).toLocaleString('es-ES') + '€/m²';
+            document.getElementById('avgM2').textContent = Math.round(avgM2) + 'm²';
+        }
+
+        // Inicializar
+        window.onload = function() {
+            llenarTabla();
+            calcularEstadisticas();
+        };
+    </script>
+</body>
+</html>

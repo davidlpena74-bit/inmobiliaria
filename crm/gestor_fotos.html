@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestor de Fotos - La Voz Del Pueblo</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2d3436;
+            --accent: #0984e3;
+            --success: #00b894;
+            --danger: #d63031;
+            --bg: #f5f6fa;
+            --card: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--primary);
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: var(--primary);
+        }
+
+        .btn-xml {
+            background: var(--primary);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+        }
+
+        .btn-xml:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+        }
+
+        .property-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+
+        .property-card {
+            background: var(--card);
+            border-radius: 20px;
+            padding: 25px;
+            display: grid;
+            grid-template-columns: 200px 1fr 1fr;
+            gap: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            transition: transform 0.2s;
+        }
+
+        .property-card:hover {
+            transform: scale(1.01);
+        }
+
+        .main-thumb {
+            width: 200px;
+            height: 150px;
+            background: #e2e8f0;
+            border-radius: 15px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #eee;
+        }
+
+        .main-thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .info-section h3 {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: #636e72;
+            margin-bottom: 5px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #dfe6e9;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            transition: border-color 0.3s;
+        }
+
+        input:focus {
+            border-color: var(--accent);
+            outline: none;
+        }
+
+        .gallery-preview {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+
+        .mini-thumb {
+            width: 40px;
+            height: 40px;
+            border-radius: 6px;
+            background: #eee;
+            overflow: hidden;
+        }
+
+        .mini-thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .btn-save {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .btn-save:hover {
+            background: #0873c4;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 5px;
+            font-size: 0.7rem;
+            font-weight: 800;
+            margin-top: 10px;
+        }
+
+        .status-empty { background: #fee2e2; color: #ef4444; }
+        .status-ready { background: #d1fae5; color: #10b981; }
+
+        /* Dropzone Styles */
+        .dropzone {
+            border: 2px dashed #cbd5e0;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            background: #f8fafc;
+            color: #64748b;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+            font-size: 0.8rem;
+        }
+
+        .dropzone:hover, .dropzone.active {
+            border-color: var(--accent);
+            background: #f0f7ff;
+            color: var(--accent);
+        }
+
+        .upload-status {
+            font-size: 0.7rem;
+            margin-top: 5px;
+            display: block;
+        }
+
+        .edit-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .edit-grid .full {
+            grid-column: span 2;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #dfe6e9;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            min-height: 80px;
+            resize: vertical;
+        }
+
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #dfe6e9;
+            border-radius: 10px;
+            background: white;
+            font-size: 0.9rem;
+        }
+
+        .back-btn {
+            text-decoration: none;
+            color: #636e72;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <a href="propiedades.html" class="back-btn">← Volver al Listado General</a>
+    <header>
+        <div>
+            <h1>📸 Gestor de Fotos</h1>
+            <p>Arrastra tus fotos o indica rutas de GitHub</p>
+        </div>
+        <button onclick="downloadXML()" class="btn-xml">Exportar Feed Idealista (.xml)</button>
+    </header>
+
+    <div id="loading" style="text-align: center; padding: 50px;">
+        <h2>Cargando propiedades...</h2>
+    </div>
+
+    <div id="properties" class="property-grid">
+        <!-- Renderizado dinámico -->
+    </div>
+</div>
+
+<script>
+    const SB_URL = "https://dwbvegnxmyvpolvofkfn.supabase.co";
+    const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR3YnZlZ254bXl2cG9sdm9ma2ZuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njc1Mzg1NTUsImV4cCI6MjA4MzExNDU1NX0.eT5ZSce8H8Yk8pWKyLUYChU0HtmZljywP4eEQd5FkOI";
+    const BUCKET_NAME = "fotos"; // Asegúrate de crear este bucket en Supabase
+    const GITHUB_USER = "davidlpena74-bit";
+    const GITHUB_REPO = "fotos-inmobiliaria";
+
+    const { createClient } = supabase;
+    const _supabase = createClient(SB_URL, SB_KEY);
+
+    let props = [];
+
+    async function load() {
+        try {
+            const { data, error } = await _supabase.from('inm_propiedades').select('*').order('fecha_captura', { ascending: false });
+            if (error) throw error;
+            props = data;
+            render();
+            document.getElementById('loading').style.display = 'none';
+        } catch (e) {
+            alert("Error: " + e.message);
+        }
+    }
+
+    function render() {
+        const container = document.getElementById('properties');
+        container.innerHTML = props.map(p => {
+            const fotos = p.caracteristicas?.fotos || [];
+            const ref = p.caracteristicas?.referencia || "";
+            const filenames = fotos.filter(f => !f.includes('supabase')).map(f => f.split('/').pop()).join(', ');
+            const mainPhoto = fotos.length > 0 ? fotos[0] : null;
+
+            return `
+                <div class="property-card" id="card-${p.id}">
+                    <div class="main-thumb">
+                        ${mainPhoto ? `<img src="${mainPhoto}">` : '<span>SIN FOTOS</span>'}
+                        <div class="gallery-preview" style="position:absolute; bottom:5px; left:5px;">
+                            ${fotos.slice(1,4).map(f => `<div class="mini-thumb"><img src="${f}"></div>`).join('')}
+                        </div>
+                    </div>
+                    <div class="info-section">
+                        <h3>${p.zona} - ${p.precio.toLocaleString()}€</h3>
+                        <p style="font-size: 0.8rem; color: #636e72;">${p.titulo.substring(0,60)}...</p>
+                        <div class="status-badge ${fotos.length > 0 ? 'status-ready' : 'status-empty'}">
+                            ${fotos.length > 0 ? `✓ ${fotos.length} FOTOS LISTAS` : '⚠ FALTA CONFIGURAR'}
+                        </div>
+                        
+                        <div class="dropzone" id="dz-${p.id}" 
+                             ondragover="event.preventDefault(); this.classList.add('active')" 
+                             ondragleave="this.classList.remove('active')" 
+                             ondrop="handleDrop(event, ${p.id})">
+                             🖼️ Arrastra fotos aquí para subir <br> (o haz clic)
+                             <input type="file" multiple style="display:none" onchange="handleFileSelect(event, ${p.id})">
+                        </div>
+                        <span id="status-${p.id}" class="upload-status"></span>
+                    </div>
+                    <div class="edit-section">
+                        <div class="edit-grid">
+                            <div class="form-group">
+                                <label>Operación</label>
+                                <select id="op-${p.id}">
+                                    <option value="sale" ${p.caracteristicas?.operacion === 'sale' ? 'selected' : ''}>Venta</option>
+                                    <option value="rent" ${p.caracteristicas?.operacion === 'rent' ? 'selected' : ''}>Alquiler</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Tipo Inmueble</label>
+                                <select id="type-${p.id}">
+                                    <option value="flat" ${p.caracteristicas?.tipo === 'flat' ? 'selected' : ''}>Piso / Apartamento</option>
+                                    <option value="house" ${p.caracteristicas?.tipo === 'house' ? 'selected' : ''}>Chalet / Casa</option>
+                                    <option value="local" ${p.caracteristicas?.tipo === 'local' ? 'selected' : ''}>Local Comercial</option>
+                                    <option value="office" ${p.caracteristicas?.tipo === 'office' ? 'selected' : ''}>Oficina</option>
+                                    <option value="garage" ${p.caracteristicas?.tipo === 'garage' ? 'selected' : ''}>Garaje</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Carpeta GitHub (Ref)</label>
+                                <input type="text" id="ref-${p.id}" value="${ref}" placeholder="REF-001">
+                            </div>
+                            <div class="form-group">
+                                <label>Calle Real (Precisa)</label>
+                                <input type="text" id="street-${p.id}" value="${p.caracteristicas?.calle_real || ''}" placeholder="C/ Alcalá, 123">
+                            </div>
+                            <div class="form-group">
+                                <label>Baños</label>
+                                <input type="number" id="bath-${p.id}" value="${p.banos || p.caracteristicas?.banos || 1}">
+                            </div>
+                            <div class="form-group">
+                                <label>Archivos GitHub (coma)</label>
+                                <input type="text" id="files-${p.id}" value="${filenames}" placeholder="p1.jpg, p2.jpg">
+                            </div>
+                            <div class="form-group full">
+                                <label>Descripción del Anuncio</label>
+                                <textarea id="desc-${p.id}" placeholder="Escribe aquí la descripción para Idealista...">${p.caracteristicas?.descripcion || ''}</textarea>
+                            </div>
+                        </div>
+                        <div style="display: flex; gap: 10px; margin-top: 15px;">
+                            <button class="btn-save" style="flex: 2;" onclick="save(${p.id})">Guardar Ficha Permanente</button>
+                            <button class="btn-save" style="flex: 1; background: #2d3436;" onclick="queueAPI(${p.id})">🚀 Publicar API</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }).join('');
+    }
+
+    // --- Lógica de Carga de Archivos ---
+
+    async function handleDrop(e, id) {
+        e.preventDefault();
+        const files = e.dataTransfer.files;
+        uploadFiles(files, id);
+    }
+
+    async function handleFileSelect(e, id) {
+        const files = e.target.files;
+        uploadFiles(files, id);
+    }
+
+    async function uploadFiles(files, id) {
+        if (files.length === 0) return;
+        
+        const statusEl = document.getElementById(`status-${id}`);
+        statusEl.innerText = `⏳ Subiendo ${files.length} archivos...`;
+        statusEl.style.color = "var(--accent)";
+
+        const p = props.find(x => x.id === id);
+        const currentPhotos = p.caracteristicas?.fotos || [];
+        const newUrls = [];
+
+        for (const file of files) {
+            const fileName = `${id}/${Date.now()}-${file.name.replace(/\s+/g, '_')}`;
+            try {
+                const { data, error } = await _supabase.storage
+                    .from(BUCKET_NAME)
+                    .upload(fileName, file);
+
+                if (error) {
+                    if (error.message.includes("not found")) {
+                        alert("⚠️ Error: El bucket 'fotos' no existe en Supabase. Por favor, créalo en tu panel de Supabase.");
+                        throw error;
+                    }
+                    throw error;
+                }
+
+                // Generar URL pública
+                const { data: publicData } = _supabase.storage
+                    .from(BUCKET_NAME)
+                    .getPublicUrl(fileName);
+                
+                newUrls.push(publicData.publicUrl);
+            } catch (err) {
+                console.error("Fallo upload:", err);
+                statusEl.innerText = "❌ Error al subir.";
+                return;
+            }
+        }
+
+        // Actualizar base de datos
+        const updatedPhotos = [...currentPhotos, ...newUrls];
+        const newData = { ...p.caracteristicas, fotos: updatedPhotos };
+
+        const { error } = await _supabase.from('inm_propiedades').update({ caracteristicas: newData }).eq('id', id);
+        
+        if (!error) {
+            statusEl.innerText = "✅ ¡Subida completa!";
+            statusEl.style.color = "var(--success)";
+            setTimeout(load, 1500);
+        }
+    }
+
+    async function save(id) {
+        const ref = document.getElementById(`ref-${id}`).value.trim();
+        const filesStr = document.getElementById(`files-${id}`).value.trim();
+        const op = document.getElementById(`op-${id}`).value;
+        const type = document.getElementById(`type-${id}`).value;
+        const street = document.getElementById(`street-${id}`).value.trim();
+        const bath = document.getElementById(`bath-${id}`).value;
+        const desc = document.getElementById(`desc-${id}`).value.trim();
+        
+        const p = props.find(x => x.id === id);
+        const currentSupabasePhotos = (p.caracteristicas?.fotos || []).filter(url => url.includes('supabase'));
+        
+        let manualUrls = [];
+        if (ref && filesStr) {
+            const files = filesStr.split(',').map(f => f.trim()).filter(f => f !== "");
+            manualUrls = files.map(f => `https://raw.githubusercontent.com/${GITHUB_USER}/${GITHUB_REPO}/main/${ref}/${f}`);
+        }
+
+        const newData = {
+            ...p.caracteristicas,
+            referencia: ref,
+            fotos: [...currentSupabasePhotos, ...manualUrls],
+            operacion: op,
+            tipo: type,
+            calle_real: street,
+            banos: bath,
+            descripcion: desc
+        };
+
+        try {
+            const { error } = await _supabase.from('inm_propiedades').update({ caracteristicas: newData }).eq('id', id);
+            if (error) throw error;
+            alert("✓ Ficha actualizada correctamente.");
+            load();
+        } catch (e) {
+            alert("Error al guardar: " + e.message);
+        }
+    }
+
+    async function queueAPI(id) {
+        const p = props.find(x => x.id === id);
+        const newData = {
+            ...p.caracteristicas,
+            pendiente_pub: true // Marca para el script local
+        };
+
+        try {
+            const { error } = await _supabase.from('inm_propiedades').update({ caracteristicas: newData }).eq('id', id);
+            if (error) throw error;
+            alert("🚀 ¡Orden enviada! La propiedad se publicará en Idealista en unos segundos desde tu PC.");
+            load();
+        } catch (e) {
+            alert("Error al enviar orden: " + e.message);
+        }
+    }
+
+    function downloadXML() {
+        const ready = props.filter(p => p.caracteristicas?.fotos?.length > 0);
+        if (ready.length === 0) {
+            alert("No hay propiedades configuradas con fotos.");
+            return;
+        }
+
+        let xml = `<?xml version="1.0" encoding="UTF-8"?>\n<properties>\n`;
+        ready.forEach(p => {
+            xml += `  <property>\n`;
+            xml += `    <propertyCode>${p.caracteristicas.referencia || 'REF-'+p.id}</propertyCode>\n`;
+            xml += `    <propertyOperation>${p.caracteristicas.operacion || 'sale'}</propertyOperation>\n`;
+            xml += `    <propertyType>${p.caracteristicas.tipo || 'flat'}</propertyType>\n`;
+            xml += `    <address>\n`;
+            xml += `      <country>ES</country>\n`;
+            xml += `      <province>Madrid</province>\n`;
+            xml += `      <municipality>${p.zona}</municipality>\n`;
+            xml += `      <streetName>${p.caracteristicas.calle_real || p.zona}</streetName>\n`;
+            xml += `      <visibility>2</visibility>\n`;
+            xml += `    </address>\n`;
+            xml += `    <features>\n`;
+            xml += `      <constructedArea>${p.superficie}</constructedArea>\n`;
+            xml += `      <rooms>${p.habitaciones}</rooms>\n`;
+            xml += `      <bathrooms>${p.caracteristicas.banos || 1}</bathrooms>\n`;
+            xml += `    </features>\n`;
+            xml += `    <price>${p.precio}</price>\n`;
+            xml += `    <descriptions>\n`;
+            xml += `      <description language="español">${p.caracteristicas.descripcion || 'Propiedad en ' + p.zona}</description>\n`;
+            xml += `    </descriptions>\n`;
+            xml += `    <images>\n`;
+            p.caracteristicas.fotos.forEach((url, i) => {
+                xml += `      <image><url>${url}</url><order>${i+1}</order><label>${i===0?'principal':''}</label></image>\n`;
+            });
+            xml += `    </images>\n`;
+            xml += `  </property>\n`;
+        });
+        xml += `</properties>`;
+
+        const blob = new Blob([xml], { type: 'application/xml' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = `idealista_feed.xml`;
+        a.click();
+    }
+
+    load();
+</script>
+
+</body>
+</html>

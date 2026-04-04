@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configuración Web | Weperty CRM</title>
+    <script src="auth-check.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="shell.css">
+    <style>
+        .web-grid-container {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 22px;
+        }
+
+        .web-main-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr); /* 4 columns like Inmoweb */
+            gap: 15px; /* Tighter gap */
+        }
+
+        .web-card {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 16px; /* Reduced padding from 22px */
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .web-card:hover {
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        .web-card-title {
+            font-size: 14px; /* Slightly smaller like Inmoweb */
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .web-card-desc {
+            font-size: 12px;
+            color: var(--text-light);
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+
+        .web-card-footer {
+            margin-top: auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .web-link {
+            font-size: 13px;
+            color: var(--link-blue);
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .web-link:hover { text-decoration: underline; }
+
+        .web-help {
+            font-size: 11px;
+            color: var(--text-light);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        /* Icons/Social */
+        .social-icons {
+            display: flex;
+            gap: 12px;
+            margin-top: 10px;
+        }
+        .social-icons i {
+            font-size: 20px;
+            color: #6366f1;
+            cursor: pointer;
+        }
+
+        /* Status Badge */
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            background: #d1fae5;
+            color: #059669;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+        .status-badge i { font-size: 8px; }
+
+        /* SEO Rank Card */
+        .seo-rank-card {
+            grid-column: 1 / -1;
+            margin-top: 10px;
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 24px;
+            display: grid;
+            grid-template-columns: 1fr 1fr 200px;
+            gap: 40px;
+            align-items: center;
+        }
+        .seo-info h3 { font-size: 16px; margin-bottom: 12px; }
+        .seo-info p { font-size: 12px; color: var(--text-light); line-height: 1.6; }
+
+        .seo-stats {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .seo-stat-item {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+        }
+        .seo-val { color: #ef4444; font-weight: 600; cursor: pointer; }
+        .seo-val.ok { color: #10b981; }
+
+        /* Gauge for SEO */
+        .gauge-container {
+            text-align: center;
+        }
+        .gauge-visual {
+            width: 140px;
+            height: 70px;
+            background: linear-gradient(to right, #ef4444, #f59e0b, #10b981);
+            border-radius: 100px 100px 0 0;
+            position: relative;
+            margin: 0 auto 10px;
+        }
+        .gauge-needle {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 2px;
+            height: 60px;
+            background: #2d3748;
+            transform-origin: bottom;
+            transform: translateX(-50%) rotate(-60deg);
+            transition: 1s;
+        }
+        .gauge-label { font-weight: 700; font-size: 14px; color: #ef4444; }
+
+        /* Right Sidebar Panel */
+        .web-side-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .side-card {
+            background: #eefafa; /* Accurate Inmoweb greenish mint */
+            border: 1px solid #dceaea;
+            border-radius: 12px;
+            padding: 20px;
+        }
+        .side-card h4 { font-size: 14px; margin-bottom: 12px; color: var(--text); }
+        .side-card p { font-size: 11px; color: var(--text-light); margin-bottom: 10px; }
+        
+        .domain-display {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 10px;
+            font-size: 13px;
+            color: #64748b;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .lang-list {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+        .lang-tag {
+            font-size: 10px;
+            font-weight: 700;
+            color: var(--text-light);
+            text-transform: uppercase;
+        }
+
+        .template-preview {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 10px;
+            margin-top: 10px;
+            text-align: center;
+        }
+        .template-name { font-size: 12px; font-weight: 700; margin-bottom: 4px; }
+        .template-id { font-size: 10px; background: #334155; color: white; padding: 2px 6px; border-radius: 4px; }
+        .template-img {
+            width: 100%;
+            height: 120px;
+            background: #e2e8f0;
+            border-radius: 6px;
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #cbd5e1;
+            font-size: 24px;
+        }
+
+        .btn-template {
+            width: 100%;
+            margin-top: 12px;
+            padding: 10px;
+            background: var(--link-blue);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .btn-template-outline {
+            background: #6366f1;
+            margin-top: 8px;
+        }
+
+        .header-main {
+            margin-bottom: 22px;
+        }
+        .header-main h1 { font-size: 22px; font-weight: 700; }
+        .header-main p { color: var(--text-light); font-size: 13px; }
+    </style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+    <div class="sidebar-logo">
+        <div class="mini-logo">wp</div>
+        <div class="brand">weperty<sup style="font-size:8px;">®</sup><small>Properties Management</small></div>
+        <i class="fa-solid fa-bars hamburger"></i>
+    </div>
+    <nav class="s-nav">
+        <div class="s-item"><div class="icon-box">wp</div> <span>Inicio</span> <i class="fa-solid fa-chevron-down chevron"></i></div>
+        <div class="s-sub">
+            <a href="index.html">Resumen</a>
+            <a href="dashboard_financiero.html">Dashboard financiero</a>
+        </div>
+        <div class="s-item"><i class="fa-solid fa-building"></i> <span>Inmuebles</span> <i class="fa-solid fa-chevron-down chevron"></i></div>
+        <div class="s-sub">
+            <a href="ficha_inmueble.html">Nuevo inmueble</a>
+            <a href="mis_propiedades.html">Mis inmuebles</a>
+            <a href="#">Tipos de cartera</a>
+            <a href="#">Gestor de zonas</a>
+        </div>
+        <a href="#" class="s-item"><i class="fa-solid fa-address-book"></i> <span>Contactos</span> <i class="fa-solid fa-chevron-down chevron"></i></a>
+        <a href="#" class="s-item"><i class="fa-solid fa-globe"></i> <span>MLS</span></a>
+        <div class="s-item"><i class="fa-solid fa-screwdriver-wrench"></i> <span>Herramientas</span> <i class="fa-solid fa-chevron-down chevron"></i></div>
+        <div class="s-sub">
+            <a href="portales.html">Pasarelas (API)</a>
+            <a href="#">Tareas</a>
+            <a href="#">Embudo de ventas</a>
+            <a href="#">Peticiones de información</a>
+            <a href="#">Demandas</a>
+            <a href="#">Documentos</a>
+            <a href="#">Visitas</a>
+            <a href="#">Recomendaciones</a>
+            <a href="#">Ofertas</a>
+            <a href="#">Operaciones</a>
+            <a href="#">Valoraciones</a>
+            <a href="#">Mailing list</a>
+        </div>
+        <a href="web.html" class="s-item active"><i class="fa-solid fa-display"></i> <span>Web</span></a>
+        <a href="#" class="s-item"><i class="fa-solid fa-envelope"></i> <span>Cuentas de email</span></a>
+    </nav>
+    <div class="sidebar-bottom">
+        <div class="s-item"><i class="fa-solid fa-gear"></i> <span>Administración</span></div>
+        <div class="s-item" onclick="logout()" style="color: #f87171; cursor: pointer; display: flex; align-items: center; gap: 10px; padding: 10px 15px; font-size: 13px;"><i class="fa-solid fa-right-from-bracket"></i> <span>Cerrar sesión</span></div>
+    </div>
+</aside>
+
+<!-- MAIN -->
+<div class="main">
+    <header class="topbar">
+        <div class="search-box" style="margin-left: auto; order: 5;">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" placeholder="Buscar...">
+        </div>
+        <div style="flex: 1;"></div>
+        <i class="fa-solid fa-plus t-icon" style="order: 4;"></i>
+        <i class="fa-solid fa-shop t-icon" style="order: 6;"></i>
+        <i class="fa-solid fa-bullhorn t-icon" style="order: 7;"></i>
+        <i class="fa-solid fa-bell t-icon" style="order: 8;"></i>
+        <i class="fa-solid fa-circle-question t-icon" style="order: 9;"></i>
+        <i class="fa-regular fa-calendar t-icon" style="order: 10;"></i>
+        <i class="fa-solid fa-box-archive t-icon" style="order: 11;"></i>
+        <div class="avatar" style="order: 12;"><i class="fa-solid fa-user"></i></div>
+    </header>
+
+    <div class="page-content" style="padding: 15px 18px;">
+        <div class="header-main" style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
+            <i class="fa-solid fa-display" style="color: #64748b; font-size: 13px;"></i>
+            <h1 style="font-size: 13px; font-weight: 600; color: #1e2844;">Web</h1>
+        </div>
+
+        <div class="web-grid-container">
+            <div class="web-main-grid">
+                <!-- Redes sociales -->
+                <div class="web-card">
+                    <div class="web-card-title">Redes sociales <i class="fa-solid fa-share-nodes"></i></div>
+                    <div class="web-card-desc">Configure fácilmente sus redes sociales para compartirlas en su web.</div>
+                    <div class="social-icons">
+                        <i class="fa-brands fa-facebook-f"></i>
+                        <i class="fa-brands fa-twitter"></i>
+                        <i class="fa-brands fa-youtube"></i>
+                        <i class="fa-brands fa-linkedin-in"></i>
+                        <i class="fa-brands fa-instagram"></i>
+                        <i class="fa-brands fa-pinterest-p"></i>
+                    </div>
+                    <div class="web-card-footer">
+                        <a href="#" class="web-link">Configurar</a>
+                        <span class="web-help">Ayuda <i class="fa-regular fa-circle-question"></i></span>
+                    </div>
+                </div>
+
+                <!-- Contenidos -->
+                <div class="web-card">
+                    <div class="web-card-title">Contenidos <i class="fa-solid fa-file-lines"></i></div>
+                    <div class="web-card-desc">Administre los contenidos de la portada, páginas internas y blog de su sitio web.</div>
+                    <div style="font-size: 20px; font-weight: 700; margin-bottom: 4px;">80 <span style="font-weight: 400; font-size: 13px; color: var(--text-light);">secciones</span></div>
+                    <div style="font-size: 20px; font-weight: 700; margin-bottom: 12px;">0 <span style="font-weight: 400; font-size: 13px; color: var(--text-light);">post en blog</span></div>
+                    <a href="#" class="web-link" style="margin-bottom: 4px;">Administrar secciones</a>
+                    <a href="#" class="web-link">Administrar blog</a>
+                    <div class="web-card-footer" style="margin-top: 10px;">
+                        <span></span>
+                        <span class="web-help">Ayuda <i class="fa-regular fa-circle-question"></i></span>
+                    </div>
+                </div>
+
+                <!-- Portada -->
+                <div class="web-card">
+                    <div class="web-card-title">Portada <i class="fa-solid fa-house-chimney"></i></div>
+                    <div class="web-card-desc">Determine los inmuebles de portada o añada cajas con enlace a búsquedas de inmuebles populares.</div>
+                    <div style="font-size: 20px; font-weight: 700; margin-bottom: 4px;">8 <span style="font-weight: 400; font-size: 13px; color: var(--text-light);">inmuebles</span></div>
+                    <div style="font-size: 20px; font-weight: 700; margin-bottom: 12px;">0 <span style="font-weight: 400; font-size: 13px; color: var(--text-light);">búsquedas</span></div>
+                    <a href="#" class="web-link" style="margin-bottom: 4px;">Cambiar inmuebles</a>
+                    <a href="#" class="web-link">Cambiar búsquedas</a>
+                    <div class="web-card-footer" style="margin-top: 10px;">
+                        <span></span>
+                        <span class="web-help">Ayuda <i class="fa-regular fa-circle-question"></i></span>
+                    </div>
+                </div>
+
+                <!-- Estado -->
+                <div class="web-card">
+                    <div class="web-card-title">Estado <i class="fa-solid fa-signal"></i></div>
+                    <div class="web-card-desc">Active o desactive su web al público. En estos momentos su web está:</div>
+                    <div style="margin-bottom: 20px;">
+                        <span class="status-badge"><i class="fa-solid fa-circle"></i> Activada</span>
+                    </div>
+                    <div class="web-card-footer">
+                        <a href="#" class="web-link">Configurar</a>
+                        <span class="web-help">Ayuda <i class="fa-regular fa-circle-question"></i></span>
+                    </div>
+                </div>
+
+                <!-- Logotipos -->
+                <div class="web-card">
+                    <div class="web-card-title">Logotipos <i class="fa-solid fa-shapes"></i></div>
+                    <div class="web-card-desc">Logotipo principal:</div>
+                    <div style="height: 30px; margin-bottom: 10px;"><strong style="font-style: italic; color: #1e2844;">weperty</strong></div>
+                    <div class="web-card-desc" style="margin-bottom: 8px;">Mini logotipo:</div>
+                    <div style="height: 30px; margin-bottom: 10px;"><div style="width: 28px; height: 28px; background: #6366f1; color: white; display: flex; align-items: center; justify-content: center; border-radius: 6px; font-size: 12px; font-weight: 800;">wp</div></div>
+                    <div class="web-card-desc" style="margin-bottom: 8px;">Favicon:</div>
+                    <div style="height: 20px;"><i class="fa-solid fa-wave-square" style="color: #6366f1;"></i></div>
+                    <div class="web-card-footer" style="margin-top: 15px;">
+                        <a href="#" class="web-link">Configurar</a>
+                        <span class="web-help">Ayuda <i class="fa-regular fa-circle-question"></i></span>
+                    </div>
+                </div>
+
+                <!-- Cabecera -->
+                <div class="web-card">
+                    <div class="web-card-title">Cabecera <i class="fa-solid fa-image"></i></div>
+                    <div class="web-card-desc">Administre las fotos para la cabecera de su sitio web.</div>
+                    <div style="font-size: 20px; font-weight: 700; margin-bottom: 4px;">5 <span style="font-weight: 400; font-size: 13px; color: var(--text-light);">fotos</span></div>
+                    <div class="web-card-footer" style="margin-top: 20px;">
+                        <a href="#" class="web-link">Cambiar</a>
+                        <span class="web-help">Ayuda <i class="fa-regular fa-circle-question"></i></span>
+                    </div>
+                </div>
+
+                <!-- Menú -->
+                <div class="web-card">
+                    <div class="web-card-title">Menú <i class="fa-solid fa-bars"></i></div>
+                    <div class="web-card-desc">Configure el menú y submenús de navegación de su sitio.</div>
+                    <div class="web-card-footer" style="margin-top: 40px;">
+                        <a href="#" class="web-link">Configurar</a>
+                        <span class="web-help">Ayuda <i class="fa-regular fa-circle-question"></i></span>
+                    </div>
+                </div>
+
+                <!-- Configuración -->
+                <div class="web-card">
+                    <div class="web-card-title">Configuración <i class="fa-solid fa-gear"></i></div>
+                    <div class="web-card-desc">Política de cookies, posición elementos de portada, personalización del buscador principal, ordenación de resultados de inmuebles, etc.</div>
+                    <div class="web-card-footer" style="margin-top: 10px;">
+                        <a href="#" class="web-link">Revisar</a>
+                        <span class="web-help">Ayuda <i class="fa-regular fa-circle-question"></i></span>
+                    </div>
+                </div>
+
+                <!-- SEO Rank Section -->
+                <div class="seo-rank-card">
+                    <div class="seo-info">
+                        <h3>Inmoweb® SEO Rank</h3>
+                        <p>El posicionamiento en buscadores o SEO (del inglés search engine optimization), es un conjunto de acciones orientadas a mejorar el posicionamiento de un sitio web en buscadores. Aquí le mostramos algunas claves vitales para mejorar un posicionamiento de su web.</p>
+                    </div>
+                    <div class="seo-stats">
+                        <div class="seo-stat-item"><span>Meta title:</span> <span class="seo-val">2 de 11 <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 10px;"></i></span></div>
+                        <div class="seo-stat-item"><span>Meta description:</span> <span class="seo-val">2 de 11 <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 10px;"></i></span></div>
+                        <div class="seo-stat-item"><span>Texto de portada:</span> <span class="seo-val ok">11 de 11 <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 10px;"></i></span></div>
+                        <div class="seo-stat-item"><span>Secciones web:</span> <span class="seo-val ok">80 <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 10px;"></i></span></div>
+                        <div class="seo-stat-item"><span>Posts en tu blog: (totales)</span> <span class="seo-val">0 <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 10px;"></i></span></div>
+                    </div>
+                    <div class="gauge-container">
+                        <div class="gauge-visual">
+                            <div class="gauge-needle"></div>
+                        </div>
+                        <div class="gauge-label">Resultado: Malo</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Side Panel (Dominios, Idiomas, Plantilla) -->
+            <div class="web-side-panel">
+                <div class="side-card">
+                    <h4>Dominios</h4>
+                    <p>Su web está configurada en el dominio principal:</p>
+                    <div class="domain-display">
+                        <i class="fa-solid fa-globe"></i> weperty.com
+                    </div>
+                    <a href="#" class="web-link" style="display: block; margin-top: 12px; font-size: 12px;">Ayuda</a>
+                </div>
+
+                <div class="side-card">
+                    <h4>Idiomas</h4>
+                    <p>Son los idiomas que usted tiene en su web.</p>
+                    <div class="lang-list">
+                        <span class="lang-tag">ES</span>
+                        <span class="lang-tag">EN</span>
+                        <span class="lang-tag">FR</span>
+                        <span class="lang-tag">DE</span>
+                        <span class="lang-tag">PT</span>
+                        <span class="lang-tag">NL</span>
+                        <span class="lang-tag">RU</span>
+                        <span class="lang-tag">NO</span>
+                        <span class="lang-tag">FI</span>
+                        <span class="lang-tag">SE</span>
+                        <span class="lang-tag">DA</span>
+                    </div>
+                    <a href="#" class="web-link" style="display: block; margin-top: 12px; font-size: 12px;">Configurar</a>
+                    <a href="#" class="web-link" style="display: block; margin-top: 4px; font-size: 12px;">Ayuda</a>
+                </div>
+
+                <div class="side-card" style="background: #eef2ff;">
+                    <h4>Plantilla web:</h4>
+                    <p>Su plantilla actual es:</p>
+                    <div class="template-preview">
+                        <div class="template-name">Plantilla Profesional <span class="template-id">M0109</span></div>
+                        <div class="template-img">
+                            <i class="fa-solid fa-window-maximize"></i>
+                        </div>
+                    </div>
+                    <button class="btn-template"><i class="fa-solid fa-arrows-rotate"></i> Cambiar mi plantilla web</button>
+                    <p style="margin-top: 15px; font-size: 10px;">Destaque de su competencia. Contrate una Plantilla Personalizada.</p>
+                    <button class="btn-template btn-template-outline">Quiero una Plantilla Personalizada</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="shell.js"></script>
+</body>
+</html>
