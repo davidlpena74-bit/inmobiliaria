@@ -83,9 +83,12 @@ def process_property_deep_data(property_data):
             record_id = existing.data[0]['id']
             
             update_fields = {
+                "titulo": property_data.get('titulo'),
                 "descripcion": property_data.get('descripcion'),
                 "caracteristicas": property_data.get('caracteristicas'),
                 "imagenes_url": supabase_urls, # Ahora apuntan a TU Supabase
+                "latitud": property_data.get('latitud'),
+                "longitud": property_data.get('longitud'),
                 "estado_publicacion": "Activo"
             }
             
