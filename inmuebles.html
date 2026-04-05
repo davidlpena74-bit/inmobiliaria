@@ -97,19 +97,30 @@
 
         /* PUNTOS EN EL MAPA */
         .custom-marker {
-            width: 14px; height: 14px;
+            width: 16px !important; height: 16px !important;
             background: var(--compass-blue); border: 2px solid white; border-radius: 50%;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
             transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             cursor: pointer;
             display: flex; align-items: center; justify-content: center;
             color: transparent; overflow: hidden; white-space: nowrap; font-size: 0;
+            /* Asegurar centrado respecto a coordenada Leaflet */
+            margin-left: -8px !important; margin-top: -8px !important;
         }
         .custom-marker:hover, .custom-marker.highlight {
-            width: auto; height: 30px; padding: 0 12px; border-radius: 15px;
-            color: white; font-size: 12px; font-weight: 700;
+            width: auto !important; 
+            min-width: 50px;
+            height: 28px !important; 
+            margin-left: -25px !important; margin-top: -14px !important;
+            padding: 0 12px; 
+            border-radius: 14px;
+            color: white; 
+            font-size: 13px; 
+            font-weight: 700;
+            background: var(--compass-blue);
             z-index: 9999 !important;
         }
+        .custom-marker span { pointer-events: none; }
 
         @media (max-width: 1024px) {
             .list-sidebar { width: 100%; position: absolute; bottom: 0; height: 40%; z-index: 2000; border-top: 2px solid var(--border); }
@@ -506,8 +517,8 @@
                     const icon = L.divIcon({
                         className: 'custom-marker',
                         html: `<span>${precio}</span>`,
-                        iconSize: [14, 14],
-                        iconAnchor: [7, 7]
+                        iconSize: null,
+                        iconAnchor: null
                     });
                     const marker = L.marker([p.latitud, p.longitud], { icon }).addTo(map);
                     propertyMarkers[p.id] = marker;
