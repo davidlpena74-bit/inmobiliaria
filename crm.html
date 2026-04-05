@@ -428,7 +428,7 @@
 <!-- SIDEBAR -->
 <aside class="sidebar">
     <div class="sidebar-logo" style="flex-direction: column; align-items: flex-start; padding: 20px 18px; position: relative;">
-        <img src="../logos_corporativos/weperty_logo.png" alt="Weperty Logo" style="width: 150px; margin-bottom: 5px; display: block;">
+        <img src="logos_corporativos/weperty_logo_azul.png" alt="Weperty Logo" style="width: 150px; margin-bottom: 5px; display: block;">
         <i class="fa-solid fa-bars hamburger" style="position: absolute; right: 18px; top: 28px;"></i>
     </div>
     <nav class="s-nav">
@@ -772,6 +772,24 @@
                 </td>
             </tr>`;
         }).join('');
+
+        // Pagination info
+        const start = (currentPage - 1) * PAGE_SIZE;
+        const end = Math.min(start + PAGE_SIZE, filteredProperties.length);
+        document.getElementById('pag-info').textContent = `Mostrando ${start + 1} - ${end} de ${filteredProperties.length} resultados`;
+
+        // Pagination buttons
+        const totalPages = Math.ceil(filteredProperties.length / PAGE_SIZE);
+        let pagHtml = `<div class="pag-btn" onclick="goPage(1)"><i class="fa-solid fa-angles-left" style="font-size:10px;"></i></div>`;
+        pagHtml += `<div class="pag-btn" onclick="goPage(${Math.max(1, currentPage-1)})"><i class="fa-solid fa-chevron-left" style="font-size:10px;"></i></div>`;
+        for (let i = 1; i <= totalPages; i++) {
+            if (i >= currentPage - 2 && i <= currentPage + 2) {
+                pagHtml += `<div class="pag-btn ${i === currentPage ? 'active' : ''}" onclick="goPage(${i})">${i}</div>`;
+            }
+        }
+        pagHtml += `<div class="pag-btn" onclick="goPage(${Math.min(totalPages, currentPage+1)})"><i class="fa-solid fa-chevron-right" style="font-size:10px;"></i></div>`;
+        pagHtml += `<div class="pag-btn" onclick="goPage(${totalPages})"><i class="fa-solid fa-angles-right" style="font-size:10px;"></i></div>`;
+        document.getElementById('pag-buttons').innerHTML = pagHtml;
     }
 
     async function togglePublish(id, field, currentState) {
@@ -783,21 +801,6 @@
             if (prop) prop[field] = !currentState;
             renderTable();
         }
-    }
-
-        // Pagination info
-        document.getElementById('pag-info').textContent = `Mostrando ${start + 1} - ${end} de ${filteredProperties.length} resultados`;
-
-        // Pagination buttons
-        const totalPages = Math.ceil(filteredProperties.length / PAGE_SIZE);
-        let pagHtml = `<div class="pag-btn" onclick="goPage(1)"><i class="fa-solid fa-angles-left" style="font-size:10px;"></i></div>`;
-        pagHtml += `<div class="pag-btn" onclick="goPage(${Math.max(1, currentPage-1)})"><i class="fa-solid fa-chevron-left" style="font-size:10px;"></i></div>`;
-        for (let i = 1; i <= totalPages; i++) {
-            pagHtml += `<div class="pag-btn ${i === currentPage ? 'active' : ''}" onclick="goPage(${i})">${i}</div>`;
-        }
-        pagHtml += `<div class="pag-btn" onclick="goPage(${Math.min(totalPages, currentPage+1)})"><i class="fa-solid fa-chevron-right" style="font-size:10px;"></i></div>`;
-        pagHtml += `<div class="pag-btn" onclick="goPage(${totalPages})"><i class="fa-solid fa-angles-right" style="font-size:10px;"></i></div>`;
-        document.getElementById('pag-buttons').innerHTML = pagHtml;
     }
 
     function goPage(n) {
