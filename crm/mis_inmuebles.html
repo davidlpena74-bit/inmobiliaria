@@ -733,6 +733,14 @@
             const transaction = c.transaction || '';
             const visits = Math.floor(Math.random() * 120) + 10;
 
+            // Renderizado de estados de publicación
+            const renderStatus = (active, title, color, field) => `
+                <div class="p-chk ${active ? 'checked' : ''}" 
+                     style="cursor:pointer; color:${active ? color : '#d1d5db'}" 
+                     title="${title}"
+                     onclick="togglePublish(${p.id}, '${field}', ${active})">
+                </div>`;
+
             return `<tr>
                 <td><input type="checkbox"></td>
                 <td class="thumb-cell">${imgHtml}</td>
@@ -746,13 +754,36 @@
                 <td>${getFamilyName(p.tipo)}</td>
                 <td class="price-cell">${formatPrice(p.precio, transaction)}</td>
                 <td class="visits-cell">${visits}</td>
-                <td>${renderPortalChecks()}</td>
+                <td>
+                    <div class="portal-checks">
+                        ${renderStatus(p.publicar_web, 'Web propia', '#2563eb', 'publicar_web')}
+                        ${renderStatus(p.publicar_idealista, 'Idealista', '#1d4ed8', 'publicar_idealista')}
+                        ${renderStatus(p.publicar_fotocasa, 'Fotocasa', '#ef4444', 'publicar_fotocasa')}
+                        ${renderStatus(p.publicar_pisoscom, 'Pisos.com', '#dc2626', 'publicar_pisoscom')}
+                        <div class="p-chk"></div>
+                        <div class="p-chk"></div>
+                        <div class="p-chk"></div>
+                        <div class="p-chk"></div>
+                    </div>
+                </td>
                 <td class="updated-cell">${timeAgo(p.created_at)}</td>
                 <td style="text-align:right;">
                     <button class="btn-ver" onclick="window.location.href='ficha_inmueble.html?id=${p.id}'">Ver <i class="fa-solid fa-chevron-down" style="font-size:9px;"></i></button>
                 </td>
             </tr>`;
         }).join('');
+    }
+
+    async function togglePublish(id, field, currentState) {
+        const { error } = await db.from('inm_propiedades').update({ [field]: !currentState }).eq('id', id);
+        if (error) {
+            alert("Error al actualizar estado: " + error.message);
+        } else {
+            const prop = allProperties.find(p => p.id === id);
+            if (prop) prop[field] = !currentState;
+            renderTable();
+        }
+    }
 
         // Pagination info
         document.getElementById('pag-info').textContent = `Mostrando ${start + 1} - ${end} de ${filteredProperties.length} resultados`;

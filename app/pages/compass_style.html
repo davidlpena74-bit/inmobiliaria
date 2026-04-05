@@ -114,46 +114,62 @@
     <section class="section">
         <div class="container">
             <span class="section-tag">EXCLUSIVO EN WEPERTY</span>
-            <h2 class="section-title">Propiedades Destacadas en Madrid</h2>
+            <h2 class="section-title">Propiedades Exclusivas en Alicante</h2>
             
-            <div class="property-grid">
-                <!-- PROPIEDAD 1 -->
-                <div class="prop-card">
-                    <div class="prop-img-box">
-                        <img src="../assets/property_sample.png" alt="Propiedad de Lujo">
-                    </div>
-                    <div class="prop-price">1.250.000 €</div>
-                    <div class="prop-address">Calle de Serrano, Salamanca, Madrid</div>
-                    <div class="prop-specs">
-                        <div>4 <span>Hab</span></div>
-                        <div>3 <span>Baños</span></div>
-                        <div>180 <span>m²</span></div>
-                    </div>
-                </div>
-
-                <!-- PROPIEDAD 2 -->
-                <div class="prop-card">
-                    <div class="prop-img-box">
-                        <img src="../assets/property_sample.png" alt="Ático Moderno">
-                    </div>
-                    <div class="prop-price">890.000 €</div>
-                    <div class="prop-address">Paseo de la Castellana, Chamartín, Madrid</div>
-                    <div class="prop-specs">
-                        <div>3 <span>Hab</span></div>
-                        <div>2 <span>Baños</span></div>
-                        <div>145 <span>m²</span></div>
-                    </div>
-                </div>
+            <div class="property-grid" id="web-property-grid">
+                <!-- Se carga dinámicamente desde Supabase (Filtro: publicar_web = true) -->
             </div>
         </div>
     </section>
 
-    <footer>
-        <span class="footer-logo">WEPERTY.</span>
-        <div class="footer-copy">
-            &copy; 2026 WEPERTY REAL ESTATE PLATFORM. Todos los derechos reservados. | VERSION 2.2.0
-        </div>
-    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        const SB_URL = "https://dwbvegnxmyvpolvofkfn.supabase.co";
+        const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR3YnZlZ254bXl2cG9sdm9ma2ZuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njc1Mzg1NTUsImV4cCI6MjA4MzExNDU1NX0.eT5ZSce8H8Yk8pWKyLUYChU0HtmZljywP4eEQd5FkOI";
+        const db = supabase.createClient(SB_URL, SB_KEY);
 
+        async function loadWebProperties() {
+            const grid = document.getElementById('web-property-grid');
+            
+            const { data, error } = await db
+                .from('inm_propiedades')
+                .select('*')
+                .eq('publicar_web', true)
+                .order('created_at', { ascending: false });
+
+            if (error) {
+                console.error("Error cargando inmuebles:", error);
+                return;
+            }
+
+            if (!data || data.length === 0) {
+                grid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: var(--compass-gray);">Próximamente nuevas propiedades exclusivas en Alicante.</p>';
+                return;
+            }
+
+            grid.innerHTML = data.map(p => {
+                const c = p.caracteristicas || {};
+                const fotos = p.imagenes_url || c.fotos || [];
+                const imgUrl = fotos.length > 0 ? fotos[0] : '../assets/property_sample.png';
+                
+                return `
+                    <div class="prop-card" onclick="window.location.href='ficha_inmueble.html?id=${p.id}'">
+                        <div class="prop-img-box">
+                            <img src="${imgUrl}" alt="${p.titulo}">
+                        </div>
+                        <div class="prop-price">${Number(p.precio).toLocaleString('es-ES')} €</div>
+                        <div class="prop-address">${p.titulo}</div>
+                        <div class="prop-specs">
+                            <div>${p.habitaciones || 0} <span>Hab</span></div>
+                            <div>${p.banos || 0} <span>Baños</span></div>
+                            <div>${p.superficie || p.m2 || 0} <span>m²</span></div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        window.onload = loadWebProperties;
+    </script>
 </body>
 </html>
