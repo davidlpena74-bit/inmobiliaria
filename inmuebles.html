@@ -123,8 +123,11 @@
         // Tracker global para sincronización lista-mapa
         const propertyMarkers = {}; 
 
-        // Inicializar Mapa centrado en la region (Alicante - Torrevieja)
-        const map = L.map('map', { zoomControl: false }).setView([38.15, -0.62], 10);
+        // Inicializar Mapa centrado en la region con zoom fraccional para precision
+        const map = L.map('map', { 
+            zoomControl: false,
+            zoomSnap: 0.1 
+        }).setView([38.15, -0.62], 10.5);
         L.control.zoom({ position: 'bottomright' }).addTo(map);
 
         L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
