@@ -64,7 +64,14 @@ def migrar_datos():
             "caracteristicas": {
                 "ciudad": str(row.get('location-city-name', '')),
                 "cod_postal": str(row.get('location-postal_code', '')),
-                "pais": str(row.get('location-country-name', 'España'))
+                "pais": str(row.get('location-country-name', 'España')),
+                "pool": str(row.get('features-11-pool', '')).lower() in ['si', '1', 'true', 'yes'],
+                "elevator": str(row.get('features-24-elevator', '')).lower() in ['si', '1', 'true', 'yes'],
+                "garage": str(row.get('features-17-garage', '')).lower() in ['si', '1', 'true', 'yes'],
+                "garden": str(row.get('features-16-garden', '')).lower() in ['si', '1', 'true', 'yes'],
+                "air_conditioner": str(row.get('features-22-air_conditioner', '')).lower() in ['si', '1', 'true', 'yes'],
+                "storage_room": str(row.get('features-20-storage_room', '')).lower() in ['si', '1', 'true', 'yes'],
+                "year_built": int(row.get('features-0-year_built', 0)) if pd.notna(row.get('features-0-year_built')) else 0
             },
             "origen_datos": "CRM_WEPERTY",
             "estado_publicacion": "Activo"
