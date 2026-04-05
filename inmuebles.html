@@ -511,6 +511,7 @@
 
                 card.onmouseenter = () => highlightMarker(p.id, true);
                 card.onmouseleave = () => highlightMarker(p.id, false);
+                card.onclick = () => window.location.href = `inmueble.html?ref=${p.referencia}`;
                 container.appendChild(card);
 
                 if (p.latitud && p.longitud) {
