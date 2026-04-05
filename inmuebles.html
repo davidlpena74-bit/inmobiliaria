@@ -424,21 +424,22 @@
         function changeImage(propId, delta, event) {
             if (event) event.stopPropagation();
             const p = allProperties.find(item => item.id === propId);
-            if (!p || !p.imagenes || p.imagenes.length <= 1) return;
+            const fotos = p.imagenes_url || p.imagenes || [];
+            if (!p || fotos.length <= 1) return;
 
             if (carouselIndices[propId] === undefined) carouselIndices[propId] = 0;
             
             let newIdx = carouselIndices[propId] + delta;
-            if (newIdx < 0) newIdx = p.imagenes.length - 1;
-            if (newIdx >= p.imagenes.length) newIdx = 0;
+            if (newIdx < 0) newIdx = fotos.length - 1;
+            if (newIdx >= fotos.length) newIdx = 0;
             
             carouselIndices[propId] = newIdx;
             
             // Actualizar DOM
             const card = document.querySelector(`.prop-card[data-id="${propId}"]`);
             if (card) {
-                card.querySelector('img').src = p.imagenes[newIdx];
-                card.querySelector('.carousel-counter').textContent = `${newIdx + 1}/${p.imagenes.length}`;
+                card.querySelector('img').src = fotos[newIdx];
+                card.querySelector('.carousel-counter').textContent = `${newIdx + 1}/${fotos.length}`;
             }
         }
 
@@ -470,9 +471,10 @@
 
             filteredProperties.forEach(p => {
                 const precio = new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(p.precio);
-                const hasMultipleImages = p.imagenes && p.imagenes.length > 1;
+                const fotos = p.imagenes_url || p.imagenes || [];
+                const hasMultipleImages = fotos.length > 1;
                 const currentIdx = carouselIndices[p.id] || 0;
-                const totalImages = p.imagenes ? p.imagenes.length : 0;
+                const totalImages = fotos.length;
 
                 const card = document.createElement('div');
                 card.className = 'prop-card';
@@ -492,7 +494,7 @@
                             <div class="badge-pill">LISTED BY WEPERTY</div>
                             <div class="badge-pill new">NUEVO</div>
                         </div>
-                        <img src="${p.imagenes && p.imagenes[0] ? p.imagenes[0] : 'weperty_placeholder.png'}">
+                        <img src="${fotos[0] ? fotos[0] : 'weperty_placeholder.png'}">
                     </div>
                     <div class="prop-info">
                         <div class="info-top">
