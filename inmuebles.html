@@ -150,7 +150,11 @@
             const grid = document.getElementById('prop-items');
             grid.innerHTML = '';
 
+            // Limpiar marcadores previos si existen
+            Object.values(propertyMarkers).forEach(m => map.removeLayer(m));
+
             props.forEach(p => {
+                const id = p.id || Math.random().toString(36).substr(2, 9);
                 const lat = p.latitud || 38.36 + (Math.random() * 0.05);
                 const lng = p.longitud || -0.45 + (Math.random() * 0.05);
                 const precioStr = Number(p.precio).toLocaleString('es-ES') + ' €';
@@ -162,25 +166,46 @@
                     iconSize: null,
                     iconAnchor: [7, 7]
                 });
-                L.marker([lat, lng], { icon }).addTo(map);
+                const marker = L.marker([lat, lng], { icon }).addTo(map);
+                propertyMarkers[id] = marker; // Guardar referencia
 
                 // Añadir Tarjeta
                 const fotos = p.imagenes_url || (p.caracteristicas ? p.caracteristicas.fotos : []) || [];
                 const imgUrl = fotos.length > 0 ? fotos[0] : 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=400&q=80';
 
                 grid.innerHTML += `
-                    <div class="prop-card">
+                    <div class="prop-card" 
+                         onmouseenter="highlightMarker('${id}')" 
+                         onmouseleave="unhighlightMarker('${id}')"
+                         onclick="window.location.href='ficha_inmueble.html?id=${p.id}'">
                         <div class="prop-img">
                             <div class="prop-status">WEPERTY EXCLUSIVE</div>
                             <img src="${imgUrl}" alt="Propiedad">
                         </div>
                         <div class="prop-info">
                             <div class="price">${precioStr}</div>
-                            <div class="details">${p.habitaciones || 3} hab · ${p.banos || 2} baños · ${p.m2 || 150} m²</div>
+                            <div class="details">${p.habitaciones || 3} hab · ${p.banos || 2} baños · ${p.superficie || 150} m²</div>
                         </div>
                     </div>
                 `;
             });
+        }
+
+        // Funciones de Sincronización
+        function highlightMarker(id) {
+            const marker = propertyMarkers[id];
+            if (marker && marker._icon) {
+                marker._icon.classList.add('highlight');
+                marker.setZIndexOffset(10000);
+            }
+        }
+
+        function unhighlightMarker(id) {
+            const marker = propertyMarkers[id];
+            if (marker && marker._icon) {
+                marker._icon.classList.remove('highlight');
+                marker.setZIndexOffset(0);
+            }
         }
 
         function renderMocks() {
