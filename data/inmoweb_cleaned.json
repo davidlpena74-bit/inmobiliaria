@@ -1,0 +1,1538 @@
+[
+    {
+        "referencia": "ALQYAGO",
+        "titulo": "Villa de Lujo en País valenciano 40, Benijófar",
+        "tipo": "Villa",
+        "precio": 2350,
+        "habitaciones": 4,
+        "banos": 3,
+        "superficie": 150,
+        "zona": "País valenciano 40, Benijófar",
+        "imagenes_url": [
+            "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1721711/image/thumb/585_335/img_6256.jpg"
+        ],
+        "estado_publicacion": "Activo",
+        "origen_datos": "CRM_WEPERTY",
+        "publicar_web": true
+    },
+    {
+        "referencia": "AJRTL10",
+        "titulo": "Apartamento en Timonel 1, Torrevieja",
+        "tipo": "Apartamento",
+        "precio": 850,
+        "habitaciones": 3,
+        "banos": 2,
+        "superficie": 135,
+        "zona": "Timonel 1, Torrevieja",
+        "imagenes_url": [
+            "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1719463/image/thumb/585_335/9bbc7907-e8e6-4ddd-8fe9-f19d6234ca19.jpg"
+        ],
+        "estado_publicacion": "Activo",
+        "origen_datos": "CRM_WEPERTY",
+        "publicar_web": true
+    },
+    {
+        "referencia": "AP0701",
+        "titulo": "Apartamento en Roentgen 3, Torrevieja",
+        "tipo": "Apartamento",
+        "precio": 750,
+        "habitaciones": 1,
+        "banos": 1,
+        "superficie": 45,
+        "zona": "Roentgen 3, Torrevieja",
+        "imagenes_url": [
+            "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1715804/image/thumb/585_335/img_6231.jpg"
+        ],
+        "estado_publicacion": "Activo",
+        "origen_datos": "CRM_WEPERTY",
+        "publicar_web": true
+    },
+    {
+        "referencia": "AJQNUEVO",
+        "titulo": "Casa / Chalet en Pantano 4, Crevillente",
+        "tipo": "Casa / Chalet",
+        "precio": 1500,
+        "habitaciones": 3,
+        "banos": 2,
+        "superficie": 350,
+        "zona": "Pantano 4, Crevillente",
+        "imagenes_url": [
+            "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1715537/image/thumb/585_335/a954dc0a-c508-46dd-b9e2-77d1522afded.jpg"
+        ],
+        "estado_publicacion": "Activo",
+        "origen_datos": "CRM_WEPERTY",
+        "publicar_web": true
+    },
+    {
+        "referencia": "AP0699",
+        "titulo": "Apartamento en Marejadilla 6, Orihuela Costa",
+        "tipo": "Apartamento",
+        "precio": 1250,
+        "habitaciones": 2,
+        "banos": 2,
+        "superficie": 105,
+        "zona": "Marejadilla 6, Orihuela Costa",
+        "imagenes_url": [
+            "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1710190/image/thumb/585_335/img_5857.jpg"
+        ],
+        "estado_publicacion": "Activo",
+        "origen_datos": "CRM_WEPERTY",
+        "publicar_web": true
+    },
+    {
+        "referencia": "AJLJELNE",
+        "titulo": "Apartamento en Radio Murcia 59, Torrevieja",
+        "tipo": "Apartamento",
+        "precio": 850,
+        "habitaciones": 3,
+        "banos": 2,
+        "superficie": 105,
+        "zona": "Radio Murcia 59, Torrevieja",
+        "imagenes_url": [
+            "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1709401/image/thumb/585_335/salon_moderno_foto1.png"
+        ],
+        "estado_publicacion": "Activo",
+        "origen_datos": "CRM_WEPERTY",
+        "publicar_web": true
+    },
+    {
+        "referencia": "ALQMARABU",
+        "titulo": "Apartamento en ciudad real 1, Ciudad Quesada",
+        "tipo": "Apartamento",
+        "precio": 1450,
+        "habitaciones": 2,
+        "banos": 2,
+        "superficie": 95,
+        "zona": "ciudad real 1, Ciudad Quesada",
+        "imagenes_url": [
+            "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1705131/image/thumb/585_335/56d94a85-835f-4dfd-a423-3c2c3d6da848.jpg"
+        ],
+        "estado_publicacion": "Activo",
+        "origen_datos": "CRM_WEPERTY",
+        "publicar_web": true
+    },
+    {
+        "referencia": "ALQCSALRUE",
+        "titulo": "Casa / Chalet en Gabriel y Galan, Orihuela Costa",
+        "tipo": "Casa / Chalet",
+        "precio": 700,
+        "habitaciones": 2,
+        "banos": 1,
+        "superficie": 100,
+        "zona": "Gabriel y Galan, Orihuela Costa",
+        "imagenes_url": [
+            "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1704407/image/thumb/585_335/1d3953d6-b1cb-448e-b52c-db61f986dad1.jpg"
+        ],
+        "estado_publicacion": "Activo",
+        "origen_datos": "CRM_WEPERTY",
+        "publicar_web": true
+    },
+    {
+        "referencia": "RRHVENMARV",
+        "titulo": "Casa adosada en Marcelina 40, Torrevieja",
+        "tipo": "Casa / Chalet",
+        "precio": 126000,
+        "habitaciones": 1,
+        "banos": 1,
+        "superficie": 50,
+        "zona": "Marcelina 40, Torrevieja",
+        "imagenes_url": [
+            "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1700802/image/thumb/585_335/img_4926.jpg"
+        ],
+        "estado_publicacion": "Activo",
+        "origen_datos": "CRM_WEPERTY",
+        "publicar_web": true
+    },
+    {
+        "referencia": "ALQUILUXURY",
+        "titulo": "Villa de Lujo en País valenciano 40, Benijófar",
+        "tipo": "Villa",
+        "precio": 2100,
+        "habitaciones": 3,
+        "banos": 2,
+        "superficie": 150,
+        "zona": "País valenciano 40, Benijófar",
+        "imagenes_url": [
+            "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1700219/image/thumb/585_335/124_web_villa3b.jpg"
+        ],
+        "estado_publicacion": "Activo",
+        "origen_datos": "CRM_WEPERTY",
+        "publicar_web": true
+    },
+    {
+        "referencia": "LALALAANANANA",
+        "titulo": "Bungalow en Avenida de Polonia 236, Gran Alacant",
+        "tipo": "Bungalow",
+        "precio": 700,
+        "habitaciones": 3,
+        "banos": 2,
+        "superficie": 100,
+        "zona": "Avenida de Polonia 236, Gran Alacant",
+        "imagenes_url": [
+            "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1699949/image/thumb/585_335/photo-2025-09-30-12-55-02-4.jpg"
+        ],
+        "estado_publicacion": "Activo",
+        "origen_datos": "CRM_WEPERTY",
+        "publicar_web": true
+    },
+    {
+        "referencia": "ALQMJAIMME",
+        "titulo": "Casa de campo en chapitel 1, Muchamiel",
+        "tipo": "Casa / Chalet",
+        "precio": 1800,
+        "habitaciones": 2,
+        "banos": 2,
+        "superficie": 200,
+        "zona": "chapitel 1, Muchamiel",
+        "imagenes_url": [
+            "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1697639/image/thumb/585_335/garten_12.jpg"
+        ],
+        "estado_publicacion": "Activo",
+        "origen_datos": "CRM_WEPERTY",
+        "publicar_web": true
+    },
+    {
+        "referencia": "ALQUIKNA",
+        "titulo": "Bungalow en Nenúfares 50, Torrevieja",
+        "tipo": "Bungalow",
+        "precio": 700,
+        "habitaciones": 2,
+        "banos": 1,
+        "superficie": 50,
+        "zona": "Nenúfares 50, Torrevieja",
+        "imagenes_url": [
+            "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1696901/image/thumb/585_335/img_4950_2.jpg"
+        ],
+        "estado_publicacion": "Activo",
+        "origen_datos": "CRM_WEPERTY",
+        "publicar_web": true
+    },
+    {
+        "referencia": "AJLJJCOTOV",
+        "titulo": "Casa / Chalet en Cotoveta, Muchamiel",
+        "tipo": "Casa / Chalet",
+        "precio": 1800,
+        "habitaciones": 3,
+        "banos": 2,
+        "superficie": 140,
+        "zona": "Cotoveta, Muchamiel",
+        "imagenes_url": [
+            "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1696583/image/thumb/585_335/fullsizerender_3.jpg"
+        ],
+        "estado_publicacion": "Activo",
+        "origen_datos": "CRM_WEPERTY",
+        "publicar_web": true
+    },
+    {
+        "referencia": "AHWGFFPOR",
+        "titulo": "Apartamento en Purísima 1, Torrevieja",
+        "tipo": "Apartamento",
+        "precio": 850,
+        "habitaciones": 3,
+        "banos": 2,
+        "superficie": 105,
+        "zona": "Purísima 1, Torrevieja",
+        "imagenes_url": [
+            "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1696580/image/thumb/585_335/img_4751.png"
+        ],
+        "estado_publicacion": "Activo",
+        "origen_datos": "CRM_WEPERTY",
+        "publicar_web": true
+    },
+    {
+        "referencia": "ALQUGUSRFF",
+        "titulo": "Apartamento en azorin 3, Guardamar del Segura",
+        "tipo": "Apartamento",
+        "precio": 700,
+        "habitaciones": 2,
+        "banos": 1,
+        "superficie": 60,
+        "zona": "azorin 3, Guardamar del Segura",
+        "imagenes_url": [
+            "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1691403/image/thumb/585_335/05c6d146-23e0-4b18-9e5f-824c7a786f97.jpg"
+        ],
+        "estado_publicacion": "Activo",
+        "origen_datos": "CRM_WEPERTY",
+        "publicar_web": true
+    },
+    {
+        "referencia": "ALHPHDSPM",
+        "titulo": "Casa de campo en Del moco, Albatera",
+        "tipo": "Casa / Chalet",
+        "precio": 1300,
+        "habitaciones": 4,
+        "banos": 2,
+        "superficie": 200,
+        "zona": "Del moco, Albatera",
+        "imagenes_url": [
+            "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1688808/image/thumb/585_335/847c11aa-e98c-4dc9-829a-3de521d3b6a1.jpg"
+        ],
+        "estado_publicacion": "Activo",
+        "origen_datos": "CRM_WEPERTY",
+        "publicar_web": true
+    },
+    {
+        "referencia": "ALQU8888",
+        "titulo": "Apartamento en Timonel 1, Torrevieja",
+        "tipo": "Apartamento",
+        "precio": 850,
+        "habitaciones": 3,
+        "banos": 1,
+        "superficie": 120,
+        "zona": "Timonel 1, Torrevieja",
+        "imagenes_url": [
+            "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1680752/image/thumb/585_335/img_4711.png"
+        ],
+        "estado_publicacion": "Activo",
+        "origen_datos": "CRM_WEPERTY",
+        "publicar_web": true
+    },
+    {
+        "referencia": "ATTTRRR20",
+        "titulo": "Casa / Chalet en Gabriel y Galan, Orihuela Costa",
+        "tipo": "Casa / Chalet",
+        "precio": 700,
+        "habitaciones": 3,
+        "banos": 1,
+        "superficie": 100,
+        "zona": "Gabriel y Galan, Orihuela Costa",
+        "imagenes_url": [
+            "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1669458/image/thumb/585_335/d8454a61-f72b-4d13-a7e0-83c1204ad17e.jpg"
+        ],
+        "estado_publicacion": "Activo",
+        "origen_datos": "CRM_WEPERTY",
+        "publicar_web": true
+    },
+    {
+        "referencia": "ALQVICENVICEM",
+        "titulo": "Apartamento en Puerto 2, Guardamar del Segura",
+        "tipo": "Apartamento",
+        "precio": 950,
+        "habitaciones": 3,
+        "banos": 2,
+        "superficie": 95,
+        "zona": "Puerto 2, Guardamar del Segura",
+        "imagenes_url": [
+            "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1665131/image/thumb/585_335/img_1827.jpg"
+        ],
+        "estado_publicacion": "Activo",
+        "origen_datos": "CRM_WEPERTY",
+        "publicar_web": true
+    },
+    {
+        "referencia": "ALQUESTHRE",
+        "titulo": "Apartamento en roetgen 5, Torrevieja",
+        "tipo": "Apartamento",
+        "precio": 800,
+        "habitaciones": 2,
+        "banos": 2,
+        "superficie": 80,
+        "zona": "roetgen 5, Torrevieja",
+        "imagenes_url": [
+            "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1665129/image/thumb/585_335/fachada-2.jpg"
+        ],
+        "estado_publicacion": "Activo",
+        "origen_datos": "CRM_WEPERTY",
+        "publicar_web": true
+    },
+    {
+        "referencia": "ALQVNDMARI",
+        "titulo": "Apartamento en De los marineros 4, Torrevieja",
+        "tipo": "Apartamento",
+        "precio": 850,
+        "habitaciones": 3,
+        "banos": 2,
+        "superficie": 135,
+        "zona": "De los marineros 4, Torrevieja",
+        "imagenes_url": [
+            "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1664983/image/thumb/585_335/228e07f6-0d29-41e4-be65-ebbc7f47e213.jpg"
+        ],
+        "estado_publicacion": "Activo",
+        "origen_datos": "CRM_WEPERTY",
+        "publicar_web": true
+    },
+    {
+        "referencia": "ALQUBATYQU",
+        "titulo": "Villa de Lujo en Costa azul, Ciudad Quesada",
+        "tipo": "Villa",
+        "precio": 2500,
+        "habitaciones": 3,
+        "banos": 2,
+        "superficie": 150,
+        "zona": "Costa azul, Ciudad Quesada",
+        "imagenes_url": [
+            "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1661140/image/thumb/585_335/f1513f06-3072-4773-bdf3-99821ebd0a10.jpg"
+        ],
+        "estado_publicacion": "Activo",
+        "origen_datos": "CRM_WEPERTY",
+        "publicar_web": true
+    },
+    {
+        "referencia": "10PLAYCURA",
+        "titulo": "Apartamento en Timonel 1, Torrevieja",
+        "tipo": "Apartamento",
+        "precio": 850,
+        "habitaciones": 3,
+        "banos": 2,
+        "superficie": 135,
+        "zona": "Timonel 1, Torrevieja",
+        "imagenes_url": [
+            "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1654847/image/thumb/585_335/9bbc7907-e8e6-4ddd-8fe9-f19d6234ca19.jpg"
+        ],
+        "estado_publicacion": "Activo",
+        "origen_datos": "CRM_WEPERTY",
+        "publicar_web": true
+    },
+    {
+        "referencia": "ALEYTEMPO",
+        "titulo": "Apartamento en Escandinavia 41, Gran Alacant",
+        "tipo": "Apartamento",
+        "precio": 1550,
+        "habitaciones": 3,
+        "banos": 3,
+        "superficie": 90,
+        "zona": "Escandinavia 41, Gran Alacant",
+        "imagenes_url": [
+            "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1649943/image/thumb/585_335/img_6741.jpg"
+        ],
+        "estado_publicacion": "Activo",
+        "origen_datos": "CRM_WEPERTY",
+        "publicar_web": true
+    },
+    {
+        "referencia": "ADOSADO",
+        "titulo": "Dúplex en Matilde Peñaranda 5, Torrevieja",
+        "tipo": "Dúplex",
+        "precio": 165000,
+        "habitaciones": 3,
+        "banos": 2,
+        "superficie": 70,
+        "zona": "Matilde Peñaranda 5, Torrevieja",
+        "imagenes_url": [
+            "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1648854/image/thumb/585_335/20059c4e-450e-4670-8a3b-5aac75ba0f84.jpg"
+        ],
+        "estado_publicacion": "Activo",
+        "origen_datos": "CRM_WEPERTY",
+        "publicar_web": true
+    },
+    {
+        "referencia": "ALQVENBT",
+        "titulo": "Bungalow en Joven pura 40, Torrevieja",
+        "tipo": "Bungalow",
+        "precio": 126000,
+        "habitaciones": 1,
+        "banos": 1,
+        "superficie": 45,
+        "zona": "Joven pura 40, Torrevieja",
+        "imagenes_url": [
+            "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1645974/image/thumb/585_335/img_2415.jpg"
+        ],
+        "estado_publicacion": "Activo",
+        "origen_datos": "CRM_WEPERTY",
+        "publicar_web": true
+    },
+    {
+        "referencia": "ALQTRMPORSDA",
+        "titulo": "Casa / Chalet en Gabriel y Galan, Orihuela Costa",
+        "tipo": "Casa / Chalet",
+        "precio": 700,
+        "habitaciones": 3,
+        "banos": 1,
+        "superficie": 100,
+        "zona": "Gabriel y Galan, Orihuela Costa",
+        "imagenes_url": [
+            "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1645650/image/thumb/585_335/img_9243.jpg"
+        ],
+        "estado_publicacion": "Activo",
+        "origen_datos": "CRM_WEPERTY",
+        "publicar_web": true
+    },
+    {
+        "referencia": "LQU1350",
+        "titulo": "Casa de campo en Barranco San Cayetano, Crevillente",
+        "tipo": "Casa / Chalet",
+        "precio": 1300,
+        "habitaciones": 3,
+        "banos": 2,
+        "superficie": 205,
+        "zona": "Barranco San Cayetano, Crevillente",
+        "imagenes_url": [
+            "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1645256/image/thumb/585_335/img_3583.jpg"
+        ],
+        "estado_publicacion": "Activo",
+        "origen_datos": "CRM_WEPERTY",
+        "publicar_web": true
+    },
+    {
+        "referencia": "AP0674",
+        "titulo": "Apartamento en castillo de atalayas 15, Orihuela Costa",
+        "tipo": "Apartamento",
+        "precio": 750,
+        "habitaciones": 2,
+        "banos": 1,
+        "superficie": 90,
+        "zona": "castillo de atalayas 15, Orihuela Costa",
+        "imagenes_url": [
+            "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1642859/image/thumb/585_335/img_9813.jpg"
+        ],
+        "estado_publicacion": "Activo",
+        "origen_datos": "CRM_WEPERTY",
+        "publicar_web": true
+    },
+    {
+        "referencia": "ALQRSDO29",
+        "titulo": "Villa de Lujo en Raso, Guardamar del Segura",
+        "tipo": "Villa",
+        "precio": 2650,
+        "habitaciones": 4,
+        "banos": 3,
+        "superficie": 150,
+        "zona": "Raso, Guardamar del Segura",
+        "imagenes_url": [
+            "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1638847/image/thumb/585_335/img_2221.jpg"
+        ],
+        "estado_publicacion": "Activo",
+        "origen_datos": "CRM_WEPERTY",
+        "publicar_web": true
+    },
+    {
+        "referencia": "AALLCCEE",
+        "titulo": "Casa de campo en Campillos 8, Crevillente",
+        "tipo": "Casa / Chalet",
+        "precio": 1700,
+        "habitaciones": 5,
+        "banos": 3,
+        "superficie": 350,
+        "zona": "Campillos 8, Crevillente",
+        "imagenes_url": [
+            "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1636559/image/thumb/585_335/3aa40bd2-b18b-4e05-bb1c-e2a9659ab1a7_2.jpg"
+        ],
+        "estado_publicacion": "Activo",
+        "origen_datos": "CRM_WEPERTY",
+        "publicar_web": true
+    },
+    {
+        "referencia": "ALQPNMYP",
+        "titulo": "Apartamento en Joaquín chapaprieta 3, Torrevieja",
+        "tipo": "Apartamento",
+        "precio": 750,
+        "habitaciones": 4,
+        "banos": 2,
+        "superficie": 135,
+        "zona": "Joaquín chapaprieta 3, Torrevieja",
+        "imagenes_url": [
+            "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1635019/image/thumb/585_335/img_8359.jpg"
+        ],
+        "estado_publicacion": "Activo",
+        "origen_datos": "CRM_WEPERTY",
+        "publicar_web": true
+    },
+    {
+        "referencia": "ALQJOSRO10",
+        "titulo": "Apartamento en Timonel 1, Torrevieja",
+        "tipo": "Apartamento",
+        "precio": 850,
+        "habitaciones": 3,
+        "banos": 1,
+        "superficie": 120,
+        "zona": "Timonel 1, Torrevieja",
+        "imagenes_url": [
+            "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1632684/image/thumb/585_335/img_2647.jpg"
+        ],
+        "estado_publicacion": "Activo",
+        "origen_datos": "CRM_WEPERTY",
+        "publicar_web": true
+    },
+    {
+        "referencia": "ALQTREENAM",
+        "titulo": "Apartamento en San Bartolomé de tirajana 3, Arenales del Sol",
+        "tipo": "Apartamento",
+        "precio": 1050,
+        "habitaciones": 3,
+        "banos": 2,
+        "superficie": 130,
+        "zona": "San Bartolomé de tirajana 3, Arenales del Sol",
+        "imagenes_url": [
+            "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1631435/image/thumb/585_335/f3d757c4-57ef-4d9f-8b9d-8a173e4f9c8c.jpg"
+        ],
+        "estado_publicacion": "Activo",
+        "origen_datos": "CRM_WEPERTY",
+        "publicar_web": true
+    },
+    {
+        "referencia": "ALRENALES1450",
+        "titulo": "Dúplex en Ciudad Real 1, Arenales del Sol",
+        "tipo": "Dúplex",
+        "precio": 1450,
+        "habitaciones": 2,
+        "banos": 2,
+        "superficie": 95,
+        "zona": "Ciudad Real 1, Arenales del Sol",
+        "imagenes_url": [
+            "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1630761/image/thumb/585_335/img_5936.jpg"
+        ],
+        "estado_publicacion": "Activo",
+        "origen_datos": "CRM_WEPERTY",
+        "publicar_web": true
+    },
+    {
+        "referencia": "APSEPTIM",
+        "titulo": "Apartamento en Puerto 2, Guardamar del Segura",
+        "tipo": "Apartamento",
+        "precio": 950,
+        "habitaciones": 3,
+        "banos": 2,
+        "superficie": 95,
+        "zona": "Puerto 2, Guardamar del Segura",
+        "imagenes_url": [
+            "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1630189/image/thumb/585_335/840976d0-8c49-457d-b622-18165ac7f9e5.jpg"
+        ],
+        "estado_publicacion": "Activo",
+        "origen_datos": "CRM_WEPERTY",
+        "publicar_web": true
+    },
+    {
+        "referencia": "ALQUESADA",
+        "titulo": "Villa de Lujo en Costa azul, Ciudad Quesada",
+        "tipo": "Villa",
+        "precio": 2950,
+        "habitaciones": 3,
+        "banos": 2,
+        "superficie": 150,
+        "zona": "Costa azul, Ciudad Quesada",
+        "imagenes_url": [
+            "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1625950/image/thumb/585_335/76276aab-adce-423a-9a65-6573642da7e1_2.jpg"
+        ],
+        "estado_publicacion": "Activo",
+        "origen_datos": "CRM_WEPERTY",
+        "publicar_web": true
+    },
+    {
+        "referencia": "ALEUJ1450",
+        "titulo": "Dúplex en Ciudad Real 1, Arenales del Sol",
+        "tipo": "Dúplex",
+        "precio": 1450,
+        "habitaciones": 2,
+        "banos": 2,
+        "superficie": 95,
+        "zona": "Ciudad Real 1, Arenales del Sol",
+        "imagenes_url": [
+            "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1623280/image/thumb/585_335/img_5962.jpg"
+        ],
+        "estado_publicacion": "Activo",
+        "origen_datos": "CRM_WEPERTY",
+        "publicar_web": true
+    },
+    {
+        "referencia": "BAHAEGG1400",
+        "titulo": "Casa de campo en Campillos 8, Crevillente",
+        "tipo": "Casa / Chalet",
+        "precio": 1400,
+        "habitaciones": 4,
+        "banos": 4,
+        "superficie": 250,
+        "zona": "Campillos 8, Crevillente",
+        "imagenes_url": [
+            "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1616738/image/thumb/585_335/img_8814.jpg"
+        ],
+        "estado_publicacion": "Activo",
+        "origen_datos": "CRM_WEPERTY",
+        "publicar_web": true
+    },
+    {
+        "referencia": "AHHHHATICO",
+        "titulo": "Apartamento en Escandinavia 87, Santa Pola",
+        "tipo": "Apartamento",
+        "precio": 1550,
+        "habitaciones": 2,
+        "banos": 2,
+        "superficie": 95,
+        "zona": "Escandinavia 87, Santa Pola",
+        "imagenes_url": [
+            "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1614907/image/thumb/585_335/img_5950.jpg"
+        ],
+        "estado_publicacion": "Activo",
+        "origen_datos": "CRM_WEPERTY",
+        "publicar_web": true
+    },
+    {
+        "referencia": "ALHEHRR980",
+        "titulo": "Villa de Lujo en Chapitel 5, Muchamiel",
+        "tipo": "Villa",
+        "precio": 3500,
+        "habitaciones": 5,
+        "banos": 5,
+        "superficie": 700,
+        "zona": "Chapitel 5, Muchamiel",
+        "imagenes_url": [
+            "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1612522/image/thumb/585_335/img_7071.jpg"
+        ],
+        "estado_publicacion": "Activo",
+        "origen_datos": "CRM_WEPERTY",
+        "publicar_web": true
+    },
+    {
+        "referencia": "LUX0078",
+        "titulo": "Villa de Lujo en País valenciano 40, Benijófar",
+        "tipo": "Villa",
+        "precio": 2100,
+        "habitaciones": 2,
+        "banos": 3,
+        "superficie": 150,
+        "zona": "País valenciano 40, Benijófar",
+        "imagenes_url": [
+            "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1602136/image/thumb/585_335/photo-2025-02-14-11-19-52-3.jpg"
+        ],
+        "estado_publicacion": "Activo",
+        "origen_datos": "CRM_WEPERTY",
+        "publicar_web": true
+    },
+    {
+        "referencia": "ALRGCA150",
+        "titulo": "Casa de campo en Campillos 8, Crevillente",
+        "tipo": "Casa / Chalet",
+        "precio": 1400,
+        "habitaciones": 4,
+        "banos": 4,
+        "superficie": 250,
+        "zona": "Campillos 8, Crevillente",
+        "imagenes_url": [
+            "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1579695/image/thumb/585_335/img_8808.jpg"
+        ],
+        "estado_publicacion": "Activo",
+        "origen_datos": "CRM_WEPERTY",
+        "publicar_web": true
+    },
+    {
+        "referencia": "ALQBSLCONA",
+        "titulo": "Dúplex en Albacete 4, Arenales del Sol",
+        "tipo": "Dúplex",
+        "precio": 3500,
+        "habitaciones": 3,
+        "banos": 2,
+        "superficie": 150,
+        "zona": "Albacete 4, Arenales del Sol",
+        "imagenes_url": [
+            "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1577420/image/thumb/585_335/fec01b2b-16cb-48ff-92f5-b941de6d3114.jpg"
+        ],
+        "estado_publicacion": "Activo",
+        "origen_datos": "CRM_WEPERTY",
+        "publicar_web": true
+    },
+    {
+        "referencia": "ALQRMAT",
+        "titulo": "Apartamento en José semper garcia, Torrevieja",
+        "tipo": "Apartamento",
+        "precio": 650,
+        "habitaciones": 1,
+        "banos": 1,
+        "superficie": 48,
+        "zona": "José semper garcia, Torrevieja",
+        "imagenes_url": [
+            "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1574709/image/thumb/585_335/e31fd705-362c-47ad-ad0e-7948c4b24192.jpg"
+        ],
+        "estado_publicacion": "Activo",
+        "origen_datos": "CRM_WEPERTY",
+        "publicar_web": true
+    },
+    {
+        "referencia": "DUP0134",
+        "titulo": "Dúplex en SAN bartolome de tirajana 45, Arenales del Sol",
+        "tipo": "Dúplex",
+        "precio": 2500,
+        "habitaciones": 4,
+        "banos": 3,
+        "superficie": 255,
+        "zona": "SAN bartolome de tirajana 45, Arenales del Sol",
+        "imagenes_url": [
+            "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1572856/image/thumb/585_335/img_8347.jpg"
+        ],
+        "estado_publicacion": "Activo",
+        "origen_datos": "CRM_WEPERTY",
+        "publicar_web": true
+    },
+    {
+        "referencia": "MAS0012",
+        "titulo": "Casa de campo en San José 8, Crevillente",
+        "tipo": "Casa / Chalet",
+        "precio": 1500,
+        "habitaciones": 3,
+        "banos": 2,
+        "superficie": 250,
+        "zona": "San José 8, Crevillente",
+        "imagenes_url": [
+            "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1566618/image/thumb/585_335/img_3714.jpg"
+        ],
+        "estado_publicacion": "Activo",
+        "origen_datos": "CRM_WEPERTY",
+        "publicar_web": true
+    },
+    {
+        "referencia": "VENTTORR",
+        "titulo": "Apartamento en caleta 24, Torre de la Horadada",
+        "tipo": "Apartamento",
+        "precio": 180000,
+        "habitaciones": 3,
+        "banos": 2,
+        "superficie": 130,
+        "zona": "caleta 24, Torre de la Horadada",
+        "imagenes_url": [
+            "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1562689/image/thumb/585_335/d12915ae-2923-4fbc-9b59-3d1e65a292f5.jpg"
+        ],
+        "estado_publicacion": "Activo",
+        "origen_datos": "CRM_WEPERTY",
+        "publicar_web": true
+    },
+    {
+        "referencia": "",
+        "titulo": "Apartamento en Matilde Peñaranda 70, Torrevieja",
+        "tipo": "Apartamento",
+        "precio": 700,
+        "habitaciones": 2,
+        "banos": 1,
+        "superficie": 60,
+        "zona": "Matilde Peñaranda 70, Torrevieja",
+        "imagenes_url": [
+            "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1562475/image/thumb/585_335/img_7365.jpg"
+        ],
+        "estado_publicacion": "Activo",
+        "origen_datos": "CRM_WEPERTY",
+        "publicar_web": true
+    },
+    {
+        "referencia": "VETTAB",
+        "titulo": "Casa adosada en Escandinavia 90, Gran Alacant",
+        "tipo": "Casa / Chalet",
+        "precio": 260000,
+        "habitaciones": 3,
+        "banos": 3,
+        "superficie": 120,
+        "zona": "Escandinavia 90, Gran Alacant",
+        "imagenes_url": [
+            "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1554140/image/thumb/585_335/img_7479.jpg"
+        ],
+        "estado_publicacion": "Activo",
+        "origen_datos": "CRM_WEPERTY",
+        "publicar_web": true
+    },
+    {
+        "referencia": "AJBRISA1000",
+        "titulo": "Casa adosada en Escandinavia 90, Gran Alacant",
+        "tipo": "Casa / Chalet",
+        "precio": 1000,
+        "habitaciones": 3,
+        "banos": 3,
+        "superficie": 140,
+        "zona": "Escandinavia 90, Gran Alacant",
+        "imagenes_url": [
+            "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1551211/image/thumb/585_335/5e2ff27986c98.jpg"
+        ],
+        "estado_publicacion": "Activo",
+        "origen_datos": "CRM_WEPERTY",
+        "publicar_web": true
+    },
+    {
+        "referencia": "ALQIBRIS",
+        "titulo": "Casa adosada en Escandinavia 90, Gran Alacant",
+        "tipo": "Casa / Chalet",
+        "precio": 1100,
+        "habitaciones": 3,
+        "banos": 3,
+        "superficie": 140,
+        "zona": "Escandinavia 90, Gran Alacant",
+        "imagenes_url": [
+            "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1534593/image/thumb/585_335/2b.png"
+        ],
+        "estado_publicacion": "Activo",
+        "origen_datos": "CRM_WEPERTY",
+        "publicar_web": true
+    },
+    {
+        "referencia": "AHEPORD",
+        "titulo": "Bungalow en Marcelina 40, Torrevieja",
+        "tipo": "Bungalow",
+        "precio": 700,
+        "habitaciones": 1,
+        "banos": 1,
+        "superficie": 50,
+        "zona": "Marcelina 40, Torrevieja",
+        "imagenes_url": [
+            "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1529082/image/thumb/585_335/img_4926.jpg"
+        ],
+        "estado_publicacion": "Activo",
+        "origen_datos": "CRM_WEPERTY",
+        "publicar_web": true
+    },
+    {
+        "referencia": "ALQUEH2200",
+        "titulo": "Villa de Lujo en Ciudad de granada, Torre de la Horadada",
+        "tipo": "Villa",
+        "precio": 1600,
+        "habitaciones": 4,
+        "banos": 2,
+        "superficie": 200,
+        "zona": "Ciudad de granada, Torre de la Horadada",
+        "imagenes_url": [
+            "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1463103/image/thumb/585_335/f17f1f1c-8c3b-4f4f-af67-5323ff411e48.jpg"
+        ],
+        "estado_publicacion": "Activo",
+        "origen_datos": "CRM_WEPERTY",
+        "publicar_web": true
+    },
+    {
+        "referencia": "ALQLUX",
+        "titulo": "Apartamento en azorin 3, Guardamar del Segura",
+        "tipo": "Apartamento",
+        "precio": 800,
+        "habitaciones": 2,
+        "banos": 1,
+        "superficie": 60,
+        "zona": "azorin 3, Guardamar del Segura",
+        "imagenes_url": [
+            "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1426734/image/thumb/585_335/ea14de1a-659e-4f72-847b-79e13a4e408d.jpg"
+        ],
+        "estado_publicacion": "Activo",
+        "origen_datos": "CRM_WEPERTY",
+        "publicar_web": true
+    },
+    {
+        "referencia": "AAFRIT",
+        "titulo": "Casa / Chalet en Gabriel y Galan, Orihuela Costa",
+        "tipo": "Casa / Chalet",
+        "precio": 700,
+        "habitaciones": 2,
+        "banos": 1,
+        "superficie": 100,
+        "zona": "Gabriel y Galan, Orihuela Costa",
+        "imagenes_url": [
+            "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1363121/image/thumb/585_335/dd577961-0083-4824-97c8-ca1a9b746ad4.jpg"
+        ],
+        "estado_publicacion": "Activo",
+        "origen_datos": "CRM_WEPERTY",
+        "publicar_web": true
+    },
+    {
+        "referencia": "CHALE160",
+        "titulo": "Casa / Chalet en Fenix 6, Orihuela Costa",
+        "tipo": "Casa / Chalet",
+        "precio": 160000,
+        "habitaciones": 3,
+        "banos": 2,
+        "superficie": 98,
+        "zona": "Fenix 6, Orihuela Costa",
+        "imagenes_url": [
+            "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1339948/image/thumb/585_335/b7862cff-b922-4d08-9dce-85960fd1a690.jpg"
+        ],
+        "estado_publicacion": "Activo",
+        "origen_datos": "CRM_WEPERTY",
+        "publicar_web": true
+    },
+    {
+        "referencia": "LAUSJW650",
+        "titulo": "Apartamento en San Bartolomé de tirajana 3, Arenales del Sol",
+        "tipo": "Apartamento",
+        "precio": 600,
+        "habitaciones": 1,
+        "banos": 1,
+        "superficie": 60,
+        "zona": "San Bartolomé de tirajana 3, Arenales del Sol",
+        "imagenes_url": [
+            "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1317562/image/thumb/585_335/5bc47d2d-891d-47e2-a601-63b7a61a2bb9.jpg"
+        ],
+        "estado_publicacion": "Activo",
+        "origen_datos": "CRM_WEPERTY",
+        "publicar_web": true
+    },
+    {
+        "referencia": "ALQUECURV",
+        "titulo": "Apartamento en Timonel 1, Torrevieja",
+        "tipo": "Apartamento",
+        "precio": 750,
+        "habitaciones": 2,
+        "banos": 1,
+        "superficie": 75,
+        "zona": "Timonel 1, Torrevieja",
+        "imagenes_url": [
+            "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1285859/image/thumb/585_335/img_9303.jpg"
+        ],
+        "estado_publicacion": "Activo",
+        "origen_datos": "CRM_WEPERTY",
+        "publicar_web": true
+    },
+    {
+        "referencia": "ALUYOLIVO",
+        "titulo": "Dúplex en Escandinavia, Gran Alacant",
+        "tipo": "Dúplex",
+        "precio": 1100,
+        "habitaciones": 3,
+        "banos": 3,
+        "superficie": 121,
+        "zona": "Escandinavia, Gran Alacant",
+        "imagenes_url": [
+            "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1276473/image/thumb/585_335/4b96389d-2bcf-4d75-89e4-a6f2b612f231.jpg"
+        ],
+        "estado_publicacion": "Activo",
+        "origen_datos": "CRM_WEPERTY",
+        "publicar_web": true
+    },
+    {
+        "referencia": "AAUWH900A",
+        "titulo": "Casa adosada en Escandinavia 90, Gran Alacant",
+        "tipo": "Casa / Chalet",
+        "precio": 1000,
+        "habitaciones": 3,
+        "banos": 3,
+        "superficie": 140,
+        "zona": "Escandinavia 90, Gran Alacant",
+        "imagenes_url": [
+            "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1254568/image/thumb/585_335/a6fbc666-a085-46ec-9880-49829faf4a3d_2.jpg"
+        ],
+        "estado_publicacion": "Activo",
+        "origen_datos": "CRM_WEPERTY",
+        "publicar_web": true
+    },
+    {
+        "referencia": "AHSVEVVV",
+        "titulo": "Apartamento en Timonel 1, Torrevieja",
+        "tipo": "Apartamento",
+        "precio": 850,
+        "habitaciones": 3,
+        "banos": 1,
+        "superficie": 135,
+        "zona": "Timonel 1, Torrevieja",
+        "imagenes_url": [
+            "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1235292/image/thumb/585_335/0f7041fa-f2f3-4e57-b4a3-a403decf44e1.jpg"
+        ],
+        "estado_publicacion": "Activo",
+        "origen_datos": "CRM_WEPERTY",
+        "publicar_web": true
+    },
+    {
+        "referencia": "AHAHWVE10",
+        "titulo": "Apartamento en Timonel 1, Torrevieja",
+        "tipo": "Apartamento",
+        "precio": 850,
+        "habitaciones": 3,
+        "banos": 1,
+        "superficie": 120,
+        "zona": "Timonel 1, Torrevieja",
+        "imagenes_url": [
+            "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1228929/image/thumb/585_335/img_5196.jpg"
+        ],
+        "estado_publicacion": "Activo",
+        "origen_datos": "CRM_WEPERTY",
+        "publicar_web": true
+    },
+    {
+        "referencia": "AP0563",
+        "titulo": "Apartamento en Orihuela Costa",
+        "tipo": "Apartamento",
+        "precio": 700,
+        "habitaciones": 1,
+        "banos": 1,
+        "superficie": 51,
+        "zona": "Orihuela Costa",
+        "imagenes_url": [
+            "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1177767/image/thumb/585_335/c40b4e5a-5d9c-4d15-9436-a4470a4d946c.jpg"
+        ],
+        "estado_publicacion": "Activo",
+        "origen_datos": "CRM_WEPERTY",
+        "publicar_web": true
+    },
+    {
+        "referencia": "AURENLNI",
+        "titulo": "Apartamento en Timonel 1, Torrevieja",
+        "tipo": "Apartamento",
+        "precio": 850,
+        "habitaciones": 3,
+        "banos": 1,
+        "superficie": 120,
+        "zona": "Timonel 1, Torrevieja",
+        "imagenes_url": [
+            "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1167419/image/thumb/585_335/img_5018_2.jpg"
+        ],
+        "estado_publicacion": "Activo",
+        "origen_datos": "CRM_WEPERTY",
+        "publicar_web": true
+    },
+    {
+        "referencia": "ALQJEHE900",
+        "titulo": "Casa adosada en Escandinavia 90, Gran Alacant",
+        "tipo": "Casa / Chalet",
+        "precio": 289000,
+        "habitaciones": 3,
+        "banos": 3,
+        "superficie": 140,
+        "zona": "Escandinavia 90, Gran Alacant",
+        "imagenes_url": [
+            "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1162692/image/thumb/585_335/img_5765.jpg"
+        ],
+        "estado_publicacion": "Activo",
+        "origen_datos": "CRM_WEPERTY",
+        "publicar_web": true
+    },
+    {
+        "referencia": "ANAHAVEG650",
+        "titulo": "Apartamento en Purísima 1, Torrevieja",
+        "tipo": "Apartamento",
+        "precio": 700,
+        "habitaciones": 3,
+        "banos": 2,
+        "superficie": 105,
+        "zona": "Purísima 1, Torrevieja",
+        "imagenes_url": [
+            "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1155483/image/thumb/585_335/52b54ede-f7f5-49c9-b2fa-002af0e8d569.jpg"
+        ],
+        "estado_publicacion": "Activo",
+        "origen_datos": "CRM_WEPERTY",
+        "publicar_web": true
+    },
+    {
+        "referencia": "AHSHEH600",
+        "titulo": "Apartamento en La paz, Torrevieja",
+        "tipo": "Apartamento",
+        "precio": 700,
+        "habitaciones": 3,
+        "banos": 1,
+        "superficie": 90,
+        "zona": "La paz, Torrevieja",
+        "imagenes_url": [
+            "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1153523/image/thumb/585_335/photo-2023-07-05-11-22-43-2.jpg"
+        ],
+        "estado_publicacion": "Activo",
+        "origen_datos": "CRM_WEPERTY",
+        "publicar_web": true
+    },
+    {
+        "referencia": "LUX0070",
+        "titulo": "Villa de Lujo en Biar, El Campello",
+        "tipo": "Villa",
+        "precio": 2200,
+        "habitaciones": 3,
+        "banos": 2,
+        "superficie": 300,
+        "zona": "Biar, El Campello",
+        "imagenes_url": [
+            "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1152624/image/thumb/585_335/img_3947.jpg"
+        ],
+        "estado_publicacion": "Activo",
+        "origen_datos": "CRM_WEPERTY",
+        "publicar_web": true
+    },
+    {
+        "referencia": "LAQUJEB650",
+        "titulo": "Apartamento en Atalayas 12, Orihuela Costa",
+        "tipo": "Apartamento",
+        "precio": 700,
+        "habitaciones": 2,
+        "banos": 1,
+        "superficie": 85,
+        "zona": "Atalayas 12, Orihuela Costa",
+        "imagenes_url": [
+            "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1145826/image/thumb/585_335/62a90a2d-0e49-4838-af7e-ebe80feb8be0.jpg"
+        ],
+        "estado_publicacion": "Activo",
+        "origen_datos": "CRM_WEPERTY",
+        "publicar_web": true
+    },
+    {
+        "referencia": "ALQYMO",
+        "titulo": "Casa adosada en San Mateo, Montesinos, Los",
+        "tipo": "Casa / Chalet",
+        "precio": 750,
+        "habitaciones": 3,
+        "banos": 2,
+        "superficie": 102,
+        "zona": "San Mateo, Montesinos, Los",
+        "imagenes_url": [
+            "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1137651/image/thumb/585_335/img_1326.jpg"
+        ],
+        "estado_publicacion": "Activo",
+        "origen_datos": "CRM_WEPERTY",
+        "publicar_web": true
+    },
+    {
+        "referencia": "BNG0033",
+        "titulo": "Dúplex en De Portugal 79, Santa Pola",
+        "tipo": "Dúplex",
+        "precio": 750,
+        "habitaciones": 3,
+        "banos": 2,
+        "superficie": 105,
+        "zona": "De Portugal 79, Santa Pola",
+        "imagenes_url": [
+            "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/669593/image/thumb/585_335/img_2244.jpg"
+        ],
+        "estado_publicacion": "Activo",
+        "origen_datos": "CRM_WEPERTY",
+        "publicar_web": true
+    },
+    {
+        "referencia": "DUP0112",
+        "titulo": "Dúplex en Valencia 27, El Campello",
+        "tipo": "Dúplex",
+        "precio": 1300,
+        "habitaciones": 3,
+        "banos": 2,
+        "superficie": 160,
+        "zona": "Valencia 27, El Campello",
+        "imagenes_url": [
+            "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1135947/image/thumb/585_335/img_6416.jpg"
+        ],
+        "estado_publicacion": "Activo",
+        "origen_datos": "CRM_WEPERTY",
+        "publicar_web": true
+    },
+    {
+        "referencia": "ALQUEBMATA",
+        "titulo": "Bungalow en Morerq 3, Torrevieja",
+        "tipo": "Bungalow",
+        "precio": 750,
+        "habitaciones": 3,
+        "banos": 2,
+        "superficie": 90,
+        "zona": "Morerq 3, Torrevieja",
+        "imagenes_url": [
+            "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1116059/image/thumb/585_335/img_1689.jpg"
+        ],
+        "estado_publicacion": "Activo",
+        "origen_datos": "CRM_WEPERTY",
+        "publicar_web": true
+    },
+    {
+        "referencia": "LUX100",
+        "titulo": "Villa de Lujo en Elche",
+        "tipo": "Villa",
+        "precio": 3000,
+        "habitaciones": 4,
+        "banos": 2,
+        "superficie": 200,
+        "zona": "Elche",
+        "imagenes_url": [
+            "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1106819/image/thumb/585_335/ea54eaf7-294a-4734-b3b3-cf7c30d8c38e.jpg"
+        ],
+        "estado_publicacion": "Activo",
+        "origen_datos": "CRM_WEPERTY",
+        "publicar_web": true
+    },
+    {
+        "referencia": "ALQMRCPLO",
+        "titulo": "Apartamento en Mar báltico 2, Torrevieja",
+        "tipo": "Apartamento",
+        "precio": 1400,
+        "habitaciones": 3,
+        "banos": 2,
+        "superficie": 130,
+        "zona": "Mar báltico 2, Torrevieja",
+        "imagenes_url": [
+            "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1102814/image/thumb/585_335/2a699dfd-16ba-4f98-b4b3-e41ef1bbdc9c.jpg"
+        ],
+        "estado_publicacion": "Activo",
+        "origen_datos": "CRM_WEPERTY",
+        "publicar_web": true
+    },
+    {
+        "referencia": "ALQUISEPT",
+        "titulo": "Apartamento en San Bartolomé de tirajana 3, Arenales del Sol",
+        "tipo": "Apartamento",
+        "precio": 700,
+        "habitaciones": 2,
+        "banos": 1,
+        "superficie": 70,
+        "zona": "San Bartolomé de tirajana 3, Arenales del Sol",
+        "imagenes_url": [
+            "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1068190/image/thumb/585_335/7b034cef-77c4-4fde-a767-a50107d8b9e2.jpg"
+        ],
+        "estado_publicacion": "Activo",
+        "origen_datos": "CRM_WEPERTY",
+        "publicar_web": true
+    },
+    {
+        "referencia": "NUEH123",
+        "titulo": "Bungalow en Avenida de Polonia 236, Gran Alacant",
+        "tipo": "Bungalow",
+        "precio": 750,
+        "habitaciones": 4,
+        "banos": 2,
+        "superficie": 150,
+        "zona": "Avenida de Polonia 236, Gran Alacant",
+        "imagenes_url": [
+            "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1049261/image/thumb/585_335/img_6202.jpg"
+        ],
+        "estado_publicacion": "Activo",
+        "origen_datos": "CRM_WEPERTY",
+        "publicar_web": true
+    },
+    {
+        "referencia": "AVWVEV1",
+        "titulo": "Casa / Chalet en Pantano 4, Crevillente",
+        "tipo": "Casa / Chalet",
+        "precio": 1700,
+        "habitaciones": 3,
+        "banos": 2,
+        "superficie": 350,
+        "zona": "Pantano 4, Crevillente",
+        "imagenes_url": [
+            "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1041974/image/thumb/585_335/dd400be3-5b11-4ed0-86b8-bd38fb560bbd.jpg"
+        ],
+        "estado_publicacion": "Activo",
+        "origen_datos": "CRM_WEPERTY",
+        "publicar_web": true
+    },
+    {
+        "referencia": "ANAVETT12",
+        "titulo": "Apartamento en Puerto 2, Guardamar del Segura",
+        "tipo": "Apartamento",
+        "precio": 900,
+        "habitaciones": 2,
+        "banos": 2,
+        "superficie": 90,
+        "zona": "Puerto 2, Guardamar del Segura",
+        "imagenes_url": [
+            "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1038767/image/thumb/585_335/15f0db40-48f0-4874-9096-67cf471d91ea.jpg"
+        ],
+        "estado_publicacion": "Activo",
+        "origen_datos": "CRM_WEPERTY",
+        "publicar_web": true
+    },
+    {
+        "referencia": "ALQVNUC",
+        "titulo": "Apartamento en Purísima 1, Torrevieja",
+        "tipo": "Apartamento",
+        "precio": 650,
+        "habitaciones": 3,
+        "banos": 2,
+        "superficie": 105,
+        "zona": "Purísima 1, Torrevieja",
+        "imagenes_url": [
+            "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1017455/image/thumb/585_335/b7a07acb-d831-4af0-a04a-e1246d4dfe89.jpg"
+        ],
+        "estado_publicacion": "Activo",
+        "origen_datos": "CRM_WEPERTY",
+        "publicar_web": true
+    },
+    {
+        "referencia": "ALQRNOP",
+        "titulo": "Bungalow en Escandinavia 90, Gran Alacant",
+        "tipo": "Bungalow",
+        "precio": 1000,
+        "habitaciones": 3,
+        "banos": 3,
+        "superficie": 120,
+        "zona": "Escandinavia 90, Gran Alacant",
+        "imagenes_url": [
+            "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1014682/image/thumb/585_335/1ae8735e-9e35-48b9-8863-31057882c29b.jpg"
+        ],
+        "estado_publicacion": "Activo",
+        "origen_datos": "CRM_WEPERTY",
+        "publicar_web": true
+    },
+    {
+        "referencia": "HAGE123",
+        "titulo": "Casa adosada en Los balcones 13, Orihuela Costa",
+        "tipo": "Casa / Chalet",
+        "precio": 1300,
+        "habitaciones": 3,
+        "banos": 3,
+        "superficie": 250,
+        "zona": "Los balcones 13, Orihuela Costa",
+        "imagenes_url": [
+            "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/991622/image/thumb/585_335/6e0f27ef-603d-4006-a8b8-0dead4a54b7b.jpg"
+        ],
+        "estado_publicacion": "Activo",
+        "origen_datos": "CRM_WEPERTY",
+        "publicar_web": true
+    },
+    {
+        "referencia": "ALPIER",
+        "titulo": "Apartamento en Puerto 2, Guardamar del Segura",
+        "tipo": "Apartamento",
+        "precio": 1000,
+        "habitaciones": 2,
+        "banos": 2,
+        "superficie": 95,
+        "zona": "Puerto 2, Guardamar del Segura",
+        "imagenes_url": [
+            "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/968833/image/thumb/585_335/840976d0-8c49-457d-b622-18165ac7f9e5.jpg"
+        ],
+        "estado_publicacion": "Activo",
+        "origen_datos": "CRM_WEPERTY",
+        "publicar_web": true
+    },
+    {
+        "referencia": "ANAUEU",
+        "titulo": "Apartamento en Del puerto 20, Guardamar del Segura",
+        "tipo": "Apartamento",
+        "precio": 650,
+        "habitaciones": 2,
+        "banos": 1,
+        "superficie": 70,
+        "zona": "Del puerto 20, Guardamar del Segura",
+        "imagenes_url": [
+            "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/967461/image/thumb/585_335/1acba448-c69c-43b2-a86c-3061cc09a9f1.jpg"
+        ],
+        "estado_publicacion": "Activo",
+        "origen_datos": "CRM_WEPERTY",
+        "publicar_web": true
+    },
+    {
+        "referencia": "DUP0092",
+        "titulo": "Dúplex en Matilde Peñaranda 5, Torrevieja",
+        "tipo": "Dúplex",
+        "precio": 900,
+        "habitaciones": 3,
+        "banos": 2,
+        "superficie": 70,
+        "zona": "Matilde Peñaranda 5, Torrevieja",
+        "imagenes_url": [
+            "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/959590/image/thumb/585_335/0051a319-cc7c-4508-be74-9b2c846640e5.jpg"
+        ],
+        "estado_publicacion": "Activo",
+        "origen_datos": "CRM_WEPERTY",
+        "publicar_web": true
+    },
+    {
+        "referencia": "DUP0085",
+        "titulo": "Dúplex en Guardamar hills, Guardamar del Segura",
+        "tipo": "Dúplex",
+        "precio": 1400,
+        "habitaciones": 3,
+        "banos": 2,
+        "superficie": 130,
+        "zona": "Guardamar hills, Guardamar del Segura",
+        "imagenes_url": [
+            "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/923956/image/thumb/585_335/photo-2022-07-29-17-34-08.jpg"
+        ],
+        "estado_publicacion": "Activo",
+        "origen_datos": "CRM_WEPERTY",
+        "publicar_web": true
+    },
+    {
+        "referencia": "BNG0088",
+        "titulo": "Bungalow en Morerq 3, Torrevieja",
+        "tipo": "Bungalow",
+        "precio": 750,
+        "habitaciones": 3,
+        "banos": 2,
+        "superficie": 90,
+        "zona": "Morerq 3, Torrevieja",
+        "imagenes_url": [
+            "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/921372/image/thumb/585_335/5d348b6c-3c1d-4d88-865b-dfaebf13692e.jpg"
+        ],
+        "estado_publicacion": "Activo",
+        "origen_datos": "CRM_WEPERTY",
+        "publicar_web": true
+    },
+    {
+        "referencia": "ALQIEB",
+        "titulo": "Casa / Chalet en Gabriel y Galan, Orihuela Costa",
+        "tipo": "Casa / Chalet",
+        "precio": 700,
+        "habitaciones": 3,
+        "banos": 1,
+        "superficie": 100,
+        "zona": "Gabriel y Galan, Orihuela Costa",
+        "imagenes_url": [
+            "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/911071/image/thumb/585_335/435cfd23-5074-4203-ae1a-db7950854ad7.jpg"
+        ],
+        "estado_publicacion": "Activo",
+        "origen_datos": "CRM_WEPERTY",
+        "publicar_web": true
+    },
+    {
+        "referencia": "WEPSEPT",
+        "titulo": "Apartamento en azorin 3, Guardamar del Segura",
+        "tipo": "Apartamento",
+        "precio": 700,
+        "habitaciones": 2,
+        "banos": 1,
+        "superficie": 60,
+        "zona": "azorin 3, Guardamar del Segura",
+        "imagenes_url": [
+            "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/876181/image/thumb/585_335/c8b190d1-1608-41ff-9221-ca5b3a6c80f3.jpg"
+        ],
+        "estado_publicacion": "Activo",
+        "origen_datos": "CRM_WEPERTY",
+        "publicar_web": true
+    },
+    {
+        "referencia": "ALGOLIVO",
+        "titulo": "Dúplex en Escandinavia, Gran Alacant",
+        "tipo": "Dúplex",
+        "precio": 950,
+        "habitaciones": 3,
+        "banos": 3,
+        "superficie": 121,
+        "zona": "Escandinavia, Gran Alacant",
+        "imagenes_url": [
+            "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/874103/image/thumb/585_335/photo-2019-05-30-12-13-16.jpg"
+        ],
+        "estado_publicacion": "Activo",
+        "origen_datos": "CRM_WEPERTY",
+        "publicar_web": true
+    },
+    {
+        "referencia": "CHA0174",
+        "titulo": "Casa / Chalet en Helecho, Benissa",
+        "tipo": "Casa / Chalet",
+        "precio": 2500,
+        "habitaciones": 2,
+        "banos": 2,
+        "superficie": 290,
+        "zona": "Helecho, Benissa",
+        "imagenes_url": [
+            "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/841680/image/thumb/585_335/WhatsApp%20Image%202021-05-20%20at%2012.39.43%20(2).jpg"
+        ],
+        "estado_publicacion": "Activo",
+        "origen_datos": "CRM_WEPERTY",
+        "publicar_web": true
+    },
+    {
+        "referencia": "ALQSTP6",
+        "titulo": "Apartamento en El Carmen 57, Santa Pola",
+        "tipo": "Apartamento",
+        "precio": 650,
+        "habitaciones": 2,
+        "banos": 1,
+        "superficie": 90,
+        "zona": "El Carmen 57, Santa Pola",
+        "imagenes_url": [
+            "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/808203/image/thumb/585_335/31669f72-bc89-43df-81b9-46a27bec8e58.jpg"
+        ],
+        "estado_publicacion": "Activo",
+        "origen_datos": "CRM_WEPERTY",
+        "publicar_web": true
+    },
+    {
+        "referencia": "MAS0007",
+        "titulo": "Casa de campo en 4, Crevillente",
+        "tipo": "Casa / Chalet",
+        "precio": 1200,
+        "habitaciones": 3,
+        "banos": 3,
+        "superficie": 250,
+        "zona": "4, Crevillente",
+        "imagenes_url": [
+            "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/722496/image/thumb/585_335/img_4784.jpg"
+        ],
+        "estado_publicacion": "Activo",
+        "origen_datos": "CRM_WEPERTY",
+        "publicar_web": true
+    },
+    {
+        "referencia": "ATHEV",
+        "titulo": "Casa adosada en Escandinavia 90, Gran Alacant",
+        "tipo": "Casa / Chalet",
+        "precio": 1050,
+        "habitaciones": 3,
+        "banos": 3,
+        "superficie": 140,
+        "zona": "Escandinavia 90, Gran Alacant",
+        "imagenes_url": [
+            "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/708453/image/thumb/585_335/5e2ff27986c98.jpg"
+        ],
+        "estado_publicacion": "Activo",
+        "origen_datos": "CRM_WEPERTY",
+        "publicar_web": true
+    }
+]
