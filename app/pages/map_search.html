@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapa de Propiedades | Weperty Alicante</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        :root {
+            --compass-blue: #0064E5;
+            --compass-black: #000000;
+            --compass-gray: #666666;
+            --border: #e4e8ee;
+            --white: #FFFFFF;
+            --font-sans: 'Montserrat', sans-serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: var(--font-sans); overflow: hidden; height: 100vh; display: flex; flex-direction: column; }
+
+        /* HEADER COMPASS STYLE */
+        header {
+            height: 64px; background: var(--white); border-bottom: 1px solid var(--border);
+            display: flex; align-items: center; padding: 0 20px; z-index: 1000;
+        }
+        .logo-img { height: 35px; cursor: pointer; }
+        .search-inner { flex: 1; max-width: 600px; margin-left: 20px; position: relative; }
+        .search-inner input { width: 100%; padding: 10px 15px 10px 40px; border: 1px solid var(--border); border-radius: 4px; font-size: 14px; outline: none; }
+        .search-inner i { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--compass-gray); }
+
+        /* VIEWPORT LAYOUT */
+        .viewport { flex: 1; display: flex; overflow: hidden; }
+
+        /* MAP AREA (IZQUIERDA) */
+        #map { flex: 1; height: 100%; background: #f0f0f0; }
+
+        /* LIST AREA (DERECHA) */
+        .list-sidebar { width: 35%; min-width: 450px; height: 100%; background: var(--white); border-left: 1px solid var(--border); overflow-y: auto; display: flex; flex-direction: column; }
+        
+        .list-header { padding: 25px; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: var(--white); z-index: 10; }
+        .list-header h2 { font-size: 18px; font-weight: 600; margin-bottom: 15px; }
+        .filters-row { display: flex; gap: 10px; }
+        .filter-pill { padding: 8px 15px; border: 1px solid var(--border); border-radius: 20px; font-size: 12px; font-weight: 600; cursor: pointer; }
+        .filter-pill:hover { background: #f8fafc; }
+
+        .properties-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; padding: 20px; }
+        .prop-card { cursor: pointer; }
+        .prop-img { width: 100%; height: 150px; border-radius: 6px; overflow: hidden; margin-bottom: 10px; position: relative; }
+        .prop-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s; }
+        .prop-card:hover img { transform: scale(1.05); }
+        .prop-status { position: absolute; top: 8px; left: 8px; background: var(--compass-black); color: #fff; font-size: 10px; padding: 3px 8px; font-weight: 600; text-transform: uppercase; border-radius: 2px; }
+        
+        .prop-info .price { font-size: 16px; font-weight: 600; margin-bottom: 4px; }
+        .prop-info .details { font-size: 12px; color: var(--compass-gray); }
+
+        /* CUSTOM ICON LEAFLET */
+        .custom-marker {
+            background: var(--compass-blue); color: #fff; border-radius: 20px; 
+            padding: 5px 10px; font-weight: 700; font-size: 12px; 
+            border: 2px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            white-space: nowrap; transition: all 0.2s;
+        }
+        .custom-marker:hover { background: var(--compass-black); transform: scale(1.1); z-index: 1000 !important; }
+
+        @media (max-width: 1024px) {
+            .list-sidebar { width: 100%; position: absolute; bottom: 0; height: 40%; z-index: 2000; border-top: 2px solid var(--border); }
+            .viewport { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <img src="logos_corporativos/weperty_logo_azul.png" class="logo-img" onclick="window.location.href='index.html'">
+        <div class="search-inner">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" placeholder="Alicante, San Juan, Cabo de las Huertas...">
+        </div>
+        <div style="flex: 1;"></div>
+        <nav style="display: flex; gap: 20px; font-size: 13px; font-weight: 600; color: var(--compass-gray);">
+            <span>Comprar</span>
+            <span>Vender</span>
+            <span>Agentes</span>
+        </nav>
+    </header>
+
+    <div class="viewport">
+        <div id="map"></div>
+        
+        <aside class="list-sidebar">
+            <div class="list-header">
+                <h2 id="result-title">Propiedades en Alicante</h2>
+                <div class="filters-row">
+                    <div class="filter-pill">Precio <i class="fa-solid fa-chevron-down"></i></div>
+                    <div class="filter-pill">Tipo <i class="fa-solid fa-chevron-down"></i></div>
+                    <div class="filter-pill">Camas <i class="fa-solid fa-chevron-down"></i></div>
+                    <div class="filter-pill">Filtros <i class="fa-solid fa-sliders"></i></div>
+                </div>
+            </div>
+            
+            <div class="properties-grid" id="prop-items">
+                <!-- Se pobla dinámicamente -->
+            </div>
+        </aside>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        const SB_URL = "https://dwbvegnxmyvpolvofkfn.supabase.co";
+        const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR3YnZlZ254bXl2cG9sdm9ma2ZuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njc1Mzg1NTUsImV4cCI6MjA4MzExNDU1NX0.eT5ZSce8H8Yk8pWKyLUYChU0HtmZljywP4eEQd5FkOI";
+        const db = supabase.createClient(SB_URL, SB_KEY);
+
+        // Inicializar Mapa centrado en Alicante / San Juan
+        const map = L.map('map', { zoomControl: false }).setView([38.365, -0.45], 13);
+        L.control.zoom({ position: 'bottomright' }).addTo(map);
+
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+            attribution: '&copy; OpenStreetMap contributors &copy; CARTO'
+        }).addTo(map);
+
+        async function initSearch() {
+            const grid = document.getElementById('prop-items');
+            
+            // 1. Cargar solo si publicar_web = true
+            const { data, error } = await db
+                .from('inm_propiedades')
+                .select('*')
+                .eq('publicar_web', true);
+
+            if (error || !data || data.length === 0) {
+                // Mock data para Alicante para que no se vea vacio si no hay en DB
+                renderMocks();
+                return;
+            }
+
+            renderProperties(data);
+        }
+
+        function renderProperties(props) {
+            const grid = document.getElementById('prop-items');
+            grid.innerHTML = '';
+
+            props.forEach(p => {
+                const lat = p.latitud || 38.36 + (Math.random() * 0.05);
+                const lng = p.longitud || -0.45 + (Math.random() * 0.05);
+                const precioStr = Number(p.precio).toLocaleString('es-ES') + ' €';
+
+                // Añadir Marcador al Mapa
+                const icon = L.divIcon({
+                    className: 'custom-marker',
+                    html: precioStr
+                });
+                L.marker([lat, lng], { icon }).addTo(map);
+
+                // Añadir Tarjeta
+                const fotos = p.imagenes_url || (p.caracteristicas ? p.caracteristicas.fotos : []) || [];
+                const imgUrl = fotos.length > 0 ? fotos[0] : 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=400&q=80';
+
+                grid.innerHTML += `
+                    <div class="prop-card">
+                        <div class="prop-img">
+                            <div class="prop-status">WEPERTY EXCLUSIVE</div>
+                            <img src="${imgUrl}" alt="Propiedad">
+                        </div>
+                        <div class="prop-info">
+                            <div class="price">${precioStr}</div>
+                            <div class="details">${p.habitaciones || 3} hab · ${p.banos || 2} baños · ${p.m2 || 150} m²</div>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function renderMocks() {
+            const mocks = [
+                { id: 1, precio: 1250000, titulo: "San Juan Playa", lat: 38.365, lng: -0.415 },
+                { id: 2, precio: 890000, titulo: "Cabo de las Huertas", lat: 38.360, lng: -0.425 },
+                { id: 3, precio: 450000, titulo: "Alicante Centro", lat: 38.345, lng: -0.481 },
+                { id: 4, precio: 2100000, titulo: "Altea Hills", lat: 38.625, lng: -0.005 }
+            ];
+            renderProperties(mocks);
+        }
+
+        initSearch();
+    </script>
+</body>
+</html>
