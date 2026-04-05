@@ -34,11 +34,11 @@
         /* VIEWPORT LAYOUT */
         .viewport { flex: 1; display: flex; overflow: hidden; }
 
-        /* MAP AREA (IZQUIERDA) */
-        #map { flex: 1; height: 100%; background: #f0f0f0; }
+        /* MAP AREA (DERECHA) */
+        #map { flex: 1; height: 100%; background: #f0f0f0; order: 2; }
 
-        /* LIST AREA (DERECHA) */
-        .list-sidebar { width: 35%; min-width: 450px; height: 100%; background: var(--white); border-left: 1px solid var(--border); overflow-y: auto; display: flex; flex-direction: column; }
+        /* LIST AREA (IZQUIERDA) */
+        .list-sidebar { width: 35%; min-width: 450px; height: 100%; background: var(--white); border-right: 1px solid var(--border); overflow-y: auto; display: flex; flex-direction: column; order: 1; }
         
         .list-header { padding: 25px; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: var(--white); z-index: 10; }
         .list-header h2 { font-size: 18px; font-weight: 600; margin-bottom: 15px; }
@@ -66,7 +66,7 @@
             display: flex; align-items: center; justify-content: center;
             color: transparent; overflow: hidden; white-space: nowrap; font-size: 0;
         }
-        .custom-marker:hover {
+        .custom-marker:hover, .custom-marker.highlight {
             width: auto; height: 30px; padding: 0 12px; border-radius: 15px;
             color: white; font-size: 12px; font-weight: 700;
             z-index: 9999 !important;
@@ -90,7 +90,7 @@
         <nav style="display: flex; gap: 20px; font-size: 13px; font-weight: 600; color: var(--compass-gray);">
             <span>Comprar</span>
             <span>Vender</span>
-            <span>Agentes</span>
+            <span style="cursor:pointer" onclick="window.location.href='crm.html'">Agentes</span>
         </nav>
     </header>
 
@@ -107,7 +107,7 @@
             </div>
             
             <div class="properties-grid" id="prop-items">
-                <!-- Se pobla dinámicamente -->
+                <div style="grid-column: 1/-1; text-align: center; padding: 40px; color: #94a3b8;">Cargando inmuebles...</div>
             </div>
         </aside>
 
@@ -119,6 +119,9 @@
         const SB_URL = "https://dwbvegnxmyvpolvofkfn.supabase.co";
         const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR3YnZlZ254bXl2cG9sdm9ma2ZuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njc1Mzg1NTUsImV4cCI6MjA4MzExNDU1NX0.eT5ZSce8H8Yk8pWKyLUYChU0HtmZljywP4eEQd5FkOI";
         const db = supabase.createClient(SB_URL, SB_KEY);
+        
+        // Tracker global para sincronización lista-mapa
+        const propertyMarkers = {}; 
 
         // Inicializar Mapa centrado en Alicante / San Juan
         const map = L.map('map', { zoomControl: false }).setView([38.365, -0.45], 13);
@@ -129,16 +132,12 @@
         }).addTo(map);
 
         async function initSearch() {
-            const grid = document.getElementById('prop-items');
-            
-            // 1. Cargar solo si publicar_web = true
             const { data, error } = await db
                 .from('inm_propiedades')
                 .select('*')
                 .eq('publicar_web', true);
 
             if (error || !data || data.length === 0) {
-                // Mock data para Alicante para que no se vea vacio si no hay en DB
                 renderMocks();
                 return;
             }
@@ -152,38 +151,40 @@
 
             // Limpiar marcadores previos si existen
             Object.values(propertyMarkers).forEach(m => map.removeLayer(m));
+            // Reiniciar tracker
+            for (let k in propertyMarkers) delete propertyMarkers[k];
 
             props.forEach(p => {
                 const id = p.id || Math.random().toString(36).substr(2, 9);
                 const lat = p.latitud || 38.36 + (Math.random() * 0.05);
                 const lng = p.longitud || -0.45 + (Math.random() * 0.05);
-                const precioStr = Number(p.precio).toLocaleString('es-ES') + ' €';
+                const precio = Number(p.precio || 0).toLocaleString('es-ES') + ' €';
 
                 // Añadir Marcador al Mapa
                 const icon = L.divIcon({
                     className: 'custom-marker',
-                    html: precioStr,
+                    html: precio,
                     iconSize: null,
                     iconAnchor: [7, 7]
                 });
                 const marker = L.marker([lat, lng], { icon }).addTo(map);
-                propertyMarkers[id] = marker; // Guardar referencia
+                propertyMarkers[id] = marker; 
 
                 // Añadir Tarjeta
-                const fotos = p.imagenes_url || (p.caracteristicas ? p.caracteristicas.fotos : []) || [];
+                const fotos = p.imagenes_url || [];
                 const imgUrl = fotos.length > 0 ? fotos[0] : 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=400&q=80';
 
                 grid.innerHTML += `
                     <div class="prop-card" 
                          onmouseenter="highlightMarker('${id}')" 
                          onmouseleave="unhighlightMarker('${id}')"
-                         onclick="window.location.href='ficha_inmueble.html?id=${p.id}'">
+                         onclick="window.location.href='index.html'">
                         <div class="prop-img">
                             <div class="prop-status">WEPERTY EXCLUSIVE</div>
                             <img src="${imgUrl}" alt="Propiedad">
                         </div>
                         <div class="prop-info">
-                            <div class="price">${precioStr}</div>
+                            <div class="price">${precio}</div>
                             <div class="details">${p.habitaciones || 3} hab · ${p.banos || 2} baños · ${p.superficie || 150} m²</div>
                         </div>
                     </div>
@@ -191,7 +192,6 @@
             });
         }
 
-        // Funciones de Sincronización
         function highlightMarker(id) {
             const marker = propertyMarkers[id];
             if (marker && marker._icon) {
@@ -210,10 +210,9 @@
 
         function renderMocks() {
             const mocks = [
-                { id: 1, precio: 1250000, titulo: "San Juan Playa", lat: 38.365, lng: -0.415 },
-                { id: 2, precio: 890000, titulo: "Cabo de las Huertas", lat: 38.360, lng: -0.425 },
-                { id: 3, precio: 450000, titulo: "Alicante Centro", lat: 38.345, lng: -0.481 },
-                { id: 4, precio: 2100000, titulo: "Altea Hills", lat: 38.625, lng: -0.005 }
+                { id: 'm1', precio: 1250000, titulo: "San Juan Playa", latitud: 38.365, longitud: -0.415, habitaciones: 4, banos: 3, superficie: 220 },
+                { id: 'm2', precio: 890000, titulo: "Cabo de las Huertas", latitud: 38.360, longitud: -0.425, habitaciones: 3, banos: 2, superficie: 180 },
+                { id: 'm3', precio: 450000, titulo: "Alicante Centro", latitud: 38.345, longitud: -0.481, habitaciones: 2, banos: 1, superficie: 95 }
             ];
             renderProperties(mocks);
         }
