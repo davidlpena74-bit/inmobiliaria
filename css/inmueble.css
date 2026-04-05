@@ -1,0 +1,219 @@
+/* 
+   ========================================
+   ESTILO INMUEBLE DETALLE (Fotocasa Premium)
+   ========================================
+*/
+
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap');
+
+:root {
+    --primary-color: #00B1B0; /* Fotocasa Teal */
+    --secondary-color: #333333;
+    --text-main: #2D3436;
+    --text-muted: #636E72;
+    --bg-light: #F9FAFB;
+    --white: #FFFFFF;
+    --border-color: #E2E8F0;
+    --card-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    --sticky-bar-height: 80px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Outfit', sans-serif;
+    background-color: var(--bg-light);
+    color: var(--text-main);
+    line-height: 1.6;
+}
+
+/* 🏠 Galería de Imágenes (Grid Moderno) */
+.gallery-container {
+    max-width: 1200px;
+    margin: 20px auto;
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    grid-template-rows: 400px;
+    gap: 12px;
+    padding: 0 20px;
+}
+
+.main-photo {
+    grid-row: 1 / 2;
+    overflow: hidden;
+    border-radius: 12px 0 0 12px;
+}
+
+.secondary-photos {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 12px;
+}
+
+.photo-item {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease, filter 0.3s ease;
+    cursor: pointer;
+}
+
+.photo-item:hover {
+    transform: scale(1.05);
+    filter: brightness(0.9);
+}
+
+.secondary-photos img:nth-child(2) { border-radius: 0 12px 0 0; }
+.secondary-photos img:nth-child(4) { border-radius: 0 0 12px 0; }
+
+/* 📊 Barra de Resumen Sticky */
+.sticky-bar {
+    position: sticky;
+    top: 0;
+    background: var(--white);
+    height: var(--sticky-bar-height);
+    width: 100%;
+    z-index: 1000;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.sticky-content {
+    max-width: 1200px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+}
+
+.price-box {
+    display: flex;
+    flex-direction: column;
+}
+
+.price-main {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+.ref-sub {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+.cta-buttons {
+    display: flex;
+    gap: 15px;
+}
+
+.btn-contact {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 12px 28px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: background 0.3s ease;
+}
+
+.btn-contact:hover {
+    background-color: #009695;
+}
+
+/* 📝 Información Principal */
+.main-info {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 0 20px;
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 40px;
+}
+
+.property-header h1 {
+    font-size: 2.2rem;
+    margin-bottom: 10px;
+}
+
+.property-location {
+    font-size: 1.1rem;
+    color: var(--text-muted);
+    margin-bottom: 25px;
+}
+
+.property-badges {
+    display: flex;
+    gap: 30px;
+    padding: 20px 0;
+    border-top: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
+    margin-bottom: 30px;
+}
+
+.badge-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.badge-item i {
+    color: var(--primary-color);
+    font-size: 1.25rem;
+}
+
+/* ✨ Descripción y Extras */
+.section-title {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    font-weight: 700;
+    border-left: 4px solid var(--primary-color);
+    padding-left: 15px;
+}
+
+.property-description {
+    font-size: 1.05rem;
+    color: var(--text-main);
+    margin-bottom: 40px;
+    white-space: pre-line;
+}
+
+.extras-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 15px;
+    margin-bottom: 50px;
+}
+
+.extra-item {
+    background: var(--white);
+    padding: 15px;
+    border-radius: 10px;
+    border: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 500;
+}
+
+/* 📱 Responsive */
+@media (max-width: 900px) {
+    .gallery-container {
+        grid-template-columns: 1fr;
+        grid-template-rows: 300px;
+    }
+    .secondary-photos { display: none; }
+    .main-info { grid-template-columns: 1fr; }
+    .sticky-content { flex-direction: column; height: auto; padding: 15px; }
+}
