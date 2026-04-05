@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mis Inmuebles | Weperty Inmoweb</title>
-    <link rel="stylesheet" href="shell.css">
+    <link rel="stylesheet" href="shell.css?v=3.4.1">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
@@ -359,9 +359,9 @@
         }).join('');
 
         // Pagination info
-        const start = (currentPage - 1) * PAGE_SIZE;
-        const end = Math.min(start + PAGE_SIZE, filteredProperties.length);
-        document.getElementById('pag-info').textContent = `Mostrando ${start + 1} - ${end} de ${filteredProperties.length} resultados`;
+        const pagStart = (currentPage - 1) * PAGE_SIZE;
+        const pagEnd = Math.min(pagStart + PAGE_SIZE, filteredProperties.length);
+        document.getElementById('pag-info').textContent = `Mostrando ${pagStart + 1} - ${pagEnd} de ${filteredProperties.length} resultados`;
 
         // Pagination buttons
         const totalPages = Math.ceil(filteredProperties.length / PAGE_SIZE);
@@ -401,6 +401,6 @@
 
     loadProperties();
 </script>
-<script src="shell.js"></script>
+<script src="shell.js?v=3.4.1"></script>
 </body>
 </html>
