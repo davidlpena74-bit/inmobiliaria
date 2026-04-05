@@ -41,7 +41,7 @@ def incrementar_version(tipo):
         json.dump(data, f, indent=4, ensure_ascii=False)
 
     # Inyección Automática en HTML Footers
-    target_files = ['index.html', 'mapa.html', 'crm.html']
+    target_files = ['index.html', 'inmuebles.html', 'crm.html']
     import re
     
     for html_file in target_files:
