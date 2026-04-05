@@ -105,7 +105,9 @@
 <body>
 
     <header id="mainHeader">
-        <a href="#" class="logo">WEPERTY</a>
+        <a href="#" class="logo">
+            <img src="logos_corporativos/weperty_logo.png" alt="Weperty Logo" id="headerLogo" style="height: 45px; filter: brightness(0) invert(1); transition: filter 0.3s;">
+        </a>
         <nav>
             <a href="#">Comprar</a>
             <a href="#">Alquilar</a>
@@ -150,7 +152,7 @@
     <footer>
         <div class="footer-grid">
             <div class="footer-col">
-                <span class="footer-logo">WEPERTY.</span>
+                <img src="logos_corporativos/weperty_logo.png" alt="Weperty Logo" style="height: 60px; margin-bottom: 30px;">
                 <p style="color: #888; line-height: 1.6; max-width: 400px; font-size: 14px;">Weperty es la agencia líder en la Costa Blanca, combinando la última tecnología de datos inmobiliarios con un trato humano excepcional. Redefiniendo la experiencia inmobiliaria en Alicante.</p>
             </div>
             <div class="footer-col">
@@ -180,7 +182,7 @@
             </div>
         </div>
         <div class="footer-bottom">
-            <div>&copy; 2026 WEPERTY REAL ESTATE PLATFORM. | ALICANTE AUTHORITY | VERSION 2.4.0</div>
+            <div>&copy; 2026 WEPERTY REAL ESTATE PLATFORM. | ALICANTE AUTHORITY | VERSION 2.5.1</div>
             <div style="display: flex; gap: 20px;">
                 <i class="fa-brands fa-instagram"></i>
                 <i class="fa-brands fa-linkedin-in"></i>
@@ -193,10 +195,13 @@
         // LÓGICA DE HEADER (SCROLL)
         window.addEventListener('scroll', function() {
             const header = document.getElementById('mainHeader');
+            const logo = document.getElementById('headerLogo');
             if (window.scrollY > 50) {
                 header.classList.add('scrolled');
+                logo.style.filter = 'none'; // Quitar inversión de color al scroll (logo original)
             } else {
                 header.classList.remove('scrolled');
+                logo.style.filter = 'brightness(0) invert(1)'; // Volver a blanco sobre fondo oscuro
             }
         });
 
