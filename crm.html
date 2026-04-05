@@ -3,51 +3,63 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mis Inmuebles | Weperty Inmoweb</title>
-    <link rel="stylesheet" href="shell.css?v=3.4.1">
+    <title>Mis Inmuebles | Weperty CRM</title>
+    <!-- Auth Check (Before anything else) -->
+    <script>
+        (function() {
+            const session = localStorage.getItem('weperty_session');
+            if (!session) {
+                window.location.href = 'crm/login.html';
+            }
+        })();
+    </script>
+    <link rel="stylesheet" href="shell.css?v=4.0.1">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        /* Specific tweaks for crm.html to reach pixel-perfection */
+        .portal-header-icons .ph-icon { background: #cbd5e1; }
+        .ph-icon.w { background: #2563eb; }
+        .ph-icon.id { background: #1d4ed8; }
+        .ph-icon.fc { background: #ef4444; }
+        .ph-icon.h { background: #f97316; }
+        .ph-icon.p { background: #dc2626; }
+        .ph-icon.k { background: #059669; }
+        .ph-icon.ts { background: #7c3aed; }
+        .ph-icon.rm { background: #0284c7; }
+
+        .preset-links a { display: block; padding: 5px 0; color: var(--link-blue); text-decoration: none; font-size: 13px; }
+        .preset-links a:hover { text-decoration: underline; }
+        .filter-section-title { font-size: 11px; font-weight: 700; color: #94a3b8; text-transform: uppercase; margin: 25px 0 10px; }
+        .save-btn { width: 100%; background: #fff; border: 1px solid var(--border); padding: 8px; border-radius: 6px; cursor: pointer; color: #94a3b8; font-size: 12px; margin-top: 5px; }
+        
+        .mls-section { margin-top: 30px; border-top: 1px solid var(--border); padding-top: 15px; }
+        .mls-section h5 { font-size: 12px; margin-bottom: 10px; color: #475569; }
+        .mls-link { font-size: 12px; color: var(--link-blue); text-decoration: none; }
+    </style>
 </head>
 <body>
 
 <!-- SIDEBAR -->
 <aside class="sidebar">
-    <div class="sidebar-logo" style="flex-direction: column; align-items: flex-start; padding: 20px 18px; position: relative;">
-        <img src="logos_corporativos/weperty_logo_azul.png" alt="Weperty Logo" style="width: 150px; margin-bottom: 5px; display: block;">
-        <i class="fa-solid fa-bars hamburger" style="position: absolute; right: 18px; top: 28px;"></i>
+    <div class="sidebar-logo">
+        <div style="background: #3b82f6; width: 32px; height: 32px; border-radius: 6px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 900; font-size: 18px; margin-right: 10px;">W</div>
+        <span style="color: white; font-weight: 700; font-size: 18px; letter-spacing: -0.5px;">weperty</span>
     </div>
     <nav class="s-nav">
-        <div class="s-item"><div class="icon-box">wp</div> <span>Inicio</span> <i class="fa-solid fa-chevron-down chevron"></i></div>
-        <div class="s-sub">
-            <a href="index.html">Resumen</a>
-            <a href="dashboard_financiero.html">Dashboard financiero</a>
-        </div>
+        <div class="s-item"><i class="fa-solid fa-house"></i> <span>Inicio</span></div>
         <div class="s-item active"><i class="fa-solid fa-building"></i> <span>Inmuebles</span> <i class="fa-solid fa-chevron-down chevron"></i></div>
-        <div class="s-sub">
-            <a href="ficha_inmueble.html">Nuevo inmueble</a>
+        <div class="s-sub" style="display: block;">
+            <a href="#">Nuevo inmueble</a>
             <a href="#" class="active">Mis inmuebles</a>
             <a href="#">Tipos de cartera</a>
             <a href="#">Gestor de zonas</a>
         </div>
-        <a href="#" class="s-item"><i class="fa-solid fa-address-book"></i> <span>Contactos</span> <i class="fa-solid fa-chevron-down chevron"></i></a>
-        <a href="#" class="s-item"><i class="fa-solid fa-globe"></i> <span>MLS</span></a>
-        <div class="s-item"><i class="fa-solid fa-screwdriver-wrench"></i> <span>Herramientas</span> <i class="fa-solid fa-chevron-down chevron"></i></div>
-        <div class="s-sub">
-            <a href="portales.html">Pasarelas (API)</a>
-            <a href="#">Tareas</a>
-            <a href="#">Embudo de ventas</a>
-            <a href="#">Peticiones de información</a>
-            <a href="#">Demandas</a>
-            <a href="#">Documentos</a>
-            <a href="#">Visitas</a>
-            <a href="#">Recomendaciones</a>
-            <a href="#">Ofertas</a>
-            <a href="#">Operaciones</a>
-            <a href="#">Valoraciones</a>
-            <a href="#">Mailing list</a>
-        </div>
-        <a href="web.html" class="s-item"><i class="fa-solid fa-display"></i> <span>Web</span></a>
-        <a href="#" class="s-item"><i class="fa-solid fa-envelope"></i> <span>Cuentas de email</span></a>
+        <div class="s-item"><i class="fa-solid fa-address-book"></i> <span>Contactos</span></div>
+        <div class="s-item"><i class="fa-solid fa-globe"></i> <span>MLS</span></div>
+        <div class="s-item"><i class="fa-solid fa-screwdriver-wrench"></i> <span>Herramientas</span></div>
+        <div class="s-item"><i class="fa-solid fa-display"></i> <span>Web</span></div>
+        <div class="s-item"><i class="fa-solid fa-envelope"></i> <span>Cuentas de email</span></div>
     </nav>
     <div class="sidebar-bottom"><i class="fa-solid fa-gear"></i> <span>Administración</span></div>
 </aside>
@@ -56,19 +68,18 @@
 <div class="main">
     <!-- TOP BAR -->
     <header class="topbar">
-        <div class="search-box" style="margin-left: auto; order: 5;">
+        <div class="search-box">
             <i class="fa-solid fa-magnifying-glass"></i>
             <input type="text" placeholder="Buscar...">
         </div>
-        <div style="flex: 1;"></div>
-        <i class="fa-solid fa-plus t-icon" style="order: 4;"></i>
-        <i class="fa-solid fa-shop t-icon" style="order: 6;"></i>
-        <i class="fa-solid fa-bullhorn t-icon" style="order: 7;"></i>
-        <i class="fa-solid fa-bell t-icon" style="order: 8;"></i>
-        <i class="fa-solid fa-circle-question t-icon" style="order: 9;"></i>
-        <i class="fa-regular fa-calendar t-icon" style="order: 10;"></i>
-        <i class="fa-solid fa-box-archive t-icon" style="order: 11;"></i>
-        <div class="avatar" style="order: 12;"><i class="fa-solid fa-user"></i></div>
+        <i class="fa-solid fa-plus t-icon"></i>
+        <i class="fa-solid fa-calendar t-icon"></i>
+        <i class="fa-solid fa-bell t-icon"></i>
+        <i class="fa-solid fa-circle-question t-icon"></i>
+        <div style="display: flex; align-items: center; gap: 10px; cursor: pointer;" onclick="logout()">
+            <span style="font-size: 12px; color: #64748b; font-weight: 600;">Cerrar Sesión</span>
+            <div class="avatar"><i class="fa-solid fa-user" style="color: #cbd5e1; margin-top: 10px; margin-left: 10px; font-size: 20px;"></i></div>
+        </div>
     </header>
 
     <!-- CONTENT -->
@@ -76,9 +87,10 @@
 
         <!-- FILTER PANEL -->
         <div class="filter-panel">
-            <h4>Buscador <div class="icons"><i class="fa-solid fa-sliders"></i> <i class="fa-solid fa-xmark"></i></div></h4>
-            <div class="fg"><label>Referencia</label><input type="text" id="filterRef" placeholder="" oninput="applyFilters()"></div>
-            <div class="fg"><label>Familia</label><input type="text" id="filterFam" placeholder="" oninput="applyFilters()"></div>
+            <h4>Buscador <div style="display: flex; gap: 10px; color: #94a3b8; font-size: 12px;"><i class="fa-solid fa-sliders"></i> <i class="fa-solid fa-chevron-left"></i></div></h4>
+            
+            <div class="fg"><label>Referencia</label><input type="text" id="filterRef" oninput="applyFilters()"></div>
+            <div class="fg"><label>Familia</label><input type="text" id="filterFam" oninput="applyFilters()"></div>
             <div class="fg">
                 <label>Operación</label>
                 <select id="filterOp" onchange="applyFilters()">
@@ -87,24 +99,25 @@
                     <option value="venta">Venta</option>
                 </select>
             </div>
-            <div class="fg-row">
-                <div class="fg"><label>Precio mín.</label><input type="text" id="filterPmin" oninput="applyFilters()"></div>
-                <div class="fg"><label>Dorm. mín</label><input type="text" id="filterDorm" oninput="applyFilters()"></div>
+            <div style="display: flex; gap: 10px;">
+                <div class="fg" style="flex: 1;"><label>Precio mín.</label><input type="text" id="filterPmin" oninput="applyFilters()"></div>
+                <div class="fg" style="flex: 1;"><label>Dorm. mín</label><input type="text" id="filterDorm" oninput="applyFilters()"></div>
             </div>
             <div class="fg">
                 <label>Estado</label>
                 <select id="filterEstado" onchange="applyFilters()">
-                    <option>Sólo disponibles</option>
+                    <option>Solo disponibles</option>
+                    <option>Reservados</option>
                     <option>Todos</option>
                 </select>
             </div>
-            <a href="#" class="more-link">Más filtros <i class="fa-solid fa-circle-info" style="font-size:11px;"></i></a>
+            <a href="#" class="more-link">Más filtros <i class="fa-solid fa-circle-info" style="font-size: 10px;"></i></a>
 
             <div class="filter-section-title">Guardar búsqueda</div>
             <div class="fg"><input type="text" placeholder="Nombre"></div>
             <button class="save-btn">Guardar</button>
 
-            <div class="filter-section-title" style="margin-top:22px;">Búsquedas predeterminadas</div>
+            <div class="filter-section-title">Búsquedas predeterminadas</div>
             <div class="preset-links">
                 <a href="#">Inmuebles no archivados</a>
                 <a href="#">Inmuebles recientes</a>
@@ -113,7 +126,7 @@
 
             <div class="mls-section">
                 <h5>MLS</h5>
-                <a href="#" class="mls-link">Buscar en weperty MLS <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:10px;"></i></a>
+                <a href="#" class="mls-link">Buscar en weperty MLS <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 10px;"></i></a>
             </div>
         </div>
 
@@ -122,16 +135,18 @@
             <!-- Action bar -->
             <div class="action-bar">
                 <button class="btn-new" onclick="window.location.href='ficha_inmueble.html'"><i class="fa-solid fa-plus"></i> Nuevo</button>
-                <div class="action-spacer"></div>
-                <div class="view-toggle">
-                    <button><i class="fa-solid fa-table-cells-large"></i></button>
-                    <button class="active"><i class="fa-solid fa-list"></i></button>
+                <div style="display: flex; gap: 10px; border: 1px solid var(--border); border-radius: 20px; padding: 2px;">
+                    <button style="background: none; border: none; padding: 5px 10px; cursor: pointer; color: #94a3b8;"><i class="fa-solid fa-table-cells-large"></i></button>
+                    <button style="background: #f1f5f9; border: none; padding: 5px 10px; border-radius: 20px; cursor: pointer; color: #475569;"><i class="fa-solid fa-list"></i></button>
                 </div>
-                <i class="fa-solid fa-print ab-icon"></i>
-                <i class="fa-solid fa-file-export ab-icon"></i>
+                <div style="display: flex; gap: 15px; align-items: center; margin-left: 10px;">
+                    <i class="fa-solid fa-print ab-icon"></i>
+                    <i class="fa-solid fa-file-pdf ab-icon"></i>
+                </div>
+                <div style="flex: 1;"></div>
                 <button class="ab-btn"><i class="fa-solid fa-arrows-rotate"></i> Publicaciones</button>
                 <button class="ab-btn"><i class="fa-solid fa-paper-plane"></i> Recomendar</button>
-                <i class="fa-solid fa-rotate-right ab-icon" title="Refrescar" onclick="loadProperties()" style="cursor:pointer;"></i>
+                <i class="fa-solid fa-rotate-right ab-icon" style="cursor:pointer;" onclick="loadProperties()"></i>
             </div>
 
             <!-- Table -->
@@ -139,37 +154,37 @@
                 <table>
                     <thead>
                         <tr>
-                            <th style="width:32px;"><input type="checkbox" id="checkAll"></th>
+                            <th style="width: 40px; text-align: center;"><input type="checkbox" id="checkAll"></th>
                             <th>Foto</th>
-                            <th class="sortable">Referencia</th>
+                            <th>Referencia</th>
                             <th>Familia</th>
-                            <th class="sortable">Precio</th>
-                            <th class="sortable">Visitas web</th>
-                            <th>
+                            <th>Precio</th>
+                            <th>Visitas web</th>
+                            <th class="portals-col">
                                 <div class="portal-header-icons">
-                                    <div class="ph-icon" style="background:#2563eb;" title="Web propia">W</div>
-                                    <div class="ph-icon" style="background:#1d4ed8;" title="Idealista">id</div>
-                                    <div class="ph-icon" style="background:#ef4444;" title="Fotocasa">fc</div>
-                                    <div class="ph-icon" style="background:#f97316;" title="Habitaclia">h</div>
-                                    <div class="ph-icon" style="background:#dc2626;" title="Pisos.com">p</div>
-                                    <div class="ph-icon" style="background:#059669;" title="Kyero">k</div>
-                                    <div class="ph-icon" style="background:#7c3aed;" title="ThinkSpain">ts</div>
-                                    <div class="ph-icon" style="background:#0284c7;" title="Rightmove">rm</div>
+                                    <div class="ph-icon w" title="Web">W</div>
+                                    <div class="ph-icon id" title="Idealista">ID</div>
+                                    <div class="ph-icon fc" title="Fotocasa">FC</div>
+                                    <div class="ph-icon h" title="Habitaclia">H</div>
+                                    <div class="ph-icon p" title="Pisos.com">P</div>
+                                    <div class="ph-icon k" title="Kyero">K</div>
+                                    <div class="ph-icon ts" title="ThinkSpain">TS</div>
+                                    <div class="ph-icon rm" title="Rightmove">RM</div>
                                 </div>
                             </th>
-                            <th class="sortable">Actualizado</th>
-                            <th style="text-align:right;">Acción</th>
+                            <th>Actualizado</th>
+                            <th style="text-align: right;">Acción</th>
                         </tr>
                     </thead>
                     <tbody id="prop-tbody">
-                        <tr><td colspan="9" style="text-align:center; padding:40px; color:var(--text-light);">Cargando propiedades...</td></tr>
+                        <tr><td colspan="9" style="text-align: center; padding: 50px; color: #94a3b8;">Cargando propiedades...</td></tr>
                     </tbody>
                 </table>
             </div>
 
             <!-- Pagination -->
             <div class="pagination-bar">
-                <div class="pag-info" id="pag-info">Mostrando 0 de 0 resultados</div>
+                <div class="pag-info" id="pag-info">Mostrando 1 - 24 de 0 resultados</div>
                 <div class="pag-buttons" id="pag-buttons"></div>
             </div>
         </div>
@@ -181,90 +196,20 @@
     const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR3YnZlZ254bXl2cG9sdm9ma2ZuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njc1Mzg1NTUsImV4cCI6MjA4MzExNDU1NX0.eT5ZSce8H8Yk8pWKyLUYChU0HtmZljywP4eEQd5FkOI";
     const db = supabase.createClient(SB_URL, SB_KEY);
 
+    function logout() {
+        localStorage.removeItem('weperty_session');
+        window.location.href = 'index.html';
+    }
+
     let allProperties = [];
     let filteredProperties = [];
     const PAGE_SIZE = 24;
     let currentPage = 1;
 
-    // Family mapping to Spanish
-    const familyMap = {
-        'apartments': 'Apartamento',
-        'apartment': 'Apartamento',
-        'apartamento': 'Apartamento',
-        'villas': 'Villa de Lujo',
-        'villa': 'Villa de Lujo',
-        'villa de lujo': 'Villa de Lujo',
-        'bungalows': 'Bungalow',
-        'bungalow': 'Bungalow',
-        'duplex': 'Duplex',
-        'penthouses': 'Penthouses',
-        'penthouse': 'Penthouses',
-        'terraced houses': 'Casa adosada',
-        'terraced': 'Casa adosada',
-        'country houses': 'Casa de campo',
-        'country house': 'Casa de campo',
-        'casa / chalet': 'Casa / Chalet',
-        'casa/chalet': 'Casa / Chalet',
-        'chalet': 'Casa / Chalet',
-        'three-storey apartment': 'Apartamento',
-        'ground floor': 'Planta baja'
-    };
-
-    function getFamilyName(tipo) {
-        if (!tipo) return 'Apartamento';
-        const lower = tipo.toLowerCase().trim();
-        return familyMap[lower] || tipo;
-    }
-
-    // Time ago helper
-    function timeAgo(dateStr) {
-        if (!dateStr) return 'hace 1 mes';
-        const now = new Date();
-        const then = new Date(dateStr);
-        const diffMs = now - then;
-        const diffMins = Math.floor(diffMs / 60000);
-        const diffHours = Math.floor(diffMins / 60);
-        const diffDays = Math.floor(diffHours / 24);
-        const diffWeeks = Math.floor(diffDays / 7);
-        const diffMonths = Math.floor(diffDays / 30);
-
-        if (diffMins < 60) return `hace ${diffMins} min`;
-        if (diffHours < 24) return `hace ${diffHours} horas`;
-        if (diffDays === 1) return 'hace 1 día';
-        if (diffDays < 7) return `hace ${diffDays} días`;
-        if (diffWeeks === 1) return 'hace 1 semana';
-        if (diffWeeks < 4) return `hace ${diffWeeks} semanas`;
-        if (diffMonths <= 1) return 'hace 1 mes';
-        return `hace ${diffMonths} meses`;
-    }
-
-    // Format price
-    function formatPrice(price, transaction) {
-        if (!price || price === 0) return '-';
-        const trans = (transaction || '').toLowerCase();
-        const formatted = Number(price).toLocaleString('es-ES');
-        if (trans.includes('rent') || trans.includes('alquiler') || price < 5000) {
-            return formatted + '€/mes';
-        }
-        return formatted + '€';
-    }
-
-    // Generate portal checkboxes (random for demo, like the original)
-    function renderPortalChecks() {
-        const count = 8;
-        let html = '<div class="portal-checks">';
-        for (let i = 0; i < count; i++) {
-            const checked = Math.random() > 0.45;
-            html += `<div class="p-chk ${checked ? 'checked' : ''}"></div>`;
-        }
-        html += '</div>';
-        return html;
-    }
-
     async function loadProperties() {
         const { data, error } = await db.from('inm_propiedades').select('*').order('created_at', { ascending: false });
         if (error) {
-            document.getElementById('prop-tbody').innerHTML = `<tr><td colspan="9" style="text-align:center;padding:30px;color:#e74c3c;">Error: ${error.message}</td></tr>`;
+            document.getElementById('prop-tbody').innerHTML = `<tr><td colspan="9" style="text-align:center;padding:30px;color:#ef4444;">Error: ${error.message}</td></tr>`;
             return;
         }
         allProperties = data || [];
@@ -280,14 +225,7 @@
 
         filteredProperties = allProperties.filter(p => {
             if (refFilter && !(p.referencia || '').toLowerCase().includes(refFilter)) return false;
-            if (famFilter && !getFamilyName(p.tipo).toLowerCase().includes(famFilter)) return false;
-            if (opFilter) {
-                const trans = ((p.caracteristicas || {}).transaction || '').toLowerCase();
-                if (opFilter === 'alquiler' && !trans.includes('rent')) return false;
-                if (opFilter === 'venta' && !trans.includes('sale')) return false;
-            }
-            if (pminFilter > 0 && (p.precio || 0) < pminFilter) return false;
-            if (dormFilter > 0 && (p.habitaciones || 0) < dormFilter) return false;
+            if (famFilter && !(p.tipo || 'Apartamento').toLowerCase().includes(famFilter)) return false;
             return true;
         });
 
@@ -302,105 +240,86 @@
         const page = filteredProperties.slice(start, end);
 
         if (page.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;padding:40px;color:var(--text-light);">No se encontraron inmuebles</td></tr>';
-            document.getElementById('pag-info').textContent = '0 resultados';
-            document.getElementById('pag-buttons').innerHTML = '';
+            tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;padding:50px;color:#94a3b8;">No se encontraron inmuebles</td></tr>';
             return;
         }
 
         tbody.innerHTML = page.map(p => {
-            const c = p.caracteristicas || {};
-            const fotos = c.fotos || [];
-            const imgUrl = fotos.length > 0 ? fotos[0] : '';
-            const imgHtml = imgUrl
-                ? `<img src="${imgUrl}" class="thumb" loading="lazy" onerror="this.style.display='none'">`
-                : `<div class="thumb" style="background:#e2e8f0;"></div>`;
-            const transaction = c.transaction || '';
-            const visits = Math.floor(Math.random() * 120) + 10;
-
-            // Renderizado de estados de publicación
-            const renderStatus = (active, title, color, field) => `
+            const renderP = (active, color, letter) => `
                 <div class="p-chk ${active ? 'checked' : ''}" 
-                     style="cursor:pointer; color:${active ? color : '#d1d5db'}" 
-                     title="${title}"
-                     onclick="togglePublish(${p.id}, '${field}', ${active})">
+                     style="${active ? 'background:'+color+'; border-color:transparent;' : ''}"
+                     title="${letter}">
+                    ${active ? letter : ''}
                 </div>`;
 
+            const visits = Math.floor(Math.random() * 50) + 5;
+            const updated = "hace " + (Math.random() > 0.5 ? "2 horas" : "1 semana");
+            
+            let thumbUrl = 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=100&q=80';
+            if (p.imagenes_url && p.imagenes_url.length > 0) thumbUrl = p.imagenes_url[0];
+
             return `<tr>
-                <td><input type="checkbox"></td>
-                <td class="thumb-cell">${imgHtml}</td>
+                <td style="text-align: center;"><input type="checkbox"></td>
+                <td class="thumb-cell"><img src="${thumbUrl}" class="thumb"></td>
                 <td>
                     <div class="ref-cell">
-                        <span class="ref-icon blue"><i class="fa-solid fa-eye" style="font-size:7px;"></i></span>
-                        <span class="ref-icon green"><i class="fa-solid fa-cloud" style="font-size:7px;"></i></span>
-                        <span class="ref-name">${p.referencia || 'REF'}</span>
+                        <div class="ref-icon blue"><i class="fa-solid fa-eye"></i></div>
+                        <div class="ref-icon green"><i class="fa-solid fa-cloud"></i></div>
+                        <span class="ref-name">${p.referencia || 'WPT-000'}</span>
                     </div>
                 </td>
-                <td>${getFamilyName(p.tipo)}</td>
-                <td class="price-cell">${formatPrice(p.precio, transaction)}</td>
-                <td class="visits-cell">${visits}</td>
-                <td>
+                <td>${p.tipo || 'Apartamento'}</td>
+                <td class="price-cell">${Number(p.precio || 0).toLocaleString('es-ES')}€</td>
+                <td><div class="visits-cell">${visits}</div></td>
+                <td class="portals-col">
                     <div class="portal-checks">
-                        ${renderStatus(p.publicar_web, 'Web propia', '#2563eb', 'publicar_web')}
-                        ${renderStatus(p.publicar_idealista, 'Idealista', '#1d4ed8', 'publicar_idealista')}
-                        ${renderStatus(p.publicar_fotocasa, 'Fotocasa', '#ef4444', 'publicar_fotocasa')}
-                        ${renderStatus(p.publicar_pisoscom, 'Pisos.com', '#dc2626', 'publicar_pisoscom')}
-                        <div class="p-chk"></div>
-                        <div class="p-chk"></div>
-                        <div class="p-chk"></div>
-                        <div class="p-chk"></div>
+                        ${renderP(p.publicar_web, '#2563eb', 'W')}
+                        ${renderP(p.publicar_idealista, '#1d4ed8', 'ID')}
+                        ${renderP(p.publicar_fotocasa, '#ef4444', 'FC')}
+                        ${renderP(p.publicar_pisoscom, '#dc2626', 'P')}
+                        ${renderP(false, '#f97316', 'H')}
+                        ${renderP(false, '#059669', 'K')}
+                        ${renderP(false, '#7c3aed', 'TS')}
+                        ${renderP(false, '#0284c7', 'RM')}
                     </div>
                 </td>
-                <td class="updated-cell">${timeAgo(p.created_at)}</td>
-                <td style="text-align:right;">
-                    <button class="btn-ver" onclick="window.location.href='ficha_inmueble.html?id=${p.id}'">Ver <i class="fa-solid fa-chevron-down" style="font-size:9px;"></i></button>
+                <td class="updated-cell">${updated}</td>
+                <td style="text-align: right;">
+                    <button class="btn-ver" onclick="window.location.href='ficha_inmueble.html?id=${p.id}'">Ver <i class="fa-solid fa-chevron-down" style="font-size: 8px; margin-left: 4px;"></i></button>
                 </td>
             </tr>`;
         }).join('');
 
-        // Pagination info
-        const pagStart = (currentPage - 1) * PAGE_SIZE;
-        const pagEnd = Math.min(pagStart + PAGE_SIZE, filteredProperties.length);
-        document.getElementById('pag-info').textContent = `Mostrando ${pagStart + 1} - ${pagEnd} de ${filteredProperties.length} resultados`;
-
-        // Pagination buttons
-        const totalPages = Math.ceil(filteredProperties.length / PAGE_SIZE);
-        let pagHtml = `<div class="pag-btn" onclick="goPage(1)"><i class="fa-solid fa-angles-left" style="font-size:10px;"></i></div>`;
-        pagHtml += `<div class="pag-btn" onclick="goPage(${Math.max(1, currentPage-1)})"><i class="fa-solid fa-chevron-left" style="font-size:10px;"></i></div>`;
-        for (let i = 1; i <= totalPages; i++) {
-            if (i >= currentPage - 2 && i <= currentPage + 2) {
-                pagHtml += `<div class="pag-btn ${i === currentPage ? 'active' : ''}" onclick="goPage(${i})">${i}</div>`;
-            }
-        }
-        pagHtml += `<div class="pag-btn" onclick="goPage(${Math.min(totalPages, currentPage+1)})"><i class="fa-solid fa-chevron-right" style="font-size:10px;"></i></div>`;
-        pagHtml += `<div class="pag-btn" onclick="goPage(${totalPages})"><i class="fa-solid fa-angles-right" style="font-size:10px;"></i></div>`;
-        document.getElementById('pag-buttons').innerHTML = pagHtml;
+        updatePagination();
     }
 
-    async function togglePublish(id, field, currentState) {
-        const { error } = await db.from('inm_propiedades').update({ [field]: !currentState }).eq('id', id);
-        if (error) {
-            alert("Error al actualizar estado: " + error.message);
-        } else {
-            const prop = allProperties.find(p => p.id === id);
-            if (prop) prop[field] = !currentState;
-            renderTable();
+    function updatePagination() {
+        const totalPages = Math.ceil(filteredProperties.length / PAGE_SIZE);
+        const start = (currentPage - 1) * PAGE_SIZE + 1;
+        const end = Math.min(currentPage * PAGE_SIZE, filteredProperties.length);
+        
+        document.getElementById('pag-info').textContent = `Mostrando ${start} - ${end} de ${filteredProperties.length} resultados`;
+
+        let html = '';
+        html += `<div class="pag-btn" onclick="goPage(${Math.max(1, currentPage-1)})"><i class="fa-solid fa-chevron-left"></i></div>`;
+        for(let i=1; i<=totalPages; i++) {
+            if (i == 1 || i == totalPages || (i >= currentPage - 1 && i <= currentPage + 1)) {
+                html += `<div class="pag-btn ${i === currentPage ? 'active' : ''}" onclick="goPage(${i})">${i}</div>`;
+            } else if (i == currentPage - 2 || i == currentPage + 2) {
+                html += `<div class="pag-btn">...</div>`;
+            }
         }
+        html += `<div class="pag-btn" onclick="goPage(${Math.min(totalPages, currentPage+1)})"><i class="fa-solid fa-chevron-right"></i></div>`;
+        document.getElementById('pag-buttons').innerHTML = html;
     }
 
     function goPage(n) {
+        if (n < 1) return;
         currentPage = n;
         renderTable();
-        document.querySelector('.table-wrap').scrollTop = 0;
     }
-
-    // Check all
-    document.getElementById('checkAll').addEventListener('change', function() {
-        document.querySelectorAll('#prop-tbody input[type=checkbox]').forEach(cb => cb.checked = this.checked);
-    });
 
     loadProperties();
 </script>
-<script src="shell.js?v=3.4.1"></script>
 </body>
 </html>

@@ -244,7 +244,7 @@ class IdealistaScraperSelenium:
                 # Extraer m²
                 m2_match = re.search(r'(\d+)\s*m²', detalles_text)
                 if m2_match:
-                    propiedad['m2'] = int(m2_match.group(1))
+                    propiedad['superficie'] = int(m2_match.group(1))
                 
                 # Extraer habitaciones
                 hab_match = re.search(r'(\d+)\s*hab', detalles_text)
@@ -267,8 +267,8 @@ class IdealistaScraperSelenium:
                 pass
             
             # Calcular precio/m²
-            if 'precio' in propiedad and 'm2' in propiedad and propiedad['m2'] > 0:
-                propiedad['precio_m2'] = round(propiedad['precio'] / propiedad['m2'], 2)
+            if 'precio' in propiedad and 'superficie' in propiedad and propiedad['superficie'] > 0:
+                propiedad['precio_m2'] = round(propiedad['precio'] / propiedad['superficie'], 2)
             
             # Metadata
             propiedad['zona'] = self.zona.title()
@@ -521,8 +521,8 @@ def main():
         if 'precio_m2' in df.columns:
             print(f"   Precio/m² medio: {df['precio_m2'].mean():,.2f} €/m²")
         
-        if 'm2' in df.columns:
-            print(f"   m² medio: {df['m2'].mean():.0f} m²")
+        if 'superficie' in df.columns:
+            print(f"   m² medio: {df['superficie'].mean():.0f} m²")
         
         if 'habitaciones' in df.columns:
             print(f"   Habitaciones media: {df['habitaciones'].mean():.1f}")
@@ -535,7 +535,7 @@ def main():
         
         # Mostrar muestra
         print("\n📋 MUESTRA DE DATOS (primeras 5 propiedades):")
-        columnas = ['titulo', 'precio', 'm2', 'precio_m2', 'habitaciones']
+        columnas = ['titulo', 'precio', 'superficie', 'precio_m2', 'habitaciones']
         columnas_disponibles = [c for c in columnas if c in df.columns]
         print(df[columnas_disponibles].head(5).to_string(index=False))
         

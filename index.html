@@ -113,8 +113,8 @@
             <a href="#">Alquilar</a>
             <a href="#">Vender</a>
             <a href="#">Mercados</a>
-            <a href="#">Agentes</a>
-            <a href="#" style="background: var(--compass-blue); padding: 10px 20px; border-radius: 4px; margin-left: 20px;">Acceso</a>
+            <a href="crm.html">Agentes</a>
+            <a href="crm.html" style="background: var(--compass-blue); padding: 10px 20px; border-radius: 4px; margin-left: 20px;">Acceso</a>
         </nav>
     </header>
 
@@ -184,7 +184,7 @@
             </div>
         </div>
         <div class="footer-bottom">
-            <div>&copy; 2026 WEPERTY REAL ESTATE PLATFORM. | ALICANTE AUTHORITY | VERSION 3.4.6</div>
+            <div>&copy; 2026 WEPERTY REAL ESTATE PLATFORM. | ALICANTE AUTHORITY | VERSION 4.0.0</div>
             <div style="display: flex; gap: 20px;">
                 <i class="fa-brands fa-instagram"></i>
                 <i class="fa-brands fa-linkedin-in"></i>
@@ -218,7 +218,8 @@
                     .from('inm_propiedades')
                     .select('*')
                     .eq('publicar_web', true)
-                    .order('created_at', { ascending: false });
+                    .order('created_at', { ascending: false })
+                    .limit(10);
 
                 if (error || !data || data.length === 0) throw new Error("No properties found");
 
@@ -235,8 +236,8 @@
                             <div class="prop-address">${p.titulo || 'Propiedad en Alicante'}</div>
                             <div class="prop-specs">
                                 <div>${p.habitaciones || 3} <span>Hab</span></div>
-                                <div>${p.baños || 2} <span>Baños</span></div>
-                                <div>${p.m2 || 150} <span>m²</span></div>
+                                <div>${p.banos || 2} <span>Baños</span></div>
+                                <div>${p.superficie || 150} <span>m²</span></div>
                             </div>
                         </div>
                     `;

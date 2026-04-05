@@ -33,11 +33,12 @@ def generar_datos_vicalvaro():
     for i in range(30):
         # Características aleatorias pero realistas
         habitaciones = random.choice([1, 2, 2, 3, 3, 3, 4])
-        m2 = random.randint(45, 120)
+        banos = random.choice([1, 1, 2, 2, 3])
+        superficie = random.randint(45, 120)
         
         # Precio base según m² (Vicálvaro: 2,500-3,500 €/m²)
         precio_m2_base = random.uniform(2500, 3500)
-        precio = int(m2 * precio_m2_base)
+        precio = int(superficie * precio_m2_base)
         
         # Redondear precio a miles
         precio = round(precio / 1000) * 1000
@@ -57,18 +58,24 @@ def generar_datos_vicalvaro():
             "Vivienda en zona tranquila, bien comunicada"
         ]
         
+        ref = f"WPT-{random.randint(10000, 99999)}"
+        
         propiedad = {
+            'referencia': ref,
             'titulo': f"Piso en {calle}, Vicálvaro",
+            'tipo': 'Apartamento',
             'precio': precio,
-            'm2': m2,
-            'precio_m2': round(precio / m2, 2),
+            'superficie': superficie,
+            'precio_m2': round(precio / superficie, 2),
             'habitaciones': habitaciones,
-            'detalles': f"{habitaciones} hab., {m2} m², Planta {planta}",
+            'banos': banos,
+            'detalles': f"{habitaciones} hab., {banos} baños, {superficie} m², Planta {planta}",
             'descripcion': random.choice(descripciones),
             'url': f"https://www.idealista.com/inmueble/{random.randint(10000000, 99999999)}/",
             'zona': 'Vicálvaro',
             'ciudad': 'Madrid',
-            'fecha_extraccion': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            'fecha_extraccion': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+            'publicar_web': True
         }
         
         propiedades.append(propiedad)
@@ -98,10 +105,10 @@ if __name__ == "__main__":
     print(f"Precio mínimo: {df['precio'].min():,.0f} €")
     print(f"Precio máximo: {df['precio'].max():,.0f} €")
     print(f"Precio/m² medio: {df['precio_m2'].mean():,.2f} €/m²")
-    print(f"m² medio: {df['m2'].mean():.0f} m²")
+    print(f"m² medio: {df['superficie'].mean():.0f} m²")
     print(f"\n💾 Archivo guardado: datos_vicalvaro_ejemplo.csv")
     print(f"{'='*60}\n")
     
     # Mostrar muestra
     print("📋 MUESTRA DE DATOS (primeras 5 propiedades):\n")
-    print(df[['titulo', 'precio', 'm2', 'precio_m2', 'habitaciones']].head(5).to_string(index=False))
+    print(df[['titulo', 'precio', 'superficie', 'precio_m2', 'habitaciones', 'banos']].head(5).to_string(index=False))

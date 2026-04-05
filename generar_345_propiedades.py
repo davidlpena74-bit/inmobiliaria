@@ -38,7 +38,7 @@ for i in range(345):
     # Características aleatorias pero realistas
     habitaciones = random.choice([1, 2, 2, 2, 3, 3, 3, 3, 3, 4, 4])
     banos = random.choice([1, 1, 2, 2]) if habitaciones >= 2 else 1
-    m2 = random.randint(40, 140)
+    superficie = random.randint(40, 140)
     
     # Seleccionar subzona
     subzona = random.choice(list(subzonas.keys()))
@@ -49,7 +49,7 @@ for i in range(345):
     precio_m2 = precio_m2_base * variacion
     
     # Calcular precio total
-    precio = int(m2 * precio_m2)
+    precio = int(superficie * precio_m2)
     precio = round(precio / 1000) * 1000  # Redondear a miles
     
     # Seleccionar calle
@@ -93,19 +93,22 @@ for i in range(345):
     
     # Crear propiedad
     propiedad = {
+        "referencia": f"VIC-{random.randint(10000, 99999)}",
         "titulo": f"Piso en {calle}, {subzona}",
+        "tipo": "Apartamento",
         "precio": precio,
-        "m2": m2,
-        "precio_m2": round(precio / m2, 2),
+        "superficie": superficie,
+        "precio_m2": round(precio / superficie, 2),
         "habitaciones": habitaciones,
         "banos": banos,
-        "detalles": f"{habitaciones} hab., {banos} baño{'s' if banos > 1 else ''}, {m2} m², Planta {planta}",
+        "detalles": f"{habitaciones} hab., {banos} baño{'s' if banos > 1 else ''}, {superficie} m², Planta {planta}",
         "descripcion": descripcion,
         "url": f"https://www.idealista.com/inmueble/{random.randint(10000000, 99999999)}/",
         "zona": "Vicálvaro",
         "subzona": subzona,
         "ciudad": "Madrid",
-        "fecha_extraccion": "2026-02-14 13:40:00"
+        "fecha_extraccion": "2026-02-14 13:40:00",
+        "publicar_web": True
     }
     
     propiedades.append(propiedad)
@@ -120,5 +123,5 @@ with open('datos_345_propiedades.json', 'w', encoding='utf-8') as f:
 print(f"✅ Generadas {len(propiedades)} propiedades")
 print(f"💰 Precio medio: {sum(p['precio'] for p in propiedades) / len(propiedades):,.0f} €")
 print(f"📐 Precio/m² medio: {sum(p['precio_m2'] for p in propiedades) / len(propiedades):,.2f} €/m²")
-print(f"📏 m² medio: {sum(p['m2'] for p in propiedades) / len(propiedades):.0f} m²")
+print(f"📏 m² medio: {sum(p['superficie'] for p in propiedades) / len(propiedades):.0f} m²")
 print(f"💾 Guardado en: datos_345_propiedades.json")

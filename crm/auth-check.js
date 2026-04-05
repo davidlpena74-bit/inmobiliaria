@@ -9,13 +9,13 @@
     const session = localStorage.getItem('weperty_session');
 
     if (!session && !isLoginPage) {
-        // No hay sesión: Redirigir al login
-        window.location.href = 'login.html';
+        // No hay sesión: Redirigir al inicio público
+        window.location.href = '../index.html';
     }
 
     if (session && isLoginPage) {
-        // Ya está logueado pero intenta entrar al login: Redirigir al inicio
-        window.location.href = 'index.html';
+        // Ya está logueado pero intenta entrar al login: Redirigir al CRM
+        window.location.href = '../crm.html';
     }
 })();
 
@@ -24,5 +24,5 @@
  */
 function logout() {
     localStorage.removeItem('weperty_session');
-    window.location.href = 'login.html';
+    window.location.href = '../index.html';
 }
