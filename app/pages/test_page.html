@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weperty | Test Page (v2.0.0)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- Vinculamos el nuevo sistema de diseño global -->
+    <link rel="stylesheet" href="../styles/global.css">
+    <style>
+        body { padding: 40px 0; }
+        .test-header { margin-bottom: 40px; text-align: center; }
+        .test-header h2 { font-size: 32px; color: var(--primary); margin-bottom: 10px; }
+        .test-header p { color: var(--text-muted); }
+
+        /* Estilos específicos para la Tarjeta de Inmueble (Componente Prototipo) */
+        .property-card {
+            background: white;
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            border: 1px solid var(--border);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+        }
+        .property-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-lg);
+        }
+        .property-image {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            background: #f1f5f9;
+        }
+        .property-info {
+            padding: 20px;
+        }
+        .property-tag {
+            background: var(--accent-light);
+            color: var(--accent);
+            padding: 4px 12px;
+            border-radius: var(--radius-full);
+            font-size: 12px;
+            font-weight: 700;
+            display: inline-block;
+            margin-bottom: 12px;
+        }
+        .property-price {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 4px;
+            color: var(--text-main);
+        }
+        .property-price span {
+            font-size: 14px;
+            color: var(--text-muted);
+            font-weight: 400;
+        }
+        .property-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-main);
+            margin-bottom: 12px;
+            display: block;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .property-details {
+            display: flex;
+            gap: 16px;
+            color: var(--text-muted);
+            font-size: 14px;
+            border-top: 1px solid var(--border);
+            padding-top: 15px;
+        }
+        .detail-item i { margin-right: 4px; color: var(--primary); }
+    </style>
+    <!-- FontAwesome para iconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <div class="container">
+        <div class="test-header">
+            <h2>Prototipo Web Real Estate 2.0</h2>
+            <p>Visualización experimental del componente "Tarjeta de Propiedad" v2.0.0</p>
+        </div>
+
+        <div class="property-grid">
+            
+            <!-- TARJETA 1 -->
+            <div class="property-card">
+                <img src="../../casa_lujo_vicalvaro_1775376618794.png" alt="Piso en Vicálvaro" class="property-image">
+                <div class="property-info">
+                    <div class="property-tag">NUEVO EN WEPERTY</div>
+                    <div class="property-price">345.000 € <span>(1.850 €/m²)</span></div>
+                    <span class="property-title">Piso reformado con terraza en Vicálvaro, Madrid</span>
+                    <div class="property-details">
+                        <div class="detail-item"><i class="fa-solid fa-bed"></i> 3 hab.</div>
+                        <div class="detail-item"><i class="fa-solid fa-bath"></i> 2 baños</div>
+                        <div class="detail-item"><i class="fa-solid fa-maximize"></i> 85 m²</div>
+                        <div class="detail-item"><i class="fa-solid fa-building"></i> Planta 4ª</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TARJETA 2 (Duplicado para ejemplo de grid) -->
+            <div class="property-card">
+                <img src="../../casa_lujo_vicalvaro_1775376618794.png" alt="Piso en Madrid" class="property-image">
+                <div class="property-info">
+                    <div class="property-tag">DESTACADO</div>
+                    <div class="property-price">420.000 € <span>(2.100 €/m²)</span></div>
+                    <span class="property-title">Ático dúplex de lujo en Madrid Centro</span>
+                    <div class="property-details">
+                        <div class="detail-item"><i class="fa-solid fa-bed"></i> 4 hab.</div>
+                        <div class="detail-item"><i class="fa-solid fa-bath"></i> 3 baños</div>
+                        <div class="detail-item"><i class="fa-solid fa-maximize"></i> 120 m²</div>
+                        <div class="detail-item"><i class="fa-solid fa-elevator"></i> Ascensor</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TARJETA 3 (Duplicado para ejemplo de grid) -->
+            <div class="property-card">
+                <img src="../../casa_lujo_vicalvaro_1775376618794.png" alt="Piso en Madrid" class="property-image">
+                <div class="property-info">
+                    <div class="property-tag">OPORTUNIDAD</div>
+                    <div class="property-price">185.000 € <span>(1.100 €/m²)</span></div>
+                    <span class="property-title">Apartamento ideal para inversores - Zona Sur</span>
+                    <div class="property-details">
+                        <div class="detail-item"><i class="fa-solid fa-bed"></i> 1 hab.</div>
+                        <div class="detail-item"><i class="fa-solid fa-bath"></i> 1 baño</div>
+                        <div class="detail-item"><i class="fa-solid fa-maximize"></i> 55 m²</div>
+                        <div class="detail-item"><i class="fa-solid fa-chart-line"></i> 6.5% Rentabilidad</div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</body>
+</html>
