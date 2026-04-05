@@ -235,16 +235,16 @@ body.collapsed-sidebar .mini-logo { display: flex; }
 
 /* ========= CONTENT AREA & GRID LAYOUT ========= */
 .content-area {
-    display: flex;
+    display: flex !important;
     padding: 20px;
     gap: 20px;
-    flex: 1;
+    width: 100%;
 }
 
 /* Filter Panel */
 .filter-panel {
-    width: 260px;
-    min-width: 260px;
+    width: 260px !important;
+    min-width: 260px !important;
     background: #fff;
     border: 1px solid var(--border);
     border-radius: 8px;
@@ -258,11 +258,21 @@ body.collapsed-sidebar .mini-logo { display: flex; }
 
 /* List Area */
 .list-area {
-    flex: 1;
+    flex: 1 !important;
     display: flex;
     flex-direction: column;
     gap: 15px;
+    min-width: 0; /* Prevents flex items from overflowing */
 }
+
+/* Action Bar */
+.action-bar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 5px;
+}
+.action-spacer { flex: 1; }
 
 /* Data Table */
 .table-wrap {
