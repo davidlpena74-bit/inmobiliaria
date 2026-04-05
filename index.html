@@ -106,7 +106,7 @@
 
     <header id="mainHeader">
         <a href="#" class="logo">
-            <img src="logos_corporativos/weperty_logo.png" alt="Weperty Logo" id="headerLogo" style="height: 45px; filter: brightness(0) invert(1); transition: filter 0.3s;">
+            <img src="logos_corporativos/weperty_logo.png" alt="Weperty Logo" id="headerLogo" style="height: 50px; transition: transform 0.3s; padding: 5px;">
         </a>
         <nav>
             <a href="#">Comprar</a>
@@ -195,13 +195,10 @@
         // LÓGICA DE HEADER (SCROLL)
         window.addEventListener('scroll', function() {
             const header = document.getElementById('mainHeader');
-            const logo = document.getElementById('headerLogo');
             if (window.scrollY > 50) {
                 header.classList.add('scrolled');
-                logo.style.filter = 'none'; // Quitar inversión de color al scroll (logo original)
             } else {
                 header.classList.remove('scrolled');
-                logo.style.filter = 'brightness(0) invert(1)'; // Volver a blanco sobre fondo oscuro
             }
         });
 
