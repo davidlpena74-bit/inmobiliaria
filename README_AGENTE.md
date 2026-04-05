@@ -168,4 +168,4 @@ Si encuentras algún problema, revisa:
 
 ---
 
-**Desarrollado para La Voz Del Pueblo** 🏠
+**Desarrollado para WEPERTY REAL ESTATE** 🏠

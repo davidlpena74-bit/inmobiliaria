@@ -1,6 +1,6 @@
 {
     "name": "agente-precios-inmobiliarios",
-    "version": "2.0.1",
+    "version": "2.1.0",
     "description": "Agente especializado en búsqueda de precios inmobiliarios para la Comunidad de Madrid",
     "main": "agente_precios.js",
     "scripts": {
@@ -14,7 +14,7 @@
         "scraping",
         "supabase"
     ],
-    "author": "La Voz Del Pueblo",
+    "author": "WEPERTY REAL ESTATE PLATFORM",
     "license": "MIT",
     "dependencies": {
         "@supabase/supabase-js": "^2.39.0",
