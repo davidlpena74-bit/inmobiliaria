@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weperty | Luxury Real Estate</title>
+    <!-- Google Fonts: Playfair Display para títulos (Serif) y Montserrat para UI -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --compass-blue: #0064E5;
+            --compass-black: #000000;
+            --compass-gray: #666666;
+            --compass-light-gray: #F5F5F5;
+            --white: #FFFFFF;
+            --font-serif: 'Playfair Display', serif;
+            --font-sans: 'Montserrat', sans-serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: var(--font-sans); background: var(--white); color: var(--compass-black); -webkit-font-smoothing: antialiased; }
+
+        /* HEADER ELEGANTE */
+        header {
+            position: absolute; width: 100%; top: 0; z-index: 100;
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 30px 60px; transition: all 0.3s;
+        }
+        .logo { font-family: var(--font-serif); font-size: 28px; color: var(--white); text-decoration: none; letter-spacing: 2px; }
+        nav a { color: var(--white); text-decoration: none; margin-left: 30px; font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
+
+        /* HERO SECTION (ESTILO COMPASS) */
+        .hero {
+            height: 100vh; width: 100%;
+            background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('../../compass_style_hero_vicalvaro_1775377952814.png');
+            background-size: cover; background-position: center;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            text-align: center; color: var(--white); padding: 20px;
+        }
+        .hero h1 { font-family: var(--font-serif); font-size: 64px; margin-bottom: 24px; max-width: 900px; line-height: 1.1; }
+        
+        /* BUSCADOR OMNIBOX */
+        .search-container {
+            width: 100%; max-width: 800px; background: var(--white);
+            display: flex; padding: 5px; box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        .search-container input {
+            flex: 1; border: none; padding: 20px; font-size: 16px; outline: none; font-family: var(--font-sans);
+        }
+        .search-btn {
+            background: var(--compass-black); color: var(--white); border: none;
+            padding: 0 40px; font-weight: 600; text-transform: uppercase; cursor: pointer;
+            letter-spacing: 1px; transition: background 0.3s;
+        }
+        .search-btn:hover { background: var(--compass-blue); }
+
+        /* SECCIÓN DE LISTADOS */
+        .section { padding: 120px 60px; background: var(--white); }
+        .section-tag { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 3px; color: var(--compass-gray); margin-bottom: 12px; display: block; }
+        .section-title { font-family: var(--font-serif); font-size: 42px; margin-bottom: 60px; }
+
+        /* TARJETAS DE PROPIEDAD (ASSETS INYECTADOS) */
+        .property-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(400px, 1fr)); gap: 40px;
+        }
+        .prop-card { cursor: pointer; }
+        .prop-img-box { 
+            width: 100%; height: 300px; overflow: hidden; border-radius: 8px; margin-bottom: 20px; 
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08); position: relative;
+        }
+        .prop-img-box img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; }
+        .prop-card:hover img { transform: scale(1.05); }
+        
+        .prop-price { font-size: 22px; font-weight: 600; margin-bottom: 5px; }
+        .prop-address { color: var(--compass-gray); font-size: 15px; margin-bottom: 10px; }
+        .prop-specs { font-size: 13px; font-weight: 600; color: var(--compass-black); display: flex; gap: 15px; }
+        .prop-specs span { color: var(--compass-gray); font-weight: 400; }
+
+        /* FOOTER NEGRO IMPACTANTE */
+        footer { background: var(--compass-black); color: var(--white); padding: 80px 60px; }
+        .footer-logo { font-family: var(--font-serif); font-size: 32px; margin-bottom: 40px; display: block; }
+        .footer-copy { font-size: 12px; color: var(--compass-gray); border-top: 1px solid #333; padding-top: 40px; margin-top: 60px; }
+
+        @media (max-width: 768px) {
+            header { padding: 20px; }
+            .hero h1 { font-size: 40px; }
+            .search-container { flex-direction: column; }
+            .search-btn { padding: 20px; }
+            .section { padding: 60px 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="#" class="logo">WEPERTY</a>
+        <nav>
+            <a href="#">Comprar</a>
+            <a href="#">Alquilar</a>
+            <a href="#">Vender</a>
+            <a href="#">Agentes</a>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <h1>Encuentra tu lugar en el mundo.</h1>
+        <div class="search-container">
+            <input type="text" placeholder="Busca por barrio, ciudad o código postal...">
+            <button class="search-btn">Buscar</button>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container">
+            <span class="section-tag">EXCLUSIVO EN WEPERTY</span>
+            <h2 class="section-title">Propiedades Destacadas en Madrid</h2>
+            
+            <div class="property-grid">
+                <!-- PROPIEDAD 1 -->
+                <div class="prop-card">
+                    <div class="prop-img-box">
+                        <img src="../assets/property_sample.png" alt="Propiedad de Lujo">
+                    </div>
+                    <div class="prop-price">1.250.000 €</div>
+                    <div class="prop-address">Calle de Serrano, Salamanca, Madrid</div>
+                    <div class="prop-specs">
+                        <div>4 <span>Hab</span></div>
+                        <div>3 <span>Baños</span></div>
+                        <div>180 <span>m²</span></div>
+                    </div>
+                </div>
+
+                <!-- PROPIEDAD 2 -->
+                <div class="prop-card">
+                    <div class="prop-img-box">
+                        <img src="../assets/property_sample.png" alt="Ático Moderno">
+                    </div>
+                    <div class="prop-price">890.000 €</div>
+                    <div class="prop-address">Paseo de la Castellana, Chamartín, Madrid</div>
+                    <div class="prop-specs">
+                        <div>3 <span>Hab</span></div>
+                        <div>2 <span>Baños</span></div>
+                        <div>145 <span>m²</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <span class="footer-logo">WEPERTY.</span>
+        <div class="footer-copy">
+            &copy; 2026 WEPERTY REAL ESTATE PLATFORM. Todos los derechos reservados. | VERSION 2.2.0
+        </div>
+    </footer>
+
+</body>
+</html>
