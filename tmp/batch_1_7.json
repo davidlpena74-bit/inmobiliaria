@@ -1,0 +1,92 @@
+[
+  {
+    "referencia": "ADOSADO",
+    "titulo": "Bungalow duplex Torrevieja",
+    "descripcion": "Renovated new Bungalow duplex with private terrace 60m2. Recently refurbished with new kitchen, new furniture, and all brand new appliances. Features three bedrooms, two bathrooms, and a large ground floor terrace of 50m. Near Playa de los Locos.",
+    "imagenes_url": [
+      "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1648854/image/2e00644d-efe1-40c6-a3b6-54e490fefaef.jpg",
+      "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1648854/image/20059c4e-450e-4670-8a3b-5aac75ba0f84.jpg",
+      "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1648854/image/bf13d73f-fd75-46b8-9809-8c88814e7aa6.jpg",
+      "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1648854/image/13478ffc-150a-4f20-8440-fda7bc82e358.jpg"
+    ],
+    "caracteristicas": {
+      "dormitorios": "3",
+      "baños": "2",
+      "sup_construida": "70 m2",
+      "tipo_inmueble": "Dúplex"
+    },
+    "latitud": 37.985509549348,
+    "longitud": -0.66178679466248
+  },
+  {
+    "referencia": "ALQVENBT",
+    "titulo": "Charming Bungalow in Nueva Torrevieja",
+    "descripcion": "ALQUILER DE TEMPORADA. A bright 1-bedroom, 1-bathroom bungalow with a sunny porch and private garden. Fully furnished and equipped with ground-floor access. Located close to essential services and a short walk to the beach.",
+    "imagenes_url": [
+      "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1645974/image/img_2918.jpg",
+      "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1645974/image/img_2415.jpg",
+      "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1645974/image/img_2281.jpg"
+    ],
+    "caracteristicas": {
+      "dormitorios": "1",
+      "baños": "1",
+      "sup_construida": "45 m2",
+      "tipo_inmueble": "Bungalow"
+    },
+    "latitud": 37.989846876269,
+    "longitud": -0.67271392206899
+  },
+  {
+    "referencia": "ALQTRMPORSDA",
+    "titulo": "Short term rentals - Chalet in Campoamor",
+    "descripcion": "ALQUILER DE INVIERNO / WINTER RENTAL. Stunning chalet in the exclusive area of Campoamor, Orihuela Costa. Features 3 bedrooms, 1 bathroom, private garden/terrace, and access to a communal pool. Available for stays between September and June.",
+    "imagenes_url": [
+      "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1645650/image/d8046875-7c43-43d0-a387-a4145f315b51.jpg",
+      "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1645650/image/img_9243.jpg",
+      "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1645650/image/d8454a61-f72b-4d13-a7e0-83c1204ad17e.jpg"
+    ],
+    "caracteristicas": {
+      "dormitorios": "3",
+      "baños": "1",
+      "sup_construida": "100 m2",
+      "tipo_inmueble": "Casa/Chalet"
+    },
+    "latitud": 37.898787225131,
+    "longitud": -0.75419425964355
+  },
+  {
+    "referencia": "LQU1350",
+    "titulo": "Long-Term Retreat in Crevillente Mountains",
+    "descripcion": "Charming countryside villa in the Crevillente mountains on a 1,000 m² private plot. Includes a private pool, covered BBQ area, and expansive mountain views. Features 3 bedrooms, 2 bathrooms, and a wood-burning stove.",
+    "imagenes_url": [
+      "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1645256/image/img_3582.jpg",
+      "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1645256/image/img_3583.jpg",
+      "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1645256/image/img_3586.jpg"
+    ],
+    "caracteristicas": {
+      "dormitorios": "3",
+      "baños": "2",
+      "sup_construida": "205 m2",
+      "tipo_inmueble": "Casa de campo"
+    },
+    "latitud": 38.218290427232,
+    "longitud": -0.84662278958039
+  },
+  {
+    "referencia": "AP0674",
+    "titulo": "Bright Ground Floor Apartment in Lomas de Cabo Roig",
+    "descripcion": "Fully furnished and move-in ready apartment with 2 bedrooms and 1 bathroom. Highlights include a large front terrace with open views and a private rear patio. Located in a quiet community with a swimming pool near beaches and golf courses.",
+    "imagenes_url": [
+      "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1642859/image/img_1.jpg",
+      "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1642859/image/img_2.jpg"
+    ],
+    "caracteristicas": {
+      "dormitorios": "2",
+      "baños": "1",
+      "sup_construida": "90 m2",
+      "tipo_inmueble": "Apartamento"
+    },
+    "latitud": 37.925334749561,
+    "longitud": -0.75454014919939
+  }
+]

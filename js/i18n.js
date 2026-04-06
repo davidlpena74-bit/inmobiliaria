@@ -55,7 +55,21 @@ const translations = {
         "sidebar.subtitle": "Nuestros agentes te darán toda la información sin compromiso.",
         "sidebar.visit": "Solicitar Visita",
         "sidebar.call": "Llamar ahora",
-        "agent.title": "Agente Weperty"
+        "agent.title": "Agente Weperty",
+        "prop.label.beds": "Habitaciones",
+        "prop.label.baths": "Baños",
+        "prop.label.size": "Tamaño",
+        "prop.label.type": "Tipo",
+        "detail.features.additional": "Características Adicionales",
+        "feat.pool": "Piscina",
+        "feat.ac": "Aire Acondicionado",
+        "feat.garden": "Jardín",
+        "feat.terrace": "Terraza",
+        "feat.lift": "Ascensor",
+        "feat.parking": "Garaje",
+        "feat.furnished": "Amueblado",
+        "feat.exterior": "Exterior",
+        "feat.interior": "Interior"
     },
     en: {
         "nav.buy": "Buy",
@@ -113,7 +127,21 @@ const translations = {
         "sidebar.subtitle": "Our agents will provide all the information without obligation.",
         "sidebar.visit": "Request Visit",
         "sidebar.call": "Call now",
-        "agent.title": "Weperty Agent"
+        "agent.title": "Weperty Agent",
+        "prop.label.beds": "Bedrooms",
+        "prop.label.baths": "Bathrooms",
+        "prop.label.size": "Size",
+        "prop.label.type": "Type",
+        "detail.features.additional": "Additional Features",
+        "feat.pool": "Swimming Pool",
+        "feat.ac": "Air Conditioning",
+        "feat.garden": "Garden",
+        "feat.terrace": "Terrace",
+        "feat.lift": "Lift",
+        "feat.parking": "Garage",
+        "feat.furnished": "Furnished",
+        "feat.exterior": "Exterior",
+        "feat.interior": "Interior"
     },
     de: {
         "nav.buy": "Kaufen",
@@ -171,7 +199,21 @@ const translations = {
         "sidebar.subtitle": "Unsere Makler geben Ihnen unverbindlich alle Informationen.",
         "sidebar.visit": "Besichtigung anfragen",
         "sidebar.call": "Jetzt anrufen",
-        "agent.title": "Weperty Makler"
+        "agent.title": "Weperty Makler",
+        "prop.label.beds": "Schlafzimmer",
+        "prop.label.baths": "Badezimmer",
+        "prop.label.size": "Größe",
+        "prop.label.type": "Typ",
+        "detail.features.additional": "Zusätzliche Ausstattung",
+        "feat.pool": "Schwimmbad",
+        "feat.ac": "Klimaanlage",
+        "feat.garden": "Garten",
+        "feat.terrace": "Terrasse",
+        "feat.lift": "Aufzug",
+        "feat.parking": "Garage",
+        "feat.furnished": "Möbliert",
+        "feat.exterior": "Außenbereich",
+        "feat.interior": "Innenbereich"
     },
     nl: {
         "nav.buy": "Kopen",
@@ -229,7 +271,21 @@ const translations = {
         "sidebar.subtitle": "Onze makelaars geven u vrijblijvend alle informatie.",
         "sidebar.visit": "Bezoek Aanvragen",
         "sidebar.call": "Bel nu",
-        "agent.title": "Weperty Makelaar"
+        "agent.title": "Weperty Makelaar",
+        "prop.label.beds": "Slaapkamers",
+        "prop.label.baths": "Badkamers",
+        "prop.label.size": "Grootte",
+        "prop.label.type": "Type",
+        "detail.features.additional": "Extra Kenmerken",
+        "feat.pool": "Zwembad",
+        "feat.ac": "Airconditioning",
+        "feat.garden": "Tuin",
+        "feat.terrace": "Terras",
+        "feat.lift": "Lift",
+        "feat.parking": "Garage",
+        "feat.furnished": "Gemeubileerd",
+        "feat.exterior": "Buitenkant",
+        "feat.interior": "Binnenkant"
     },
 };
 
@@ -250,19 +306,20 @@ function updateContent() {
 
     // 2. Actualizar bandera e indicador de idioma en el nav
     const langFlags = {
-        es: "🇪🇸",
-        en: "🇬🇧",
-        de: "🇩🇪",
-        nl: "🇳🇱"
+        es: "https://flagcdn.com/w40/es.png",
+        en: "https://flagcdn.com/w40/gb.png",
+        de: "https://flagcdn.com/w40/de.png",
+        nl: "https://flagcdn.com/w40/nl.png"
     };
+
     const langDisplay = document.querySelector(".lang-menu");
     if (langDisplay) {
-        langDisplay.innerHTML = `${langFlags[currentLang]} <i class="fa-solid fa-chevron-down" style="font-size: 10px; margin-left: 4px;"></i>
+        langDisplay.innerHTML = `<img src="${langFlags[currentLang]}" width="18" style="vertical-align: middle; margin-right: 5px;"> <i class="fa-solid fa-chevron-down" style="font-size: 10px; margin-left: 2px;"></i>
             <div class="lang-dropdown">
-                <a href="javascript:void(0)" onclick="setLanguage('es')">🇪🇸 Español</a>
-                <a href="javascript:void(0)" onclick="setLanguage('en')">🇬🇧 English</a>
-                <a href="javascript:void(0)" onclick="setLanguage('de')">🇩🇪 Deutsch</a>
-                <a href="javascript:void(0)" onclick="setLanguage('nl')">🇳🇱 Nederlands</a>
+                <a href="javascript:void(0)" onclick="setLanguage('es')"><img src="${langFlags.es}" width="16" style="margin-right: 8px; vertical-align: middle;"> Español</a>
+                <a href="javascript:void(0)" onclick="setLanguage('en')"><img src="${langFlags.en}" width="16" style="margin-right: 8px; vertical-align: middle;"> English</a>
+                <a href="javascript:void(0)" onclick="setLanguage('de')"><img src="${langFlags.de}" width="16" style="margin-right: 8px; vertical-align: middle;"> Deutsch</a>
+                <a href="javascript:void(0)" onclick="setLanguage('nl')"><img src="${langFlags.nl}" width="16" style="margin-right: 8px; vertical-align: middle;"> Nederlands</a>
             </div>`;
     }
 }

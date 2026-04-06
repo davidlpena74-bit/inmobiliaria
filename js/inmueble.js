@@ -94,13 +94,37 @@ function renderProperty(p) {
     // Extras (Características)
     const extrasGrid = document.getElementById('extrasGrid');
     extrasGrid.innerHTML = '';
-    const extras = p.caracteristicas?.Extras || [];
     
-    // Añadimos extras técnicos primero
-    if (p.caracteristicas?.['Interior/exterior']) addExtra(p.caracteristicas['Interior/exterior']);
-    if (p.caracteristicas?.['Amueblado']) addExtra("Amueblado: " + p.caracteristicas['Amueblado']);
+    function translateFeature(text) {
+        if (!text) return "";
+        const lower = text.toLowerCase().trim();
+        
+        // Mapeo selectivo de valores comunes
+        if (lower === "sí" || lower === "si") return currentLang === "es" ? "Sí" : (currentLang === "en" ? "Yes" : (currentLang === "de" ? "Ja" : "Ja"));
+        if (lower === "no") return currentLang === "es" ? "No" : (currentLang === "en" ? "No" : (currentLang === "de" ? "Nein" : "Nee"));
 
-    extras.forEach(ex => addExtra(ex));
+        if (lower.includes("piscina")) return translations[currentLang]["feat.pool"];
+        if (lower.includes("aire acond")) return translations[currentLang]["feat.ac"];
+        if (lower.includes("jardín") || lower.includes("jardin")) return translations[currentLang]["feat.garden"];
+        if (lower.includes("terraza")) return translations[currentLang]["feat.terrace"];
+        if (lower.includes("ascensor")) return translations[currentLang]["feat.lift"];
+        if (lower.includes("garaje") || lower.includes("parking")) return translations[currentLang]["feat.parking"];
+        if (lower.includes("amueblado")) return translations[currentLang]["feat.furnished"];
+        if (lower.includes("exterior")) return translations[currentLang]["feat.exterior"];
+        if (lower.includes("interior")) return translations[currentLang]["feat.interior"];
+        return text; // Fallback
+    }
+
+    // Añadimos extras técnicos primero
+    if (p.caracteristicas?.['Interior/exterior']) addExtra(translateFeature(p.caracteristicas['Interior/exterior']));
+    if (p.caracteristicas?.['Amueblado']) {
+        const val = p.caracteristicas['Amueblado'];
+        const label = translations[currentLang]["feat.furnished"];
+        addExtra(`${label}: ${val}`);
+    }
+
+    const extras = p.caracteristicas?.Extras || [];
+    extras.forEach(ex => addExtra(translateFeature(ex)));
 
     function addExtra(text) {
         const item = document.createElement('div');
@@ -116,6 +140,11 @@ function renderProperty(p) {
             attribution: '&copy; CARTO'
         }).addTo(map);
         L.marker([p.latitud, p.longitud]).addTo(map);
+    }
+
+    // 🚩 IMPORTANTE: Forzar actualización de etiquetas i18n
+    if (typeof updateContent === "function") {
+        updateContent();
     }
 }
 

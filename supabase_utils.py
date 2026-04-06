@@ -45,6 +45,15 @@ def get_all_municipios():
         print(f"Error obtener municipios: {e}")
         return []
 
+def update_propiedad_fotos(referencia, urls):
+    """Actualiza solo el array de imágenes de una propiedad por su referencia"""
+    try:
+        response = supabase.table(TBL_PROPIEDADES).update({"imagenes_url": urls}).eq("referencia", referencia).execute()
+        return response
+    except Exception as e:
+        print(f"Error Supabase (update fotos): {e}")
+        return None
+
 class SupabaseClient:
     """Clase wrapper para operaciones de Supabase"""
     
@@ -58,6 +67,10 @@ class SupabaseClient:
     def insert_propiedad(self, data):
         """Inserta una propiedad"""
         return insert_propiedad(data)
+
+    def update_propiedad_fotos(self, referencia, urls):
+        """Actualiza las fotos de una propiedad"""
+        return update_propiedad_fotos(referencia, urls)
     
     def get_all_municipios(self):
         """Obtiene todos los municipios"""
