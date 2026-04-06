@@ -44,31 +44,46 @@
 
 <!-- SIDEBAR -->
 <aside class="sidebar">
-    <div class="sidebar-logo">
-        <div style="display: flex; align-items: center;">
-            <div style="background: #3b82f6; width: 32px; height: 32px; border-radius: 6px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 900; font-size: 18px; margin-right: 10px;">W</div>
-            <span style="color: white; font-weight: 700; font-size: 18px; letter-spacing: -0.5px;" class="brand">weperty</span>
-        </div>
-        <i class="fa-solid fa-bars hamburger"></i>
+    <div class="sidebar-logo" style="flex-direction: column; align-items: flex-start; padding: 20px 18px; position: relative;">
+        <img src="logos_corporativos/weperty_logo.png" alt="Weperty Logo" style="width: 150px; margin-bottom: 5px; display: block;">
+        <i class="fa-solid fa-bars hamburger" style="position: absolute; right: 18px; top: 28px;"></i>
     </div>
     <nav class="s-nav">
-        <a href="index.html" class="s-item"><i class="fa-solid fa-house"></i> <span>Inicio</span></a>
-        <div class="s-item active"><i class="fa-solid fa-building"></i> <span>Inmuebles</span> <i class="fa-solid fa-chevron-down chevron"></i></div>
+        <div class="s-item"><i class="fa-solid fa-house"></i> <span>Inicio</span> <i class="fa-solid fa-chevron-down chevron"></i></div>
+        <div class="s-sub">
+            <a href="crm/index.html">Resumen</a>
+            <a href="crm/dashboard_financiero.html">Dashboard financiero</a>
+        </div>
+        <div class="s-item active open"><i class="fa-solid fa-building"></i> <span>Inmuebles</span> <i class="fa-solid fa-chevron-down chevron"></i></div>
         <div class="s-sub" style="display: block;">
             <a href="crm/ficha_inmueble.html">Nuevo inmueble</a>
             <a href="#" class="active">Mis inmuebles</a>
             <a href="#">Tipos de cartera</a>
             <a href="#">Gestor de zonas</a>
         </div>
-        <a href="#" class="s-item"><i class="fa-solid fa-address-book"></i> <span>Contactos</span></a>
+        <a href="#" class="s-item"><i class="fa-solid fa-address-book"></i> <span>Contactos</span> <i class="fa-solid fa-chevron-down chevron"></i></a>
         <a href="#" class="s-item"><i class="fa-solid fa-globe"></i> <span>MLS</span></a>
-        <a href="#" class="s-item"><i class="fa-solid fa-screwdriver-wrench"></i> <span>Herramientas</span></a>
+        <div class="s-item"><i class="fa-solid fa-screwdriver-wrench"></i> <span>Herramientas</span> <i class="fa-solid fa-chevron-down chevron"></i></div>
+        <div class="s-sub">
+            <a href="crm/portales.html">Pasarelas (API)</a>
+            <a href="#">Tareas</a>
+            <a href="#">Embudo de ventas</a>
+            <a href="#">Peticiones de información</a>
+            <a href="#">Demandas</a>
+            <a href="#">Documentos</a>
+            <a href="#">Visitas</a>
+            <a href="#">Recomendaciones</a>
+            <a href="#">Ofertas</a>
+            <a href="#">Operaciones</a>
+            <a href="#">Valoraciones</a>
+            <a href="#">Mailing list</a>
+        </div>
         <a href="crm/web.html" class="s-item"><i class="fa-solid fa-display"></i> <span>Web</span></a>
         <a href="#" class="s-item"><i class="fa-solid fa-envelope"></i> <span>Cuentas de email</span></a>
     </nav>
-    <div class="sidebar-bottom" style="display: flex; flex-direction: column; gap: 5px;">
-        <div><i class="fa-solid fa-gear"></i> <span>Administración</span></div>
-        <div style="font-size: 9px; opacity: 0.5;">VERSION 4.3.2</div>
+    <div class="sidebar-bottom">
+        <div class="s-item"><i class="fa-solid fa-gear"></i> <span>Administración</span></div>
+        <div class="s-item" onclick="logout()" style="color: #f87171; cursor: pointer; display: flex; align-items: center; gap: 10px; padding: 10px 15px; font-size: 13px;"><i class="fa-solid fa-right-from-bracket"></i> <span>Cerrar sesión</span></div>
     </div>
 </aside>
 
@@ -142,7 +157,7 @@
         <div class="list-area">
             <!-- Action bar -->
             <div class="action-bar">
-                <button class="btn-new" onclick="window.location.href='ficha_inmueble.html'"><i class="fa-solid fa-plus"></i> Nuevo</button>
+                <button class="btn-new" onclick="window.location.href='crm/ficha_inmueble.html'"><i class="fa-solid fa-plus"></i> Nuevo</button>
                 <div style="display: flex; gap: 10px; border: 1px solid var(--border); border-radius: 20px; padding: 2px;">
                     <button style="background: none; border: none; padding: 5px 10px; cursor: pointer; color: #94a3b8;"><i class="fa-solid fa-table-cells-large"></i></button>
                     <button style="background: #f1f5f9; border: none; padding: 5px 10px; border-radius: 20px; cursor: pointer; color: #475569;"><i class="fa-solid fa-list"></i></button>
@@ -202,7 +217,7 @@
 <script src="shell.js?v=4.0.1"></script>
 <script>
     const SB_URL = "https://dwbvegnxmyvpolvofkfn.supabase.co";
-    const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR3YnZlZ254bXl2cG9sdm9ma2ZuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njc1Mzg1NTUsImV4cCI6MjA4MzExNDU1NX0.eT5ZSce8H8Yk8pWKyLUYChU0HtmZljywP4eEQd5FkOI";
+    const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR3YnZlZ254bXl2cG9sdm9ma2ZnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njc1Mzg1NTUsImV4cCI6MjA4MzExNDU1NX0.eT5ZSce8H8Yk8pWKyLUYChU0HtmZljywP4eEQd5FkOI";
     const db = supabase.createClient(SB_URL, SB_KEY);
 
     function logout() {
@@ -324,7 +339,7 @@
                 </td>
                 <td class="updated-cell">${updated}</td>
                 <td style="text-align: right;">
-                    <button class="btn-ver" onclick="window.location.href='ficha_inmueble.html?id=${p.id}'">Ver <i class="fa-solid fa-chevron-down" style="font-size: 8px; margin-left: 4px;"></i></button>
+                    <button class="btn-ver" onclick="window.location.href='crm/ficha_inmueble.html?id=${p.id}'">Ver <i class="fa-solid fa-chevron-down" style="font-size: 8px; margin-left: 4px;"></i></button>
                 </td>
             </tr>`;
         }).join('');

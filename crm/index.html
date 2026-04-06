@@ -99,21 +99,23 @@
 </head>
 <body>
 
-<div class="sidebar">
+<aside class="sidebar">
     <div class="sidebar-logo" style="flex-direction: column; align-items: flex-start; padding: 20px 18px; position: relative;">
         <img src="../logos_corporativos/weperty_logo.png" alt="Weperty Logo" style="width: 150px; margin-bottom: 5px; display: block;">
-        <i class="fa-solid fa-bars hamburger" style="position: absolute; right: 18px; top: 28px; color: rgba(255,255,255,0.5); cursor: pointer;"></i>
+        <i class="fa-solid fa-bars hamburger" style="position: absolute; right: 18px; top: 28px;"></i>
     </div>
-    <div class="s-nav">
-        <a href="index.html" class="s-item active">
-            <div class="icon-box" style="background: #6366f1; width: 24px; height: 24px; border-radius: 4px;"><i class="fa-solid fa-house" style="font-size: 12px; color: white;"></i></div>
-            <span>Inicio</span>
-        </a>
+    <nav class="s-nav">
+        <div class="s-item open"><i class="fa-solid fa-house"></i> <span>Inicio</span> <i class="fa-solid fa-chevron-down chevron"></i></div>
+        <div class="s-sub" style="display: block;">
+            <a href="index.html" class="active">Resumen</a>
+            <a href="dashboard_financiero.html">Dashboard financiero</a>
+        </div>
         <div class="s-item"><i class="fa-solid fa-building"></i> <span>Inmuebles</span> <i class="fa-solid fa-chevron-down chevron"></i></div>
         <div class="s-sub">
-            <a href="mis_inmuebles.html">Mis inmuebles</a>
-            <a href="propiedades.html">Listado masivo</a>
-            <a href="ficha_inmueble.html">Ficha prototipo</a>
+            <a href="ficha_inmueble.html">Nuevo inmueble</a>
+            <a href="mis_propiedades.html">Mis inmuebles</a>
+            <a href="#">Tipos de cartera</a>
+            <a href="#">Gestor de zonas</a>
         </div>
         <a href="#" class="s-item"><i class="fa-solid fa-address-book"></i> <span>Contactos</span> <i class="fa-solid fa-chevron-down chevron"></i></a>
         <a href="#" class="s-item"><i class="fa-solid fa-globe"></i> <span>MLS</span></a>
@@ -121,15 +123,25 @@
         <div class="s-sub">
             <a href="portales.html">Pasarelas (API)</a>
             <a href="#">Tareas</a>
+            <a href="#">Embudo de ventas</a>
+            <a href="#">Peticiones de información</a>
+            <a href="#">Demandas</a>
+            <a href="#">Documentos</a>
+            <a href="#">Visitas</a>
+            <a href="#">Recomendaciones</a>
+            <a href="#">Ofertas</a>
+            <a href="#">Operaciones</a>
+            <a href="#">Valoraciones</a>
+            <a href="#">Mailing list</a>
         </div>
         <a href="web.html" class="s-item"><i class="fa-solid fa-display"></i> <span>Web</span></a>
         <a href="#" class="s-item"><i class="fa-solid fa-envelope"></i> <span>Cuentas de email</span></a>
+    </nav>
+    <div class="sidebar-bottom">
+        <div class="s-item"><i class="fa-solid fa-gear"></i> <span>Administración</span></div>
+        <div class="s-item" onclick="logout()" style="color: #f87171; cursor: pointer; display: flex; align-items: center; gap: 10px; padding: 10px 15px; font-size: 13px;"><i class="fa-solid fa-right-from-bracket"></i> <span>Cerrar sesión</span></div>
     </div>
-    <div class="s-footer">
-        <div class="s-item"><i class="fa-solid fa-gear"></i> <span>Administraci├│n</span></div>
-        <div class="s-item" onclick="logout()" style="color: #f87171; cursor: pointer;"><i class="fa-solid fa-right-from-bracket"></i> <span>Cerrar sesi├│n</span></div>
-    </div>
-</div>
+</aside>
 
 <div class="main">
     <header class="topbar">

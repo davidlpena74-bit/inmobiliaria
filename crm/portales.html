@@ -151,7 +151,7 @@
         <i class="fa-solid fa-bars hamburger" style="position: absolute; right: 18px; top: 28px;"></i>
     </div>
     <nav class="s-nav">
-        <div class="s-item"><div class="icon-box">wp</div> <span>Inicio</span> <i class="fa-solid fa-chevron-down chevron"></i></div>
+        <div class="s-item"><i class="fa-solid fa-house"></i> <span>Inicio</span> <i class="fa-solid fa-chevron-down chevron"></i></div>
         <div class="s-sub">
             <a href="index.html">Resumen</a>
             <a href="dashboard_financiero.html">Dashboard financiero</a>
@@ -165,8 +165,8 @@
         </div>
         <a href="#" class="s-item"><i class="fa-solid fa-address-book"></i> <span>Contactos</span> <i class="fa-solid fa-chevron-down chevron"></i></a>
         <a href="#" class="s-item"><i class="fa-solid fa-globe"></i> <span>MLS</span></a>
-        <div class="s-item"><i class="fa-solid fa-screwdriver-wrench"></i> <span>Herramientas</span> <i class="fa-solid fa-chevron-down chevron"></i></div>
-        <div class="s-sub">
+        <div class="s-item open"><i class="fa-solid fa-screwdriver-wrench"></i> <span>Herramientas</span> <i class="fa-solid fa-chevron-down chevron"></i></div>
+        <div class="s-sub" style="display: block;">
             <a href="portales.html" class="active">Pasarelas (API)</a>
             <a href="#">Tareas</a>
             <a href="#">Embudo de ventas</a>
@@ -183,7 +183,10 @@
         <a href="web.html" class="s-item"><i class="fa-solid fa-display"></i> <span>Web</span></a>
         <a href="#" class="s-item"><i class="fa-solid fa-envelope"></i> <span>Cuentas de email</span></a>
     </nav>
-    <div class="sidebar-bottom"><i class="fa-solid fa-gear"></i> <span>Administración</span></div>
+    <div class="sidebar-bottom">
+        <div class="s-item"><i class="fa-solid fa-gear"></i> <span>Administración</span></div>
+        <div class="s-item" onclick="logout()" style="color: #f87171; cursor: pointer; display: flex; align-items: center; gap: 10px; padding: 10px 15px; font-size: 13px;"><i class="fa-solid fa-right-from-bracket"></i> <span>Cerrar sesión</span></div>
+    </div>
 </aside>
 
 <!-- MAIN -->
