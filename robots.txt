@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /crm/
+Disallow: /crm.html
+Disallow: /*.json
+
+Sitemap: https://weperty.com/sitemap.xml
