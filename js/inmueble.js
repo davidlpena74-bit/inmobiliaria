@@ -54,21 +54,41 @@ function renderProperty(p) {
     // Descripción
     document.getElementById('propDesc').innerHTML = t_prop(p, 'descripcion') || "Sin descripción disponible.";
 
-    // Galería (Fotocasa Style: 1 Grande + 4 pequeñas)
+    // 🖼️ Galería (Carrusel de 1 imagen)
     const imgs = p.imagenes_url || [];
     if (imgs.length > 0) {
-        document.getElementById('photoMain').src = imgs[0];
-        const secondaryContainer = document.getElementById('secondaryPhotosBox');
-        secondaryContainer.innerHTML = '';
-        for (let i = 1; i < 5; i++) {
-            if (imgs[i]) {
-                const img = document.createElement('img');
-                img.src = imgs[i];
-                img.className = 'photo-item';
-                img.onclick = () => openGallery(imgs, i);
-                secondaryContainer.appendChild(img);
-            }
+        let currentPhotoIndex = 0;
+        const mainPhoto = document.getElementById('photoMain');
+        const countDisplay = document.getElementById('photoCounter');
+        const btnPrev = document.getElementById('btnPrevImg');
+        const btnNext = document.getElementById('btnNextImg');
+
+        const updateCarousel = () => {
+            mainPhoto.style.opacity = '0';
+            setTimeout(() => {
+                mainPhoto.src = imgs[currentPhotoIndex];
+                countDisplay.textContent = `${currentPhotoIndex + 1} / ${imgs.length}`;
+                mainPhoto.style.opacity = '1';
+            }, 300); // pequeña transición
+        };
+
+        if (imgs.length > 1) {
+            btnPrev.style.display = 'block';
+            btnNext.style.display = 'block';
+            countDisplay.style.display = 'block';
+
+            btnPrev.onclick = () => {
+                currentPhotoIndex = (currentPhotoIndex > 0) ? currentPhotoIndex - 1 : imgs.length - 1;
+                updateCarousel();
+            };
+
+            btnNext.onclick = () => {
+                currentPhotoIndex = (currentPhotoIndex < imgs.length - 1) ? currentPhotoIndex + 1 : 0;
+                updateCarousel();
+            };
         }
+        
+        updateCarousel(); // Initialize first state
     }
 
     // Extras (Características)
@@ -99,12 +119,9 @@ function renderProperty(p) {
     }
 }
 
-// 🖼️ Lógica de Galería (Simple Modal Placeholder)
+// 🖼️ Lógica de Modal (por si en un futuro se hace click en la imagen para pantalla completa)
 function openGallery(images, index) {
-    // Aquí podrías implementar un Lightbox real. 
-    // Por ahora, solo cambia la imagen principal
-    document.getElementById('photoMain').src = images[index];
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    console.log("Abrir galería modal en índice:", index);
 }
 
 // 📞 Acciones de Contacto

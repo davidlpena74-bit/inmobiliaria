@@ -6,7 +6,7 @@
     <title>Inmueble | Weperty</title>
     <!-- Fonts & Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="css/inmueble.css">
+    <link rel="stylesheet" href="css/inmueble.css?v=4.1.5">
     <!-- Supabase JS -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="js/i18n.js"></script>
@@ -41,39 +41,23 @@
         </nav>
     </header>
 
-    <!-- 🏠 Galería de Imágenes -->
-    <div class="gallery-container">
-        <div class="main-photo">
-            <img src="weperty_placeholder.png" id="photoMain" class="photo-item" style="width: 100%; height: 100%; object-fit: cover;">
-        </div>
-        <div class="secondary-photos" id="secondaryPhotosBox">
-            <!-- Se poblara dinamicamente -->
-        </div>
-    </div>
-
-    <!-- 🏷️ Precio de la Propiedad (Debajo de las fotos) -->
-    <!-- Se movió dentro de .property-details -->
-
-
     <main class="main-info">
-        <!-- Columna Izquierda: Detalles -->
+        <!-- Columna Izquierda: Visual y Contexto -->
         <div class="property-details">
             <div class="property-header">
                 <h1 id="propTitle">Cargando inmueble...</h1>
                 <p class="property-location" id="propLocation"><i class="fa-solid fa-location-dot"></i> ---</p>
             </div>
 
-            <!-- 🏠 Precio y Ref -->
-            <div id="propPriceContainer" style="margin-bottom: 25px;">
-                <div id="stickyPrice" class="main-price">--- €</div>
-                <div id="stickyRef" class="ref-id">Ref: ---</div>
-            </div>
-
-            <div class="property-badges">
-                <div class="badge-item"><i class="fa-solid fa-bed"></i> <span id="labelBeds">---</span></div>
-                <div class="badge-item"><i class="fa-solid fa-bath"></i> <span id="labelBaths">---</span></div>
-                <div class="badge-item"><i class="fa-solid fa-ruler-combined"></i> <span id="labelArea">---</span></div>
-                <div class="badge-item"><i class="fa-solid fa-house"></i> <span id="labelTipo">---</span></div>
+            <!-- Carrusel Único -->
+            <div class="carousel-container" style="position: relative; width: 100%; height: 500px; border-radius: 12px; overflow: hidden; margin-bottom: 30px;">
+                <img src="weperty_placeholder.png" id="photoMain" style="width: 100%; height: 100%; object-fit: cover; transition: opacity 0.3s;">
+                
+                <!-- Controles del carrusel -->
+                <button id="btnPrevImg" class="carousel-nav" style="position: absolute; top: 50%; left: 15px; transform: translateY(-50%); background: rgba(255,255,255,0.9); border: none; width: 45px; height: 45px; border-radius: 50%; font-size: 1.2rem; cursor: pointer; z-index: 10; display: none; box-shadow: 0 4px 10px rgba(0,0,0,0.15);"><i class="fa-solid fa-chevron-left"></i></button>
+                <button id="btnNextImg" class="carousel-nav" style="position: absolute; top: 50%; right: 15px; transform: translateY(-50%); background: rgba(255,255,255,0.9); border: none; width: 45px; height: 45px; border-radius: 50%; font-size: 1.2rem; cursor: pointer; z-index: 10; display: none; box-shadow: 0 4px 10px rgba(0,0,0,0.15);"><i class="fa-solid fa-chevron-right"></i></button>
+                
+                <div id="photoCounter" style="position: absolute; bottom: 15px; right: 15px; background: rgba(0,0,0,0.6); color: white; padding: 6px 14px; border-radius: 20px; font-size: 0.9rem; font-weight: 600; display: none; z-index: 10;">1 / 1</div>
             </div>
 
             <h2 class="section-title" data-i18n="detail.desc">Descripción</h2>
@@ -81,20 +65,44 @@
                 Cargando descripción detallada del inmueble...
             </div>
 
-            <h2 class="section-title" data-i18n="detail.features">Características y Extras</h2>
-            <div class="extras-grid" id="extrasGrid">
-                <!-- Se poblará dinámicamente -->
-            </div>
-
             <h2 class="section-title" data-i18n="detail.location">Ubicación</h2>
             <div id="propertyMap" style="height: 300px; border-radius: 12px; margin-bottom: 50px;"></div>
         </div>
 
-        <!-- Columna Derecha: Sidebar (Agente) -->
+        <!-- Columna Derecha: Sidebar (Datos y Agente) -->
         <aside class="sidebar-info">
             <div>
-                <h3 style="margin-bottom: 20px;" data-i18n="sidebar.interest">¿Te interesa este inmueble?</h3>
-                <p style="font-size: 0.9rem; color: #666; margin-bottom: 25px;" data-i18n="sidebar.subtitle">Nuestros agentes te darán toda la información sin compromiso.</p>
+                <!-- Bloque Principal de Precio y Detalles base -->
+                <div id="propPriceContainer" style="margin-bottom: 25px; border-bottom: 2px solid #E2E8F0; padding-bottom: 20px;">
+                    <div id="stickyPrice" class="main-price">--- €</div>
+                    <div id="stickyRef" class="ref-id" style="margin-top: 5px;">Ref: ---</div>
+                </div>
+
+                <div class="property-badges-table" style="display: flex; flex-direction: column; gap: 15px; margin-bottom: 30px;">
+                    <div class="badge-row" style="display: flex; justify-content: space-between; border-bottom: 1px solid #f0f0f0; padding-bottom: 10px;">
+                        <span style="color: #666; font-size: 0.95rem;">Habitaciones</span>
+                        <span id="labelBeds" style="font-weight: 600;">---</span>
+                    </div>
+                    <div class="badge-row" style="display: flex; justify-content: space-between; border-bottom: 1px solid #f0f0f0; padding-bottom: 10px;">
+                        <span style="color: #666; font-size: 0.95rem;">Baños</span>
+                        <span id="labelBaths" style="font-weight: 600;">---</span>
+                    </div>
+                    <div class="badge-row" style="display: flex; justify-content: space-between; border-bottom: 1px solid #f0f0f0; padding-bottom: 10px;">
+                        <span style="color: #666; font-size: 0.95rem;">Tamaño</span>
+                        <span id="labelArea" style="font-weight: 600;">---</span>
+                    </div>
+                    <div class="badge-row" style="display: flex; justify-content: space-between; border-bottom: 1px solid #f0f0f0; padding-bottom: 10px;">
+                        <span style="color: #666; font-size: 0.95rem;">Tipo</span>
+                        <span id="labelTipo" style="font-weight: 600;">---</span>
+                    </div>
+                </div>
+
+                <h3 style="margin-bottom: 15px; font-size: 1.1rem; border-bottom: 1px solid #f0f0f0; padding-bottom: 10px;" data-i18n="detail.features">Características Adicionales</h3>
+                <div class="extras-list" id="extrasGrid" style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 40px; font-size: 0.95rem; color: #444;">
+                    <!-- Se poblará dinámicamente como lista -->
+                </div>
+
+                <h3 style="margin-bottom: 15px; font-size: 1.2rem;" data-i18n="sidebar.interest">¿Te interesa este inmueble?</h3>
                 <div style="display: flex; flex-direction: column; gap: 10px;">
                     <a href="javascript:void(0)" class="btn-contact" style="width: 100%; text-align: center; display: block;" onclick="openContact()">
                         <i class="fa-solid fa-envelope"></i> <span data-i18n="btn.contact">Contactar</span>
