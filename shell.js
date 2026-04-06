@@ -3,7 +3,7 @@
    Manejo de menús desplegables y navegación
    ============================================ */
 
-document.addEventListener('DOMContentLoaded', () => {
+function initShell() {
     // 1. Manejo de menús desplegables en Sidebar
     const navItems = document.querySelectorAll('.s-nav .s-item');
     
@@ -29,7 +29,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // 2. Hamburguesa (Colapsar Sidebar)
     const hamburger = document.querySelector('.hamburger');
     if (hamburger) {
-        hamburger.addEventListener('click', () => {
+        // Eliminar listeners previos para evitar duplicados si se llama varias veces
+        const newHam = hamburger.cloneNode(true);
+        hamburger.parentNode.replaceChild(newHam, hamburger);
+        
+        newHam.addEventListener('click', () => {
             document.body.classList.toggle('collapsed-sidebar');
         });
     }
@@ -45,4 +49,11 @@ document.addEventListener('DOMContentLoaded', () => {
             searchInput.parentElement.style.width = '180px';
         });
     }
-});
+}
+
+// Inicializar cuando el DOM esté listo
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initShell);
+} else {
+    initShell();
+}

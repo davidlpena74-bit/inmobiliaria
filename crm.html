@@ -45,27 +45,30 @@
 <!-- SIDEBAR -->
 <aside class="sidebar">
     <div class="sidebar-logo">
-        <div style="background: #3b82f6; width: 32px; height: 32px; border-radius: 6px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 900; font-size: 18px; margin-right: 10px;">W</div>
-        <span style="color: white; font-weight: 700; font-size: 18px; letter-spacing: -0.5px;">weperty</span>
+        <div style="display: flex; align-items: center;">
+            <div style="background: #3b82f6; width: 32px; height: 32px; border-radius: 6px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 900; font-size: 18px; margin-right: 10px;">W</div>
+            <span style="color: white; font-weight: 700; font-size: 18px; letter-spacing: -0.5px;" class="brand">weperty</span>
+        </div>
+        <i class="fa-solid fa-bars hamburger"></i>
     </div>
     <nav class="s-nav">
-        <div class="s-item"><i class="fa-solid fa-house"></i> <span>Inicio</span></div>
+        <a href="index.html" class="s-item"><i class="fa-solid fa-house"></i> <span>Inicio</span></a>
         <div class="s-item active"><i class="fa-solid fa-building"></i> <span>Inmuebles</span> <i class="fa-solid fa-chevron-down chevron"></i></div>
         <div class="s-sub" style="display: block;">
-            <a href="#">Nuevo inmueble</a>
+            <a href="crm/ficha_inmueble.html">Nuevo inmueble</a>
             <a href="#" class="active">Mis inmuebles</a>
             <a href="#">Tipos de cartera</a>
             <a href="#">Gestor de zonas</a>
         </div>
-        <div class="s-item"><i class="fa-solid fa-address-book"></i> <span>Contactos</span></div>
-        <div class="s-item"><i class="fa-solid fa-globe"></i> <span>MLS</span></div>
-        <div class="s-item"><i class="fa-solid fa-screwdriver-wrench"></i> <span>Herramientas</span></div>
-        <div class="s-item"><i class="fa-solid fa-display"></i> <span>Web</span></div>
-        <div class="s-item"><i class="fa-solid fa-envelope"></i> <span>Cuentas de email</span></div>
+        <a href="#" class="s-item"><i class="fa-solid fa-address-book"></i> <span>Contactos</span></a>
+        <a href="#" class="s-item"><i class="fa-solid fa-globe"></i> <span>MLS</span></a>
+        <a href="#" class="s-item"><i class="fa-solid fa-screwdriver-wrench"></i> <span>Herramientas</span></a>
+        <a href="crm/web.html" class="s-item"><i class="fa-solid fa-display"></i> <span>Web</span></a>
+        <a href="#" class="s-item"><i class="fa-solid fa-envelope"></i> <span>Cuentas de email</span></a>
     </nav>
     <div class="sidebar-bottom" style="display: flex; flex-direction: column; gap: 5px;">
         <div><i class="fa-solid fa-gear"></i> <span>Administración</span></div>
-        <div style="font-size: 9px; opacity: 0.5;">VERSION 4.3.1</div>
+        <div style="font-size: 9px; opacity: 0.5;">VERSION 4.3.2</div>
     </div>
 </aside>
 
@@ -196,6 +199,7 @@
     </div>
 </div>
 
+<script src="shell.js?v=4.0.1"></script>
 <script>
     const SB_URL = "https://dwbvegnxmyvpolvofkfn.supabase.co";
     const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR3YnZlZ254bXl2cG9sdm9ma2ZuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njc1Mzg1NTUsImV4cCI6MjA4MzExNDU1NX0.eT5ZSce8H8Yk8pWKyLUYChU0HtmZljywP4eEQd5FkOI";
@@ -219,6 +223,35 @@
         }
         allProperties = data || [];
         applyFilters();
+    }
+
+    async function togglePortal(propId, colName, currentVal) {
+        const newVal = !currentVal;
+        
+        // Optimistic UI update
+        const propIndex = allProperties.findIndex(p => p.id === propId);
+        if (propIndex !== -1) {
+            allProperties[propIndex][colName] = newVal;
+            renderTable();
+        }
+
+        try {
+            const { error } = await db
+                .from('inm_propiedades')
+                .update({ [colName]: newVal })
+                .eq('id', propId);
+
+            if (error) throw error;
+            console.log(`Updated ${colName} for property ${propId} to ${newVal}`);
+        } catch (err) {
+            console.error("Error updating portal status:", err);
+            // Rollback on error
+            if (propIndex !== -1) {
+                allProperties[propIndex][colName] = currentVal;
+                renderTable();
+            }
+            alert("No se pudo actualizar el estado de publicación.");
+        }
     }
 
     function applyFilters() {
@@ -250,10 +283,11 @@
         }
 
         tbody.innerHTML = page.map(p => {
-            const renderP = (active, color, letter) => `
+            const renderP = (active, color, letter, propId, colName) => `
                 <div class="p-chk ${active ? 'checked' : ''}" 
                      style="${active ? 'background:'+color+'; border-color:transparent;' : ''}"
-                     title="${letter}">
+                     title="${letter}"
+                     onclick="togglePortal(${propId}, '${colName}', ${active})">
                     ${active ? letter : ''}
                 </div>`;
 
@@ -278,14 +312,14 @@
                 <td><div class="visits-cell">${visits}</div></td>
                 <td class="portals-col">
                     <div class="portal-checks">
-                        ${renderP(p.publicar_web, '#2563eb', 'W')}
-                        ${renderP(p.publicar_idealista, '#1d4ed8', 'ID')}
-                        ${renderP(p.publicar_fotocasa, '#ef4444', 'FC')}
-                        ${renderP(p.publicar_pisoscom, '#dc2626', 'P')}
-                        ${renderP(false, '#f97316', 'H')}
-                        ${renderP(false, '#059669', 'K')}
-                        ${renderP(false, '#7c3aed', 'TS')}
-                        ${renderP(false, '#0284c7', 'RM')}
+                        ${renderP(p.publicar_web, '#2563eb', 'W', p.id, 'publicar_web')}
+                        ${renderP(p.publicar_idealista, '#1d4ed8', 'ID', p.id, 'publicar_idealista')}
+                        ${renderP(p.publicar_fotocasa, '#ef4444', 'FC', p.id, 'publicar_fotocasa')}
+                        ${renderP(p.publicar_pisoscom, '#dc2626', 'P', p.id, 'publicar_pisoscom')}
+                        ${renderP(false, '#f97316', 'H', p.id, 'publicar_habitaclia')}
+                        ${renderP(false, '#059669', 'K', p.id, 'publicar_kyero')}
+                        ${renderP(false, '#7c3aed', 'TS', p.id, 'publicar_thinkspain')}
+                        ${renderP(false, '#0284c7', 'RM', p.id, 'publicar_rightmove')}
                     </div>
                 </td>
                 <td class="updated-cell">${updated}</td>

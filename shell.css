@@ -49,8 +49,16 @@ body {
     padding: 16px 20px;
     display: flex;
     align-items: center;
+    justify-content: space-between;
     border-bottom: 1px solid rgba(255,255,255,0.05);
 }
+.sidebar-logo .hamburger {
+    color: rgba(255,255,255,0.5);
+    cursor: pointer;
+    font-size: 18px;
+    transition: 0.2s;
+}
+.sidebar-logo .hamburger:hover { color: #fff; }
 
 .s-nav { flex: 1; padding-top: 10px; }
 .s-item {
@@ -68,7 +76,8 @@ body {
 .s-item.active i { color: #fff; }
 .s-item .chevron { margin-left: auto; font-size: 10px; opacity: 0.5; }
 
-.s-sub { background: rgba(0,0,0,0.1); }
+.s-sub { background: rgba(0,0,0,0.1); display: none; }
+.s-item.open + .s-sub { display: block; }
 .s-sub a {
     display: block;
     padding: 8px 18px 8px 46px;
@@ -78,6 +87,22 @@ body {
 }
 .s-sub a:hover { color: #fff; }
 .s-sub a.active { color: #fff; font-weight: 500; background: rgba(255,255,255,0.03); }
+
+/* ========= SIDEBAR TOGGLE (COLLAPSED) ========= */
+body.collapsed-sidebar .sidebar { width: 68px; min-width: 68px; }
+body.collapsed-sidebar .main { margin-left: 68px; }
+
+body.collapsed-sidebar .sidebar .brand,
+body.collapsed-sidebar .sidebar .chevron,
+body.collapsed-sidebar .sidebar .s-sub,
+body.collapsed-sidebar .sidebar .s-item span,
+body.collapsed-sidebar .sidebar .sidebar-bottom span {
+    display: none !important;
+}
+
+body.collapsed-sidebar .sidebar .s-item { justify-content: center; padding: 12px 0; }
+body.collapsed-sidebar .sidebar-logo { flex-direction: column; padding: 20px 0; gap: 20px; }
+body.collapsed-sidebar .sidebar-bottom { justify-content: center; padding: 20px 0; }
 
 /* ========= MAIN WRAPPER ========= */
 .main {
