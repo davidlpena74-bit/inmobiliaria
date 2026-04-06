@@ -434,8 +434,9 @@
 
         function changeImage(propId, delta, event) {
             if (event) event.stopPropagation();
-            const p = allProperties.find(item => item.id === propId);
-            const fotos = p.imagenes_url || p.imagenes || [];
+            // Usar == para permitir comparación entre string (id del evento) y number (id de Supabase)
+            const p = allProperties.find(item => item.id == propId);
+            const fotos = p ? (p.imagenes_url || p.imagenes || []) : [];
             if (!p || fotos.length <= 1) return;
 
             if (carouselIndices[propId] === undefined) carouselIndices[propId] = 0;
