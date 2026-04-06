@@ -89,8 +89,20 @@
         .search-container { display: flex; align-items: center; padding: 10px 15px; }
         .search-container input { flex: 1; border: none; padding: 15px 0; font-size: 18px; outline: none; font-family: var(--font-sans); color: var(--compass-black); }
         .search-container input::placeholder { color: #999; }
-        .search-btn { background: var(--compass-blue); color: var(--white); border: none; width: 45px; height: 45px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; cursor: pointer; transition: background 0.2s; }
-        .search-btn:hover { background: #0050bc; }
+        .search-container input::placeholder { color: #999; }
+        .search-btn { 
+            background: var(--compass-black); 
+            color: var(--white); 
+            border: none; 
+            padding: 0 25px; 
+            height: 48px; 
+            border-radius: 4px; 
+            font-size: 15px; 
+            font-weight: 600; 
+            cursor: pointer; 
+            transition: opacity 0.2s; 
+        }
+        .search-btn:hover { opacity: 0.85; }
 
         /* SECCIÓN DE LISTADOS (MEJORADA - GRID 3x2) */
         .section { padding: 80px 40px; background: var(--white); max-width: 1400px; margin: 0 auto; }
@@ -252,8 +264,8 @@
                 <span class="search-tab" onclick="setSearchMode('rent', this)" data-i18n="search.tab.rent">Rent</span>
             </div>
             <div class="search-container">
-                <input type="text" data-i18n="search.placeholder" placeholder="Search by City, Neighborhood, or Address at Alicante...">
-                <button class="search-btn" onclick="executeSearch()"><i class="fa-solid fa-arrow-right"></i></button>
+                <input type="text" data-i18n="search.placeholder" id="mainSearch" placeholder="Search by City, Neighborhood, or Address at Alicante...">
+                <button class="search-btn" onclick="executeSearch()" data-i18n="search.btn">Buscar</button>
             </div>
         </div>
     </section>
@@ -331,7 +343,7 @@
         <div class="footer-bottom">
             <div data-i18n="footer.bottom">© 2026 Weperty Real Estate. All rights reserved. | Alicante Authority | Equal Housing Opportunity.</div>
             <div style="display: flex; gap: 20px; align-items: center;">
-                <span style="font-size: 10px; color: #666; margin-right: 15px;">VERSION 4.2.12</span>
+                <span style="font-size: 10px; color: #666; margin-right: 15px;">VERSION 4.2.13</span>
                 <i class="fa-brands fa-instagram"></i>
                 <i class="fa-brands fa-linkedin-in"></i>
                 <i class="fa-brands fa-facebook-f"></i>
