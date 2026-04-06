@@ -1,0 +1,102 @@
+[
+  {
+    "referencia": "ALQUIKNA",
+    "titulo": "Bungalow en Torrevieja - ALQUIKNA",
+    "descripcion": "WINTER RENTAL (SEPTEMBER TO JUNE). ⚠️ IMPORTANT: Property NOT available in July and August. Huge 48 m² Private Terrace. Ready to Move In: 2 bright bedrooms, 1 modern bathroom. Located near Carrefour and Habaneras Shopping Center.",
+    "imagenes_url": [
+      "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1696901/image/img_4950_2.jpg",
+      "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1696901/image/img_4923.jpg",
+      "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1696901/image/img_4926.jpg",
+      "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1696901/image/img_5124.jpg",
+      "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1696901/image/img_4922.jpg"
+    ],
+    "caracteristicas": {
+      "Familia": "Bungalow",
+      "Sup. construida": "50m2",
+      "Dormitorios": "2",
+      "Baños": "1",
+      "Amueblado": "Amueblado",
+      "Terraza": "48m2"
+    },
+    "latitud": 38.023787362643,
+    "longitud": -0.70675372554013
+  },
+  {
+    "referencia": "AJLJJCOTOV",
+    "titulo": "Chalet Independiente en Muchamiel - AJLJJCOTOV",
+    "descripcion": "Detached Villa for Rent – La Cotoveta (Mutxamel) – Quiet Residential Area. 3 bedrooms and 2 bathrooms, a private swimming pool and outdoor areas. A car is required for daily life.",
+    "imagenes_url": [
+      "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1696583/image/img_6392.jpg",
+      "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1696583/image/img_1042.jpg",
+      "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1696583/image/img_6393.jpg",
+      "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1696583/image/fullsizerender_5.jpg"
+    ],
+    "caracteristicas": {
+      "Familia": "Casa / Chalet",
+      "Sup. construida": "140m2",
+      "Dormitorios": "3",
+      "Baños": "2",
+      "Piscina": "Privada"
+    },
+    "latitud": 38.437422727757,
+    "longitud": -0.42483927495683
+  },
+  {
+    "referencia": "AHWGFFPOR",
+    "titulo": "Apartamento Céntrico Torrevieja - AHWGFFPOR",
+    "descripcion": "Sunny 3-Bed Apartment with Lift – Torrevieja Center. Large Sunny Terrace. 3 bedrooms and 2 bathrooms. Walking distance to the promenade and services.",
+    "imagenes_url": [
+      "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1696580/image/img_4690.png",
+      "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1696580/image/46c7cb3b-82df-444b-aa3e-9f01c2235ca4.jpg",
+      "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1696580/image/img_4751.png"
+    ],
+    "caracteristicas": {
+      "Familia": "Apartamento",
+      "Dormitorios": "3",
+      "Baños": "2",
+      "Ascensor": "Sí",
+      "Terraza": "Sí"
+    },
+    "latitud": 37.978338418993,
+    "longitud": -0.67070245742798
+  },
+  {
+    "referencia": "ALQUGUSRFF",
+    "titulo": "Apartamento Guardamar del Segura - ALQUGUSRFF",
+    "descripcion": "Apartment nestled in Guardamar del Segura, just steps away from the beach. Two bright bedrooms and a sleek, modern bathroom. South-facing terrace. Near Reina Sofia Park.",
+    "imagenes_url": [
+      "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1691403/image/img_4693.png",
+      "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1691403/image/05c6d146-23e0-4b18-9e5f-824c7a786f97.jpg",
+      "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1691403/image/img_3857.jpg"
+    ],
+    "caracteristicas": {
+      "Familia": "Apartamento",
+      "Dormitorios": "2",
+      "Baños": "1",
+      "Orientación": "Sur",
+      "Distancia Playa": "Escasos pasos"
+    },
+    "latitud": 38.088083259642,
+    "longitud": -0.64781975139141
+  },
+  {
+    "referencia": "ALHPHDSPM",
+    "titulo": "Casa de Campo en Albatera - ALHPHDSPM",
+    "descripcion": "Spacious Country House for Rent in Albatera. 200 m2 home on a massive 2,000 m2 plot. 4 Large Bedrooms, Private Swimming Pool, Modern Kitchen.",
+    "imagenes_url": [
+      "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1688808/image/30143079-ca57-43d5-95b6-20b33eb4e3c7.jpg",
+      "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1688808/image/img_4780.png",
+      "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1688808/image/fed45a88-2b5f-4ae3-83ba-75c0afd5e992.jpg"
+    ],
+    "caracteristicas": {
+      "Familia": "Casa de campo",
+      "Sup. construida": "200m2",
+      "Sup. parcela": "2000m2",
+      "Dormitorios": "4",
+      "Baños": "2",
+      "Piscina": "Privada"
+    },
+    "latitud": 38.21009729943,
+    "longitud": -0.84794236578846
+  }
+]

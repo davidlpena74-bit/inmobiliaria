@@ -1,0 +1,55 @@
+[
+  {
+    "referencia": "ALQU8888",
+    "titulo": "Apartamento en Av Timonel 1, Torrevieja",
+    "descripcion": "ALQUILER DE INVIERNO / WINTER RENTAL. Estancia de Septiembre a Junio. Apartamento ideal para mayores en Playa del Cura, sin escalones, 100% accesible, vistas frontales al mar y cercanía a servicios médicos y comerciales. Dispone de 3 amplios dormitorios, 2 baños completos y una terraza acristalada con vistas espectaculares.",
+    "imagenes_url": [
+      "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1680752/image/bd68570a-f97f-458e-a928-9cab35357dcc_2.jpg",
+      "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1680752/image/4ddafbde-8651-4d8f-9db7-1bcd369d6b13.jpg",
+      "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1680752/image/img_4711.png"
+    ],
+    "caracteristicas": {
+      "Habitaciones": "3",
+      "Baños": "2",
+      "Vistas": "Al Mar",
+      "Accesibilidad": "Cota cero",
+      "Planta": "8ª"
+    },
+    "latitud": 37.977316708442,
+    "longitud": -0.66846013069153
+  },
+  {
+    "referencia": "ATTTRRR20",
+    "titulo": "Casa / Chalet en Cl Gabriel y Galan, Orihuela Costa",
+    "descripcion": "WINTER RENTAL (SEPTEMBER TO JUNE). Impresionante chalet en la zona exclusiva de Campoamor. 2 dormitorios, jardín privado de 400m2, piscina comunitaria y a pocos pasos de la playa. Ubicación inmejorable cerca de servicios y zonas de ocio.",
+    "imagenes_url": [
+      "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1669458/image/1fa66630-2f59-4414-b99a-4b368e3554c9.jpg",
+      "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1669458/image/d8454a61-f72b-4d13-a7e0-83c1204ad17e.jpg"
+    ],
+    "caracteristicas": {
+      "Habitaciones": "2",
+      "Jardín": "Privado 400m2",
+      "Piscina": "Comunitaria",
+      "Zona": "Campoamor"
+    },
+    "latitud": 37.898787225131,
+    "longitud": -0.75419425964355
+  },
+  {
+    "referencia": "ALQVICENVICEM",
+    "titulo": "Apartamento en Av Puerto 2, Guardamar del Segura",
+    "descripcion": "Apartamento amplio y soleado en la zona del Puerto. 11 meses de contrato mínimo. 3 dormitorios, 2 baños, orientación sur con terraza soleada. Urbanización con piscina, pista de pádel y zona infantil. Garaje incluido.",
+    "imagenes_url": [
+      "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1665131/image/img_1765.jpg",
+      "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1665131/image/img_1827.jpg"
+    ],
+    "caracteristicas": {
+      "Habitaciones": "3",
+      "Baños": "2",
+      "Planta": "4ª",
+      "Extras": ["Piscina", "Pádel", "Garaje"]
+    },
+    "latitud": 38.093019034772,
+    "longitud": -0.64664840698242
+  }
+]

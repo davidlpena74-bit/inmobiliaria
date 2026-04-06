@@ -38,7 +38,18 @@
         #map { flex: 1; height: 100%; background: #f0f0f0; }
 
         /* LIST AREA (LEFT) */
-        .list-sidebar { width: 35%; min-width: 450px; height: 100%; background: var(--white); border-right: 1px solid var(--border); overflow-y: auto; display: flex; flex-direction: column; }
+        .list-sidebar { 
+            width: 45%; 
+            max-width: 650px; 
+            min-width: 450px; 
+            flex-shrink: 0;
+            height: 100%; 
+            background: var(--white); 
+            border-right: 1px solid var(--border); 
+            overflow-y: auto; 
+            display: flex; 
+            flex-direction: column; 
+        }
         
         .list-header { padding: 25px; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: var(--white); z-index: 10; }
         .list-header h2 { font-size: 18px; font-weight: 600; margin-bottom: 15px; }

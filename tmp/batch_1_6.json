@@ -1,0 +1,93 @@
+[
+  {
+    "referencia": "ALQUESTHRE",
+    "titulo": "Apartamento en Cl roetgen 5, Torrevieja",
+    "descripcion": "Winter & Summer Rental | Playa de los Locos - Los Frutales. 70 m² Spotless & Bright: Vivienda totalmente exterior y muy luminosa. Espacios acogedores y perfectamente mantenidos para una estancia confortable. 2 Double Bedrooms & 2 Bathrooms. Sunny Morning Terrace orientada al Este. A solo 300 metros del mar. Piscina comunitaria, supermercados y restaurantes cerca.",
+    "imagenes_url": [
+      "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1665129/image/acccfc66-f6de-4a59-9b67-811b0ab502ae.jpg",
+      "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1665129/image/fachada-2.jpg",
+      "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1665129/image/2f790d63-2ad5-4b81-8113-507ec913fd2d.jpg",
+      "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1665129/image/7854abae-5941-45c6-b6b3-e48c23e5deba.jpg"
+    ],
+    "caracteristicas": {
+      "Sup. construida": "80m2",
+      "Planta": "5ª",
+      "Dormitorios": 2,
+      "Baños": 2,
+      "Piscina": "Comunitaria"
+    },
+    "latitud": 37.986026295031,
+    "longitud": -0.6599967605184
+  },
+  {
+    "referencia": "ALQVNDMARI",
+    "titulo": "Apartamento en Av De los marineros 4, Torrevieja",
+    "descripcion": "SE ALQUILA DESDE OCTUBRE 2025 HASTA MAYO 2026. Espacioso apartamento de 3 dormitorios y 2 baños a solo 150 metros de Playa del Cura. 110m2 totales, cocina equipada, terraza con vistas al mar y garaje incluido. Excelente estado.",
+    "imagenes_url": [
+      "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1664983/image/c3cdfe07-1c0b-47af-99d0-f72803bbab5d.jpg",
+      "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1664983/image/228e07f6-0d29-41e4-be65-ebbc7f47e213.jpg"
+    ],
+    "caracteristicas": {
+      "Sup. construida": "135m2",
+      "Planta": "2ª",
+      "Dormitorios": 3,
+      "Baños": 2,
+      "Garaje": "Sí"
+    },
+    "latitud": 37.977077796318,
+    "longitud": -0.67057901083355
+  },
+  {
+    "referencia": "ALQUBATYQU",
+    "titulo": "Villa de Lujo en Ciudad Quesada - ALQUBATYQU",
+    "descripcion": "LARGA TEMPORADA DESDE AGOSTO 2025 (Solo anual). Villa de lujo de obra nueva. 3 habitaciones, 2 baños, 118m2 construidos en parcela de 190m2. Calificación energética A. Amueblada y con piscina privada.",
+    "imagenes_url": [
+      "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1661140/image/img_2221.jpg",
+      "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1661140/image/f1513f06-3072-4773-bdf3-99821ebd0a10.jpg"
+    ],
+    "caracteristicas": {
+      "Sup. construida": "150m2",
+      "Parcela": "200m2",
+      "Dormitorios": 3,
+      "Baños": 2,
+      "Piscina": "Privada"
+    },
+    "latitud": 38.064785228311,
+    "longitud": -0.71747922769441
+  },
+  {
+    "referencia": "10PLAYCURA",
+    "titulo": "Apartamento en Cl Timonel 1, Torrevieja - 10PLAYCURA",
+    "descripcion": "ALQUILER DE INVIERNO (Sept-Jun). Apartamento céntrico y amplio a pocos metros de Playa del Cura. 3 dormitorios, 2 baños. Vistas al mar laterales. No disponible en Julio y Agosto.",
+    "imagenes_url": [
+      "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1654847/image/a2a18a88-4ec2-4b74-9a74-1cd9aacc68f7.jpg",
+      "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1654847/image/9bbc7907-e8e6-4ddd-8fe9-f19d6234ca19.jpg"
+    ],
+    "caracteristicas": {
+      "Sup. construida": "135m2",
+      "Planta": "5ª",
+      "Dormitorios": 3,
+      "Baños": 2
+    },
+    "latitud": 37.977077796318,
+    "longitud": -0.66679137571133
+  },
+  {
+    "referencia": "ALEYTEMPO",
+    "titulo": "Apartamento en Gran Alacant - ALEYTEMPO",
+    "descripcion": "Seasonal Rental: November to May. Luxurious 3-bedroom, 2-bathroom apartment. Master bedroom with en-suite. Fully equipped kitchen with high-end appliances. Amazing sea views from the living room.",
+    "imagenes_url": [
+      "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1649943/image/img_6742.jpg",
+      "https://storage.googleapis.com/static.inmoweb.es/clients/1939/property/1649943/image/img_6741.jpg"
+    ],
+    "caracteristicas": {
+      "Sup. construida": "90m2",
+      "Dormitorios": 3,
+      "Baños": 2,
+      "Vistas": "Al Mar",
+      "Jardín": "Privado 100m2"
+    },
+    "latitud": 38.215559048085,
+    "longitud": -0.51563291465642
+  }
+]
