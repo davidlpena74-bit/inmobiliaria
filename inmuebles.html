@@ -177,9 +177,51 @@
         }
         .custom-marker span { pointer-events: none; }
 
+        /* Botón Flotante Móvil */
+        .mobile-toggle-btn {
+            display: none;
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1a1a1a;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 30px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            z-index: 3000;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            align-items: center;
+            gap: 8px;
+        }
+
         @media (max-width: 1024px) {
-            .list-sidebar { width: 100%; position: absolute; bottom: 0; height: 40%; z-index: 2000; border-top: 2px solid var(--border); }
-            .viewport { flex-direction: column; }
+            header { padding: 0 15px; }
+            nav a { display: none; }
+            .lang-menu { margin-left: 0; }
+            .search-controls-row { flex-wrap: wrap; }
+            .search-controls-row .input-group { min-width: 120px; }
+            .properties-grid { grid-template-columns: 1fr; padding: 15px; }
+            
+            .list-sidebar { 
+                width: 100%; 
+                position: absolute; 
+                top: 0; 
+                bottom: 0; 
+                height: 100vh;
+                z-index: 2000; 
+                border-top: none;
+                border-right: none;
+                transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            }
+            .list-sidebar.hidden {
+                transform: translateY(100vh);
+            }
+            .viewport { flex-direction: column; position: relative; }
+            .mobile-toggle-btn { display: flex; }
         }
 
         /* MODERN FILTERS BAR (COMPASS STYLE) */
@@ -381,11 +423,14 @@
                 <div style="grid-column: 1/-1; text-align: center; padding: 40px; color: #94a3b8;">Cargando inmuebles...</div>
             </div>
             <div style="padding: 10px 20px; border-top: 1px solid var(--border); font-size: 10px; color: #94a3b8; text-align: center;">
-                VERSION 4.2.9
+                VERSION 4.2.10
             </div>
         </aside>
 
         <div id="map"></div>
+        <button class="mobile-toggle-btn" id="mobileToggleBtn" onclick="toggleMobileView()">
+            <span id="mobileToggleText">Ver Mapa</span> <i class="fa-solid fa-map" id="mobileToggleIcon"></i>
+        </button>
     </div>
 
     <!-- ADVANCED FILTERS MODAL -->
@@ -581,6 +626,26 @@
             document.getElementById('val-bed').textContent = anyText;
             document.getElementById('val-bath').textContent = anyText;
             updateFilters();
+        }
+
+        // --- MOBILE TOGGLE ---
+        let isMapView = false;
+        function toggleMobileView() {
+            isMapView = !isMapView;
+            const sidebar = document.querySelector('.list-sidebar');
+            const toggleText = document.getElementById('mobileToggleText');
+            const toggleIcon = document.getElementById('mobileToggleIcon');
+            
+            if (isMapView) {
+                sidebar.classList.add('hidden');
+                toggleText.textContent = currentLang === 'es' ? 'Ver Lista' : (currentLang === 'en' ? 'View List' : 'Lista');
+                toggleIcon.className = 'fa-solid fa-list';
+                setTimeout(() => map.invalidateSize(), 300);
+            } else {
+                sidebar.classList.remove('hidden');
+                toggleText.textContent = currentLang === 'es' ? 'Ver Mapa' : (currentLang === 'en' ? 'View Map' : 'Mapa');
+                toggleIcon.className = 'fa-solid fa-map';
+            }
         }
 
         // --- FILTERING ENGINE ---
