@@ -1,5 +1,6 @@
 const translations = {
     es: {
+        "nav.home": "Inicio",
         "nav.buy": "Comprar",
         "nav.rent": "Alquilar",
         "nav.sell": "Vender",
@@ -72,6 +73,7 @@ const translations = {
         "feat.interior": "Interior"
     },
     en: {
+        "nav.home": "Home",
         "nav.buy": "Buy",
         "nav.rent": "Rent",
         "nav.sell": "Sell",
@@ -144,6 +146,7 @@ const translations = {
         "feat.interior": "Interior"
     },
     de: {
+        "nav.home": "Startseite",
         "nav.buy": "Kaufen",
         "nav.rent": "Mieten",
         "nav.sell": "Verkaufen",
@@ -216,6 +219,7 @@ const translations = {
         "feat.interior": "Innenbereich"
     },
     nl: {
+        "nav.home": "Home",
         "nav.buy": "Kopen",
         "nav.rent": "Huren",
         "nav.sell": "Verkopen",
