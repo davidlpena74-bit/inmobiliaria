@@ -144,9 +144,13 @@
             cursor: pointer;
             display: flex; align-items: center; justify-content: center;
             color: transparent; overflow: hidden; white-space: nowrap; font-size: 0;
-            /* Asegurar centrado respecto a coordenada Leaflet */
             margin-left: -8px !important; margin-top: -8px !important;
         }
+ 
+        /* SIDEBAR MODE TOGGLE */
+        .mode-toggle { display: flex; background: #f3f4f6; border-radius: 6px; padding: 4px; margin-bottom: 20px; }
+        .mode-btn { flex: 1; border: none; background: transparent; padding: 10px; font-size: 13px; font-weight: 600; cursor: pointer; border-radius: 4px; color: #6b7280; transition: all 0.2s; }
+        .mode-btn.active { background: white; color: var(--compass-black); box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
         .custom-marker:hover, .custom-marker.highlight {
             width: auto !important; 
             min-width: 50px;
@@ -213,19 +217,95 @@
 
         .btn-apply { background: var(--compass-blue); color: white; border: none; padding: 12px 24px; border-radius: 4px; font-weight: 600; cursor: pointer; }
         .btn-reset { background: transparent; color: var(--compass-gray); border: none; text-decoration: underline; cursor: pointer; font-size: 13px; }
+
+        /* LEAFLET POPUP CUSTOM STYLING (COMPASS STYLE) */
+        .leaflet-popup-content-wrapper { 
+            padding: 0; 
+            border-radius: 8px; 
+            overflow: hidden; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15); 
+        }
+        .leaflet-popup-content { 
+            margin: 0 !important; 
+            width: 300px !important; 
+        }
+        
+        .popup-card { 
+            display: flex; 
+            cursor: pointer; 
+            background: white; 
+            transition: background 0.2s;
+            text-decoration: none;
+            color: inherit;
+        }
+        .popup-card:hover { background: #f8fafc; }
+        
+        .popup-img { 
+            width: 100px; 
+            height: 100px; 
+            flex-shrink: 0; 
+        }
+        .popup-img img { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover; 
+        }
+        
+        .popup-info { 
+            padding: 12px; 
+            flex: 1; 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: center;
+            min-width: 0;
+        }
+        .popup-tag { 
+            background: black; 
+            color: white; 
+            font-size: 8px; 
+            font-weight: 700; 
+            padding: 2px 6px; 
+            border-radius: 2px; 
+            width: fit-content; 
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .popup-price { 
+            font-size: 18px; 
+            font-weight: 700; 
+            color: #1a1a1a; 
+            margin-bottom: 2px; 
+        }
+        .popup-stats { 
+            font-size: 12px; 
+            color: #666; 
+            margin-bottom: 4px; 
+        }
+        .popup-address { 
+            font-size: 12px; 
+            color: #666; 
+            white-space: nowrap; 
+            overflow: hidden; 
+            text-overflow: ellipsis;
+            font-weight: 400;
+        }
     </style>
 </head>
 <body>
 
     <!-- 🏠 Navegación Superior Unificada -->
-    <header>
+    <header id="mainHeader">
         <a href="index.html" class="logo">
-            <img src="logos_corporativos/weperty_logo_azul.png" alt="Weperty Logo">
+            <img src="logos_corporativos/weperty_logo.png" alt="Weperty Logo" id="headerLogo">
         </a>
-        
-        <div class="search-container">
-            <i class="fa-solid fa-magnifying-glass"></i>
-            <div class="lang-menu" style="margin-left: 20px; color: var(--compass-black);">
+        <nav>
+            <a href="#" data-i18n="nav.buy">Buy</a>
+            <a href="#" data-i18n="nav.rent">Rent</a>
+            <a href="#" data-i18n="nav.sell">Sell</a>
+            <a href="#" data-i18n="nav.neighborhoods">Neighborhoods</a>
+            <a href="crm.html" data-i18n="nav.agents">Agents</a>
+            <div class="lang-menu">
                 <i class="fa-solid fa-globe"></i> EN <i class="fa-solid fa-chevron-down" style="font-size: 10px; margin-left: 4px;"></i>
                 <div class="lang-dropdown">
                     <a href="javascript:void(0)" onclick="setLanguage('es')">🇪🇸 Español</a>
@@ -234,12 +314,17 @@
                     <a href="javascript:void(0)" onclick="setLanguage('nl')">🇳🇱 Nederlands</a>
                 </div>
             </div>
+            <a href="crm.html" style="margin-left: 30px;"><i class="fa-regular fa-user"></i> <span data-i18n="nav.signin">Sign In</span></a>
         </nav>
     </header>
 
     <div class="viewport">
         <aside class="list-sidebar">
             <div class="list-header">
+                <div class="mode-toggle">
+                    <button class="mode-btn" id="mode-buy" onclick="setMode('buy')">Comprar</button>
+                    <button class="mode-btn" id="mode-rent" onclick="setMode('rent')">Alquilar</button>
+                </div>
                 <div class="search-controls-row">
                     <div class="input-group">
                         <label>€</label>
@@ -369,7 +454,9 @@
             maxPrice: Infinity,
             minSqft: 0,
             maxSqft: Infinity,
-            sort: 'recommended'
+            maxSqft: Infinity,
+            sort: 'recommended',
+            mode: 'buy'
         };
 
         const propertyMarkers = {}; 
@@ -385,8 +472,43 @@
         L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
             attribution: '&copy; CARTO'
         }).addTo(map);
+ 
+        // --- INICIALIZACIÓN POR URL ---
+        const urlParams = new URLSearchParams(window.location.search);
+        const urlMode = urlParams.get('mode'); // 'buy', 'rent' o null
+        if (urlMode) currentFilters.mode = urlMode;
+        updateModeUI();
 
         // --- UI FUNCTIONS ---
+ 
+        function setMode(mode) {
+            currentFilters.mode = mode;
+            updateModeUI();
+            updateFilters();
+        }
+ 
+        function updateModeUI() {
+            const buyBtn = document.getElementById('mode-buy');
+            const rentBtn = document.getElementById('mode-rent');
+            if (!buyBtn || !rentBtn) return;
+ 
+            buyBtn.classList.remove('active');
+            rentBtn.classList.remove('active');
+ 
+            if (currentFilters.mode === 'rent') {
+                rentBtn.classList.add('active');
+            } else {
+                // Por defecto o si es 'buy'
+                buyBtn.classList.add('active');
+                currentFilters.mode = 'buy'; 
+            }
+            
+            // Localización para los botones
+            const buyText = currentLang === 'es' ? 'Comprar' : (currentLang === 'en' ? 'Buy' : 'Kaufen');
+            const rentText = currentLang === 'es' ? 'Alquilar' : (currentLang === 'en' ? 'Rent' : 'Mieten');
+            buyBtn.textContent = buyText;
+            rentBtn.textContent = rentText;
+        }
 
         function toggleModal(show) {
             document.getElementById('filter-modal').style.display = show ? 'flex' : 'none';
@@ -448,6 +570,11 @@
                 const pSqft = p.superficie || 0;
                 const pAms = p.caracteristicas || {};
 
+                // Filtrado por Modo (Compra / Alquiler)
+                // Umbral: Alquiler < 10.000€, Venta >= 10.000€
+                if (currentFilters.mode === 'rent' && pPrice >= 10000) return false;
+                if (currentFilters.mode === 'buy' && pPrice < 10000) return false;
+ 
                 if (pPrice < currentFilters.minPrice || pPrice > currentFilters.maxPrice) return false;
                 if (pBeds < currentFilters.bed) return false;
                 if (pBaths < currentFilters.bath) return false;
@@ -571,13 +698,41 @@
                 container.appendChild(card);
 
                 if (p.latitud && p.longitud) {
-                    const icon = L.divIcon({
+                    const icon = L.divIcon( {
                         className: 'custom-marker',
                         html: `<span>${precio}</span>`,
                         iconSize: null,
                         iconAnchor: null
                     });
                     const marker = L.marker([p.latitud, p.longitud], { icon }).addTo(map);
+                    
+                    // --- POPUP ESTILO COMPASS ---
+                    const popupHtml = `
+                        <div class="popup-card" onclick="window.location.href='inmueble.html?ref=${p.referencia}'">
+                            <div class="popup-img">
+                                <img src="${fotos[0] ? fotos[0] : 'weperty_placeholder.png'}">
+                            </div>
+                            <div class="popup-info">
+                                <div class="popup-tag">${translations[currentLang]['prop.exclusive']}</div>
+                                <div class="popup-price">${precio}</div>
+                                <div class="popup-stats">
+                                    ${p.habitaciones || 0} ${translations[currentLang]['prop.beds']} | 
+                                    ${p.banos || 0} ${translations[currentLang]['prop.baths']} | 
+                                    ${p.superficie || 0} m²
+                                </div>
+                                <div class="popup-address">${t_prop(p, 'titulo')}</div>
+                            </div>
+                        </div>
+                    `;
+                    
+                    marker.bindPopup(popupHtml, {
+                        maxWidth: 300,
+                        minWidth: 300,
+                        closeButton: false,
+                        offset: [0, -10],
+                        className: 'compass-popup'
+                    });
+
                     propertyMarkers[p.id] = marker;
                 }
             });

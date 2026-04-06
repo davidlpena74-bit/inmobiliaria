@@ -184,13 +184,12 @@
         <h1 data-i18n="hero.title">Find your place.</h1>
         <div class="search-wrapper">
             <div class="search-tabs">
-                <span class="search-tab active" data-i18n="search.tab.buy">Buy</span>
-                <span class="search-tab" data-i18n="search.tab.rent">Rent</span>
-                <span class="search-tab" data-i18n="search.tab.sold">Sold</span>
+                <span class="search-tab active" onclick="setSearchMode('buy', this)" data-i18n="search.tab.buy">Buy</span>
+                <span class="search-tab" onclick="setSearchMode('rent', this)" data-i18n="search.tab.rent">Rent</span>
             </div>
             <div class="search-container">
                 <input type="text" data-i18n="search.placeholder" placeholder="Search by City, Neighborhood, or Address at Alicante...">
-                <button class="search-btn" onclick="window.location.href='inmuebles.html'"><i class="fa-solid fa-arrow-right"></i></button>
+                <button class="search-btn" onclick="executeSearch()"><i class="fa-solid fa-arrow-right"></i></button>
             </div>
         </div>
     </section>
@@ -206,7 +205,7 @@
             <p style="grid-column: 1/-1; text-align: center; color: var(--compass-gray);">Listing exclusive properties...</p>
         </div>
 
-        <a href="inmuebles.html" class="btn-view-all" data-i18n="btn.viewall">View All Weperty Exclusives <i class="fa-solid fa-arrow-right" style="margin-left: 8px;"></i></a>
+        <a href="javascript:void(0)" onclick="executeSearch()" class="btn-view-all" data-i18n="btn.viewall">View All Weperty Exclusives <i class="fa-solid fa-arrow-right" style="margin-left: 8px;"></i></a>
     </section>
 
     <div class="concierge-banner">
@@ -271,6 +270,21 @@
                 header.classList.remove('scrolled');
             }
         });
+ 
+        // LÓGICA DE BÚSQUEDA Y PESTAÑAS
+        let currentSearchMode = 'buy';
+ 
+        function setSearchMode(mode, el) {
+            currentSearchMode = mode;
+            // Actualizar UI
+            document.querySelectorAll('.search-tab').forEach(tab => tab.classList.remove('active'));
+            el.classList.add('active');
+            console.log("Modo de búsqueda cambiado a:", mode);
+        }
+ 
+        function executeSearch() {
+            window.location.href = `inmuebles.html?mode=${currentSearchMode}`;
+        }
 
         // LÓGICA DE CARGA SUPABASE
         const SB_URL = "https://dwbvegnxmyvpolvofkfn.supabase.co";
