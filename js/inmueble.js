@@ -134,19 +134,55 @@ function renderProperty(p) {
     }
 
     // Mapa
-    if (p.latitud && p.longitud) {
-        const map = L.map('propertyMap').setView([p.latitud, p.longitud], 15);
-        L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-            attribution: '&copy; CARTO'
-        }).addTo(map);
-        L.marker([p.latitud, p.longitud]).addTo(map);
-    }
+    initMap(p);
 
     // 🚩 IMPORTANTE: Forzar actualización de etiquetas i18n
     if (typeof updateContent === "function") {
         updateContent();
     }
 }
+
+let map;
+let currentBaseLayer;
+let mapStyles;
+
+function initMap(p) {
+    if (!p.latitud || !p.longitud) return;
+
+    map = L.map('propertyMap').setView([p.latitud, p.longitud], 15);
+
+    mapStyles = {
+        light: L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+            attribution: '&copy; CARTO'
+        }),
+        voyager: L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+            attribution: '&copy; CARTO'
+        }),
+        satellite: L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+            attribution: '&copy; ESRI'
+        })
+    };
+
+    currentBaseLayer = mapStyles.voyager;
+    currentBaseLayer.addTo(map);
+
+    L.marker([p.latitud, p.longitud]).addTo(map);
+}
+
+function setMapStyle(style) {
+    if (!map || !mapStyles[style]) return;
+
+    if (map.hasLayer(currentBaseLayer)) {
+        map.removeLayer(currentBaseLayer);
+    }
+    currentBaseLayer = mapStyles[style];
+    currentBaseLayer.addTo(map);
+
+    // Actualizar UI del selector
+    document.querySelectorAll('.style-btn').forEach(btn => btn.classList.remove('active'));
+    document.getElementById(`style-${style}`).classList.add('active');
+}
+
 
 // 🖼️ Lógica de Modal (por si en un futuro se hace click en la imagen para pantalla completa)
 function openGallery(images, index) {

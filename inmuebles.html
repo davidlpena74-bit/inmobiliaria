@@ -360,6 +360,47 @@
             text-overflow: ellipsis;
             font-weight: 400;
         }
+
+        /* MAP STYLE SELECTOR */
+        .map-style-selector {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            padding: 5px;
+            display: flex;
+            gap: 5px;
+        }
+        .style-btn {
+            width: 40px;
+            height: 40px;
+            border: 2px solid transparent;
+            border-radius: 6px;
+            cursor: pointer;
+            overflow: hidden;
+            position: relative;
+            background-size: cover;
+            background-position: center;
+            transition: border-color 0.2s;
+        }
+        .style-btn:hover { border-color: var(--compass-blue); }
+        .style-btn.active { border-color: var(--compass-blue); }
+        .style-btn span {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(0,0,0,0.6);
+            color: white;
+            font-size: 8px;
+            text-align: center;
+            padding: 2px 0;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
     </style>
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-5NQ2VHSND7"></script>
@@ -461,7 +502,23 @@
             </div>
         </aside>
 
-        <div id="map"></div>
+        <div id="map">
+            <!-- Selector de Estilos de Mapa -->
+            <div class="map-style-selector">
+                <button class="style-btn" id="style-light" onclick="setMapStyle('light')" title="Light">
+                    <div style="width:100%; height:100%; background:#f0f0f0;"></div>
+                    <span>Gris</span>
+                </button>
+                <button class="style-btn" id="style-voyager" onclick="setMapStyle('voyager')" title="Standard">
+                    <div style="width:100%; height:100%; background:#a0d0f0;"></div>
+                    <span>Color</span>
+                </button>
+                <button class="style-btn" id="style-satellite" onclick="setMapStyle('satellite')" title="Satellite">
+                    <div style="width:100%; height:100%; background:#2c3e50;"></div>
+                    <span>Satelite</span>
+                </button>
+            </div>
+        </div>
         <button class="mobile-toggle-btn" id="mobileToggleBtn" onclick="toggleMobileView()">
             <span id="mobileToggleText">Ver Mapa</span> <i class="fa-solid fa-map" id="mobileToggleIcon"></i>
         </button>
@@ -571,9 +628,32 @@
         }).setView([38.15, -0.62], 10.5);
         L.control.zoom({ position: 'bottomright' }).addTo(map);
 
-        L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-            attribution: '&copy; CARTO'
-        }).addTo(map);
+        const mapStyles = {
+            light: L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+                attribution: '&copy; CARTO'
+            }),
+            voyager: L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+                attribution: '&copy; CARTO'
+            }),
+            satellite: L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+                attribution: '&copy; ESRI'
+            })
+        };
+
+        let currentBaseLayer = mapStyles.voyager;
+        currentBaseLayer.addTo(map);
+
+        function setMapStyle(style) {
+            if (map.hasLayer(currentBaseLayer)) {
+                map.removeLayer(currentBaseLayer);
+            }
+            currentBaseLayer = mapStyles[style];
+            currentBaseLayer.addTo(map);
+
+            // Update UI
+            document.querySelectorAll('.style-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(`style-${style}`).classList.add('active');
+        }
  
         // --- INICIALIZACIÓN POR URL ---
         const urlParams = new URLSearchParams(window.location.search);
