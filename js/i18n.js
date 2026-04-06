@@ -7,7 +7,18 @@ const translations = {
         "nav.neighborhoods": "Barrios",
         "nav.agents": "Agentes",
         "nav.signin": "Iniciar Sesión",
-        "hero.title": "Encuentra tu lugar en la Costa Blanca",
+        "hero.title": [
+            "Vive la felicidad frente al mar",
+            "Tu refugio bajo el sol mediterráneo",
+            "Despierta cada día junto al mar",
+            "Tu hogar soñado frente al mar",
+            "Felicidad es vivir en la costa",
+            "Tu nueva vida bajo el sol",
+            "Brisa marina en tu propio hogar",
+            "El Mediterráneo te espera en casa",
+            "Sonrisas infinitas frente a la playa",
+            "Tu oasis personal junto al mar"
+        ],
         "search.tab.buy": "Comprar",
         "search.tab.rent": "Alquilar",
         "search.tab.sold": "Vendido",
@@ -81,7 +92,18 @@ const translations = {
         "nav.neighborhoods": "Neighborhoods",
         "nav.agents": "Agents",
         "nav.signin": "Sign In",
-        "hero.title": "Find your place in the Costa Blanca.",
+        "hero.title": [
+            "Live happily by the sea",
+            "Your refuge under the Mediterranean sun",
+            "Wake up every day by the sea",
+            "Your dream home by the sea",
+            "Happiness is living on the coast",
+            "Your new life under the sun",
+            "Sea breeze in your own home",
+            "The Mediterranean awaits you at home",
+            "Infinite smiles facing the beach",
+            "Your personal oasis by the sea"
+        ],
         "search.tab.buy": "Buy",
         "search.tab.rent": "Rent",
         "search.tab.sold": "Sold",
@@ -303,11 +325,16 @@ function updateContent() {
     // 1. Textos estáticos marcados con data-i18n
     document.querySelectorAll("[data-i18n]").forEach(el => {
         const key = el.getAttribute("data-i18n");
-        if (translations[currentLang][key]) {
+        let value = translations[currentLang][key];
+        if (value) {
+            if (Array.isArray(value)) {
+                // Seleccionar un mensaje aleatorio si es un array
+                value = value[Math.floor(Math.random() * value.length)];
+            }
             if (el.tagName === "INPUT") {
-                el.placeholder = translations[currentLang][key];
+                el.placeholder = value;
             } else {
-                el.textContent = translations[currentLang][key];
+                el.textContent = value;
             }
         }
     });
