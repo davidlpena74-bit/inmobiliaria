@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/i18n.js"></script>
     <style>
         :root {
             --compass-blue: #0064E5;
@@ -21,15 +22,43 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: var(--font-sans); overflow: hidden; height: 100vh; display: flex; flex-direction: column; }
 
-        /* HEADER COMPASS STYLE */
+        /* HEADER UNIFICADO (Estilo Landing) */
         header {
-            height: 64px; background: var(--white); border-bottom: 1px solid var(--border);
-            display: flex; align-items: center; padding: 0 20px; z-index: 1000;
+            height: 70px; background: var(--white); border-bottom: 1px solid var(--border);
+            display: flex; justify-content: space-between; align-items: center; padding: 0 40px; z-index: 1000;
         }
-        .logo-img { height: 35px; cursor: pointer; }
-        .search-inner { flex: 1; max-width: 600px; margin-left: 20px; position: relative; }
-        .search-inner input { width: 100%; padding: 10px 15px 10px 40px; border: 1px solid var(--border); border-radius: 4px; font-size: 14px; outline: none; }
-        .search-inner i { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--compass-gray); }
+        .logo img { height: 35px; cursor: pointer; }
+        .search-container { flex: 1; max-width: 400px; margin-left: 40px; position: relative; }
+        .search-container input { width: 100%; padding: 10px 15px 10px 40px; border: 1px solid var(--border); border-radius: 4px; font-size: 14px; outline: none; }
+        .search-container i { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--compass-gray); }
+
+        nav { display: flex; align-items: center; }
+        nav a, .lang-menu { 
+            color: var(--compass-black); 
+            text-decoration: none; 
+            margin-left: 25px; 
+            font-size: 14px; 
+            font-weight: 500; 
+            transition: color 0.3s; 
+            position: relative; 
+            cursor: pointer; 
+        }
+        nav a:hover, .lang-menu:hover { color: var(--compass-blue); }
+
+        .lang-dropdown { 
+            position: absolute; top: 100%; right: -20px; background: var(--white); 
+            border: 1px solid var(--border); border-radius: 4px; padding: 10px 0; 
+            margin-top: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); opacity: 0; 
+            visibility: hidden; transition: all 0.2s; min-width: 130px; z-index: 2000;
+        }
+        .lang-dropdown::before { 
+            content: ''; position: absolute; top: -6px; right: 35px; width: 10px; height: 10px; 
+            background: var(--white); border-top: 1px solid var(--border); 
+            border-left: 1px solid var(--border); transform: rotate(45deg); 
+        }
+        .lang-menu:hover .lang-dropdown { opacity: 1; visibility: visible; }
+        .lang-dropdown a { color: var(--compass-black); display: block; padding: 8px 20px; margin: 0; font-weight: 400; text-align: left; }
+        .lang-dropdown a:hover { background: #f7f7f7; color: var(--compass-blue); }
 
         /* VIEWPORT LAYOUT */
         .viewport { flex: 1; display: flex; overflow: hidden; }
@@ -188,17 +217,23 @@
 </head>
 <body>
 
+    <!-- 🏠 Navegación Superior Unificada -->
     <header>
-        <img src="logos_corporativos/weperty_logo_azul.png" class="logo-img" onclick="window.location.href='index.html'">
-        <div class="search-inner">
+        <a href="index.html" class="logo">
+            <img src="logos_corporativos/weperty_logo_azul.png" alt="Weperty Logo">
+        </a>
+        
+        <div class="search-container">
             <i class="fa-solid fa-magnifying-glass"></i>
-            <input type="text" placeholder="Alicante, San Juan, Cabo de las Huertas...">
-        </div>
-        <div style="flex: 1;"></div>
-        <nav style="display: flex; gap: 20px; font-size: 13px; font-weight: 600; color: var(--compass-gray);">
-            <span>Comprar</span>
-            <span>Vender</span>
-            <span style="cursor:pointer" onclick="window.location.href='crm.html'">Agentes</span>
+            <div class="lang-menu" style="margin-left: 20px; color: var(--compass-black);">
+                <i class="fa-solid fa-globe"></i> EN <i class="fa-solid fa-chevron-down" style="font-size: 10px; margin-left: 4px;"></i>
+                <div class="lang-dropdown">
+                    <a href="javascript:void(0)" onclick="setLanguage('es')">🇪🇸 Español</a>
+                    <a href="javascript:void(0)" onclick="setLanguage('en')">🇬🇧 English</a>
+                    <a href="javascript:void(0)" onclick="setLanguage('de')">🇩🇪 Deutsch</a>
+                    <a href="javascript:void(0)" onclick="setLanguage('nl')">🇳🇱 Nederlands</a>
+                </div>
+            </div>
         </nav>
     </header>
 
@@ -208,29 +243,29 @@
                 <div class="search-controls-row">
                     <div class="input-group">
                         <label>€</label>
-                        <input type="text" id="min-price" placeholder="Mín" onchange="updateFilters()">
+                        <input type="text" id="min-price" data-i18n="filter.price.min" placeholder="Mín" onchange="updateFilters()">
                     </div>
                     <div class="hyphen">-</div>
                     <div class="input-group">
                         <label>€</label>
-                        <input type="text" id="max-price" placeholder="Máx" onchange="updateFilters()">
+                        <input type="text" id="max-price" data-i18n="filter.price.max" placeholder="Máx" onchange="updateFilters()">
                     </div>
                     <button class="btn-filters" onclick="toggleModal(true)">
-                        Filters <span class="badge" id="filter-count">0</span>
+                        <span data-i18n="filter.btn">Filters</span> <span class="badge" id="filter-count">0</span>
                     </button>
                 </div>
 
                 <div class="results-header">
                     <div class="results-meta">
-                        <div id="results-label">1-20 of 126 Inmuebles</div>
-                        <div class="results-subtext">Listas exclusivas de Weperty</div>
+                        <div id="results-label">... Inmuebles</div>
+                        <div class="results-subtext" data-i18n="results.tagline">Listas exclusivas de Weperty</div>
                     </div>
                     <div class="sort-row">
-                        <span>Ordenar por</span>
+                        <span data-i18n="sort.by">Ordenar por</span>
                         <select class="sort-select" id="sort-order" onchange="updateFilters()">
-                            <option value="recommended">Recomendados</option>
-                            <option value="price-asc">Precio: Menor a Mayor</option>
-                            <option value="price-desc">Precio: Mayor a Menor</option>
+                            <option value="recommended" data-i18n="sort.recommended">Recomendados</option>
+                            <option value="price-asc" data-i18n="sort.price.asc">Precio: Menor a Mayor</option>
+                            <option value="price-desc" data-i18n="sort.price.desc">Precio: Mayor a Menor</option>
                         </select>
                         <i class="fa-solid fa-chevron-down" style="font-size: 10px; color: #0060df; margin-left: 4px;"></i>
                     </div>
@@ -360,7 +395,8 @@
 
         function changeStepper(field, delta) {
             currentFilters[field] = Math.max(0, currentFilters[field] + delta);
-            document.getElementById(`val-${field}`).textContent = currentFilters[field] === 0 ? 'Cualquiera' : currentFilters[field] + '+';
+            const valueDisplay = currentFilters[field] === 0 ? (currentLang === 'es' ? 'Cualquiera' : (currentLang === 'en' ? 'Any' : (currentLang === 'de' ? 'Egal' : 'Elke'))) : currentFilters[field] + '+';
+            document.getElementById(`val-${field}`).textContent = valueDisplay;
             liveModalUpdate();
         }
 
@@ -371,7 +407,8 @@
             currentFilters.maxSqft = parseInt(document.getElementById('max-sqft').value) || Infinity;
 
             const count = performFiltering(false).length;
-            document.getElementById('modal-apply-btn').textContent = `Ver ${count} Inmuebles`;
+            const btnLabel = currentLang === 'es' ? `Ver ${count} Inmuebles` : (currentLang === 'en' ? `View ${count} Properties` : (currentLang === 'de' ? `${count} Immobilien anzeigen` : `Bekijk ${count} Woningen`));
+            document.getElementById('modal-apply-btn').textContent = btnLabel;
             
             let activeCount = 0;
             if (currentFilters.bed > 0) activeCount++;
@@ -395,8 +432,9 @@
             currentFilters = { bed: 0, bath: 0, types: [], amenities: [], minPrice: 0, maxPrice: Infinity, minSqft: 0, maxSqft: Infinity, sort: 'recommended' };
             document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
             document.querySelectorAll('input[type="number"]').forEach(input => input.value = '');
-            document.getElementById('val-bed').textContent = 'Cualquiera';
-            document.getElementById('val-bath').textContent = 'Cualquiera';
+            const anyText = (currentLang === 'es' ? 'Cualquiera' : (currentLang === 'en' ? 'Any' : (currentLang === 'de' ? 'Egal' : 'Elke')));
+            document.getElementById('val-bed').textContent = anyText;
+            document.getElementById('val-bath').textContent = anyText;
             updateFilters();
         }
 
@@ -467,7 +505,8 @@
                 updateFilters();
             } catch (err) {
                 console.error("Error cargando inmuebles:", err);
-                document.getElementById('prop-items').innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 40px; color: #ef4444;">Error de conexión.</div>';
+                const errorMsg = currentLang === 'es' ? 'Error de conexión.' : (currentLang === 'en' ? 'Connection error.' : (currentLang === 'de' ? 'Verbindungsfehler.' : 'Verbindingsfout.'));
+                document.getElementById('prop-items').innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 40px; color: #ef4444;">${errorMsg}</div>`;
             }
         }
 
@@ -479,7 +518,11 @@
             for (let key in propertyMarkers) delete propertyMarkers[key];
 
             const startIdx = filteredProperties.length > 0 ? 1 : 0;
-            document.getElementById('results-label').textContent = `${startIdx}-${filteredProperties.length} de ${allProperties.length} Inmuebles`;
+            const resText = currentLang === 'es' ? `${startIdx}-${filteredProperties.length} de ${allProperties.length} Inmuebles` : 
+                           (currentLang === 'en' ? `${startIdx}-${filteredProperties.length} of ${allProperties.length} Properties` : 
+                           (currentLang === 'de' ? `${startIdx}-${filteredProperties.length} von ${allProperties.length} Immobilien` : 
+                           `${startIdx}-${filteredProperties.length} van ${allProperties.length} Woningen`));
+            document.getElementById('results-label').textContent = resText;
 
             filteredProperties.forEach(p => {
                 const precio = new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(p.precio);
@@ -503,8 +546,7 @@
                             <div class="carousel-counter">1/${totalImages}</div>
                         ` : ''}
                         <div class="badge-pills">
-                            <div class="badge-pill">LISTED BY WEPERTY</div>
-                            <div class="badge-pill new">NUEVO</div>
+                            <div class="badge-pill">${t_prop(p, 'destacada') ? translations[currentLang]['prop.exclusive'] : translations[currentLang]['prop.comingsoon']}</div>
                         </div>
                         <img src="${fotos[0] ? fotos[0] : 'weperty_placeholder.png'}">
                     </div>
@@ -514,11 +556,11 @@
                             <div class="fav-star"><i class="fa-regular fa-star"></i></div>
                         </div>
                         <div class="stats">
-                            ${p.habitaciones || 0} beds <span class="sep">|</span> 
-                            <span class="underline">${p.banos || 0} baths</span> <span class="sep">|</span> 
+                            ${p.habitaciones || 0} ${translations[currentLang]['prop.beds']} <span class="sep">|</span> 
+                            <span class="underline">${p.banos || 0} ${translations[currentLang]['prop.baths']}</span> <span class="sep">|</span> 
                             ${p.superficie || 0} m²
                         </div>
-                        <div class="address">${p.titulo || 'Propiedad en Alicante'}</div>
+                        <div class="address">${t_prop(p, 'titulo')}</div>
                         <div class="area">${p.caracteristicas?.ciudad || 'Alicante'}, CP ${p.caracteristicas?.cod_postal || '03001'}</div>
                     </div>
                 `;

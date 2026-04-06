@@ -38,20 +38,21 @@ async function initPropertyDetail() {
 function renderProperty(p) {
     // Títulos y Precios
     const precioS = new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(p.precio);
-    document.title = `${p.titulo} | Weperty`;
-    document.getElementById('propTitle').textContent = p.titulo;
+    const tit = t_prop(p, 'titulo');
+    document.title = `${tit} | Weperty`;
+    document.getElementById('propTitle').textContent = tit;
     document.getElementById('stickyPrice').textContent = precioS;
     document.getElementById('stickyRef').textContent = `Ref: ${p.referencia}`;
     document.getElementById('propLocation').innerHTML = `<i class="fa-solid fa-location-dot"></i> ${p.caracteristicas?.ciudad || 'Alicante'}, ${p.caracteristicas?.provincia || 'Alicante'}`;
 
     // Badges / Stats
-    document.getElementById('labelBeds').textContent = `${p.habitaciones || 0} Hab`;
-    document.getElementById('labelBaths').textContent = `${p.banos || 0} Baños`;
+    document.getElementById('labelBeds').textContent = `${p.habitaciones || 0} ${translations[currentLang]['prop.beds']}`;
+    document.getElementById('labelBaths').textContent = `${p.banos || 0} ${translations[currentLang]['prop.baths']}`;
     document.getElementById('labelArea').textContent = `${p.superficie || 0} m²`;
     document.getElementById('labelTipo').textContent = p.tipo || 'Inmueble';
 
     // Descripción
-    document.getElementById('propDesc').innerHTML = p.descripcion || "Sin descripción disponible.";
+    document.getElementById('propDesc').innerHTML = t_prop(p, 'descripcion') || "Sin descripción disponible.";
 
     // Galería (Fotocasa Style: 1 Grande + 4 pequeñas)
     const imgs = p.imagenes_url || [];

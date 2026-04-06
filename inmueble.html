@@ -3,115 +3,118 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detalle Inmueble | Weperty Alicante</title>
+    <title>Inmueble | Weperty</title>
     <!-- Fonts & Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="css/inmueble.css">
     <!-- Supabase JS -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/i18n.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 </head>
 <body>
 
-    <!-- 📊 Barra de Resumen Sticky (Se activa al cargar) -->
-    <div class="sticky-bar" id="stickyBar">
-        <div class="sticky-content">
-            <div class="price-box">
-                <span class="price-main" id="stickyPrice">Cargando...</span>
-                <span class="ref-sub" id="stickyRef">Ref: ---</span>
-            </div>
-            <div class="cta-buttons">
-                <a href="#" class="btn-contact" onclick="openContact()"><i class="fa-solid fa-envelope"></i> Contactar</a>
-                <a href="#" class="btn-contact" style="background:#25D366" onclick="openWhatsapp()"><i class="fa-brands fa-whatsapp"></i> WhatsApp</a>
-            </div>
-        </div>
-    </div>
 
-    <!-- 🏠 Navegación Superior -->
-    <header style="padding: 15px 40px; display: flex; align-items: center; justify-content: space-between; background: white; border-bottom: 1px solid #eee;">
-        <img src="logos_corporativos/weperty_logo_azul.png" style="height: 35px; cursor: pointer;" onclick="window.location.href='index.html'">
-        <nav style="display: flex; gap: 20px; font-size: 14px; font-weight: 600; color: #666;">
-            <a href="inmuebles.html" style="text-decoration: none; color: inherit;">Volver al listado</a>
-            <span>Comprar</span>
-            <span>Vender</span>
+
+    <!-- 🏠 Navegación Superior Unificada -->
+    <header>
+        <a href="index.html" class="logo">
+            <img src="logos_corporativos/weperty_logo_azul.png" alt="Weperty Logo">
+        </a>
+        <nav>
+            <a href="inmuebles.html" data-i18n="nav.buy">Comprar</a>
+            <a href="#" data-i18n="nav.rent">Alquilar</a>
+            <a href="#" data-i18n="nav.sell">Vender</a>
+            <a href="#" data-i18n="nav.neighborhoods">Barrios</a>
+            <a href="#" data-i18n="nav.agents">Agentes</a>
+            
+            <div class="lang-menu">
+                <i class="fa-solid fa-globe"></i> EN <i class="fa-solid fa-chevron-down" style="font-size: 10px; margin-left: 4px;"></i>
+                <div class="lang-dropdown">
+                    <a href="javascript:void(0)" onclick="setLanguage('es')">🇪🇸 Español</a>
+                    <a href="javascript:void(0)" onclick="setLanguage('en')">🇬🇧 English</a>
+                    <a href="javascript:void(0)" onclick="setLanguage('de')">🇩🇪 Deutsch</a>
+                    <a href="javascript:void(0)" onclick="setLanguage('nl')">🇳🇱 Nederlands</a>
+                </div>
+            </div>
+            <a href="crm.html" style="margin-left: 30px;"><i class="fa-regular fa-user"></i> <span data-i18n="nav.signin">Iniciar Sesión</span></a>
         </nav>
     </header>
 
-    <!-- 🖼️ Galería de Imágenes -->
-    <div class="gallery-container" id="galleryGrid">
-        <div class="main-photo" id="mainPhotoBox">
-            <img src="weperty_placeholder.png" class="photo-item" id="photoMain">
+    <!-- 🏠 Galería de Imágenes -->
+    <div class="gallery-container">
+        <div class="main-photo">
+            <img src="weperty_placeholder.png" id="photoMain" class="photo-item" style="width: 100%; height: 100%; object-fit: cover;">
         </div>
         <div class="secondary-photos" id="secondaryPhotosBox">
-            <img src="weperty_placeholder.png" class="photo-item">
-            <img src="weperty_placeholder.png" class="photo-item">
-            <img src="weperty_placeholder.png" class="photo-item">
-            <img src="weperty_placeholder.png" class="photo-item">
+            <!-- Se poblara dinamicamente -->
         </div>
     </div>
 
-    <!-- 📝 Información Principal -->
+    <!-- 🏷️ Precio de la Propiedad (Debajo de las fotos) -->
+    <!-- Se movió dentro de .property-details -->
+
+
     <main class="main-info">
+        <!-- Columna Izquierda: Detalles -->
         <div class="property-details">
             <div class="property-header">
-                <h1 id="propTitle">Nombre del Inmueble</h1>
-                <p class="property-location" id="propLocation"><i class="fa-solid fa-location-dot"></i> Ubicación...</p>
+                <h1 id="propTitle">Cargando inmueble...</h1>
+                <p class="property-location" id="propLocation"><i class="fa-solid fa-location-dot"></i> ---</p>
+            </div>
+
+            <!-- 🏠 Precio y Ref -->
+            <div id="propPriceContainer" style="margin-bottom: 25px;">
+                <div id="stickyPrice" class="main-price">--- €</div>
+                <div id="stickyRef" class="ref-id">Ref: ---</div>
             </div>
 
             <div class="property-badges">
-                <div class="badge-item">
-                    <i class="fa-solid fa-bed"></i>
-                    <span id="labelBeds">-- Hab</span>
-                </div>
-                <div class="badge-item">
-                    <i class="fa-solid fa-bath"></i>
-                    <span id="labelBaths">-- Baños</span>
-                </div>
-                <div class="badge-item">
-                    <i class="fa-solid fa-ruler-combined"></i>
-                    <span id="labelArea">-- m²</span>
-                </div>
-                <div class="badge-item">
-                    <i class="fa-solid fa-building"></i>
-                    <span id="labelTipo">Inmueble</span>
-                </div>
+                <div class="badge-item"><i class="fa-solid fa-bed"></i> <span id="labelBeds">---</span></div>
+                <div class="badge-item"><i class="fa-solid fa-bath"></i> <span id="labelBaths">---</span></div>
+                <div class="badge-item"><i class="fa-solid fa-ruler-combined"></i> <span id="labelArea">---</span></div>
+                <div class="badge-item"><i class="fa-solid fa-house"></i> <span id="labelTipo">---</span></div>
             </div>
 
-            <h2 class="section-title">Descripción</h2>
+            <h2 class="section-title" data-i18n="detail.desc">Descripción</h2>
             <div class="property-description" id="propDesc">
                 Cargando descripción detallada del inmueble...
             </div>
 
-            <h2 class="section-title">Características y Extras</h2>
+            <h2 class="section-title" data-i18n="detail.features">Características y Extras</h2>
             <div class="extras-grid" id="extrasGrid">
                 <!-- Se poblará dinámicamente -->
             </div>
 
-            <h2 class="section-title">Ubicación</h2>
+            <h2 class="section-title" data-i18n="detail.location">Ubicación</h2>
             <div id="propertyMap" style="height: 300px; border-radius: 12px; margin-bottom: 50px;"></div>
         </div>
 
-        <!-- Sidebar Informativo -->
+        <!-- Columna Derecha: Sidebar (Agente) -->
         <aside class="sidebar-info">
-            <div style="background: white; padding: 25px; border-radius: 12px; border: 1px solid #eee; position: sticky; top: 100px;">
-                <h3 style="margin-bottom: 20px;">¿Te interesa este inmueble?</h3>
-                <p style="font-size: 0.9rem; color: #666; margin-bottom: 25px;">Nuestros agentes te darán toda la información sin compromiso.</p>
+            <div>
+                <h3 style="margin-bottom: 20px;" data-i18n="sidebar.interest">¿Te interesa este inmueble?</h3>
+                <p style="font-size: 0.9rem; color: #666; margin-bottom: 25px;" data-i18n="sidebar.subtitle">Nuestros agentes te darán toda la información sin compromiso.</p>
                 <div style="display: flex; flex-direction: column; gap: 10px;">
-                    <button class="btn-contact" style="width: 100%; text-align: center;">Solicitar Visita</button>
-                    <button class="btn-contact" style="width: 100%; text-align: center; border: 1px solid var(--primary-color); background: white; color: var(--primary-color);">Llamar ahora</button>
+                    <a href="javascript:void(0)" class="btn-contact" style="width: 100%; text-align: center; display: block;" onclick="openContact()">
+                        <i class="fa-solid fa-envelope"></i> <span data-i18n="btn.contact">Contactar</span>
+                    </a>
+                    <a href="javascript:void(0)" class="btn-contact" style="width: 100%; text-align: center; border: 1px solid #25D366; background: #25D366; color: white; display: block;" onclick="openWhatsapp()">
+                        <i class="fa-brands fa-whatsapp"></i> <span data-i18n="btn.whatsapp">WhatsApp</span>
+                    </a>
                 </div>
                 <div style="margin-top: 30px; border-top: 1px solid #eee; padding-top: 20px; display: flex; align-items: center; gap: 15px;">
                     <img src="https://i.pravatar.cc/100?img=12" style="width: 50px; height: 50px; border-radius: 50%;">
                     <div>
                         <p style="font-weight: 700; font-size: 0.9rem;">David Peña</p>
-                        <p style="font-size: 0.8rem; color: #888;">Agente Weperty San Juan</p>
+                        <p style="font-size: 0.8rem; color: #888;" data-i18n="agent.title">Agente Weperty San Juan</p>
                     </div>
                 </div>
             </div>
         </aside>
     </main>
 
-    <!-- JS Logic -->
+    <!-- Leaflet JS -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="js/inmueble.js"></script>
 </body>

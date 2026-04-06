@@ -29,7 +29,46 @@ body {
     background-color: var(--bg-light);
     color: var(--text-main);
     line-height: 1.6;
+    padding-top: 80px; /* Espacio para el header fixed */
 }
+
+/* 🏠 HEADER GLOBAL WEPERTY (Estilo Landing) */
+header {
+    position: fixed; width: 100%; top: 0; z-index: 1000;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 15px 40px; background: var(--white);
+    box-shadow: 0 1px 5px rgba(0,0,0,0.1);
+}
+
+.logo img { height: 35px; }
+
+nav { display: flex; align-items: center; }
+nav a, .lang-menu { 
+    color: var(--text-main); 
+    text-decoration: none; 
+    margin-left: 30px; 
+    font-size: 14px; 
+    font-weight: 500; 
+    transition: color 0.3s; 
+    position: relative; 
+    cursor: pointer; 
+}
+nav a:hover, .lang-menu:hover { color: var(--primary-color); }
+
+.lang-dropdown { 
+    position: absolute; top: 100%; right: -20px; background: var(--white); 
+    border: 1px solid var(--border-color); border-radius: 4px; padding: 10px 0; 
+    margin-top: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); opacity: 0; 
+    visibility: hidden; transition: all 0.2s; min-width: 130px; z-index: 2000;
+}
+.lang-dropdown::before { 
+    content: ''; position: absolute; top: -6px; right: 35px; width: 10px; height: 10px; 
+    background: var(--white); border-top: 1px solid var(--border-color); 
+    border-left: 1px solid var(--border-color); transform: rotate(45deg); 
+}
+.lang-menu:hover .lang-dropdown { opacity: 1; visibility: visible; }
+.lang-dropdown a { color: var(--text-main); display: block; padding: 8px 20px; margin: 0; font-weight: 400; text-align: left; }
+.lang-dropdown a:hover { background: var(--bg-light); color: var(--primary-color); }
 
 /* 🏠 Galería de Imágenes (Grid Moderno) */
 .gallery-container {
@@ -71,44 +110,32 @@ body {
 .secondary-photos img:nth-child(2) { border-radius: 0 12px 0 0; }
 .secondary-photos img:nth-child(4) { border-radius: 0 0 12px 0; }
 
-/* 📊 Barra de Resumen Sticky */
-.sticky-bar {
-    position: sticky;
-    top: 0;
-    background: var(--white);
-    height: var(--sticky-bar-height);
-    width: 100%;
-    z-index: 1000;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-bottom: 1px solid var(--border-color);
-}
-
-.sticky-content {
+/* 🏷️ Precio de la Propiedad (Debajo de las fotos) */
+.price-section {
     max-width: 1200px;
-    width: 100%;
+    margin: 0 auto;
+    padding: 20px 20px 0 20px;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 20px;
+    justify-content: flex-start;
 }
 
-.price-box {
+#propPriceContainer {
     display: flex;
     flex-direction: column;
+    gap: 2px;
 }
 
-.price-main {
+.main-price {
     font-size: 1.8rem;
     font-weight: 700;
     color: var(--primary-color);
+    line-height: 1.1;
 }
 
-.ref-sub {
-    font-size: 0.85rem;
+.ref-id {
+    font-size: 0.9rem;
     color: var(--text-muted);
+    font-weight: 500;
 }
 
 .cta-buttons {
@@ -138,6 +165,22 @@ body {
     display: grid;
     grid-template-columns: 2fr 1fr;
     gap: 40px;
+    position: relative;
+    z-index: 10; /* Asegurarse de que esté sobre otros fondos si hay solapamientos */
+}
+
+/* Columna Derecha: Sidebar (Agente) */
+aside.sidebar-info {
+    position: relative;
+}
+
+aside.sidebar-info > div {
+    position: sticky;
+    top: 100px;
+    background: var(--white);
+    padding: 25px;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
 }
 
 .property-header h1 {
@@ -215,5 +258,45 @@ body {
     }
     .secondary-photos { display: none; }
     .main-info { grid-template-columns: 1fr; }
-    .sticky-content { flex-direction: column; height: auto; padding: 15px; }
+}
+
+@media (max-width: 768px) {
+    body { padding-top: 65px; } /* Ajuste del header */
+    header { padding: 10px 20px; }
+    
+    /* Ocultar navegación en móvil (mantener iconos) */
+    nav a:not(:last-child) { display: none; }
+    nav a:last-child span { display: none; }
+    nav a:last-child { margin-left: 15px; }
+    .lang-menu { margin-left: 15px; }
+
+    .gallery-container {
+        grid-template-rows: 250px;
+        padding: 0; /* Imagen borde a borde en móvil */
+        margin-top: 0;
+    }
+    .main-photo { border-radius: 0; }
+
+    .main-info {
+        padding: 0 15px;
+        margin: 20px auto;
+        gap: 30px;
+    }
+    
+    .property-header h1 { font-size: 1.6rem; }
+    
+    .property-badges {
+        flex-wrap: wrap; /* Permitir salto de línea */
+        gap: 15px 25px;
+        padding: 15px 0;
+    }
+    
+    aside.sidebar-info > div {
+        top: 80px; 
+        padding: 20px;
+    }
+    
+    .extras-grid {
+        grid-template-columns: 1fr; /* Una columna para las características */
+    }
 }
