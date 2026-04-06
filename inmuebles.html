@@ -146,6 +146,20 @@
         .prop-info .address { font-size: 14px; color: #4a4a4a; font-weight: 400; line-height: 1.5; }
         .prop-info .area { font-size: 14px; color: #888; font-weight: 400; }
 
+        /* HEADER MOBILE MENU */
+        .hamburger { display: none; font-size: 20px; color: var(--compass-black); cursor: pointer; z-index: 2001; margin-left: 20px; }
+        .mobile-menu {
+            position: fixed; top: 0; right: -100%; width: 100%; height: 100%;
+            background: var(--white); z-index: 3000;
+            display: flex; flex-direction: column; align-items: start; padding: 100px 40px;
+            transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .mobile-menu.active { right: 0; }
+        .mobile-menu a { color: var(--compass-black); text-decoration: none; font-size: 24px; font-weight: 600; margin-bottom: 25px; font-family: var(--font-sans); }
+        .mobile-menu .close-btn { position: absolute; top: 30px; right: 40px; font-size: 30px; cursor: pointer; }
+        .mobile-menu .lang-selector-mob { border-top: 1px solid var(--border); width: 100%; padding-top: 25px; margin-top: 10px; display: flex; gap: 15px; flex-wrap: wrap; }
+        .mobile-menu .lang-selector-mob a { font-size: 14px; font-weight: 500; margin-bottom: 0; padding: 8px 15px; border: 1px solid var(--border); border-radius: 4px; }
+
         /* PUNTOS EN EL MAPA */
         .custom-marker {
             width: 16px !important; height: 16px !important;
@@ -201,7 +215,8 @@
         @media (max-width: 1024px) {
             header { padding: 0 15px; }
             nav a { display: none; }
-            .lang-menu { margin-left: 0; }
+            .lang-menu { display: none; }
+            .hamburger { display: block !important; }
             .search-controls-row { flex-wrap: wrap; }
             .search-controls-row .input-group { min-width: 120px; }
             .properties-grid { grid-template-columns: 1fr; padding: 15px; }
@@ -378,7 +393,24 @@
             </div>
             <a href="crm.html" style="margin-left: 30px;"><i class="fa-regular fa-user"></i> <span data-i18n="nav.signin">Sign In</span></a>
         </nav>
+        <div class="hamburger" onclick="toggleMenu(true)"><i class="fa-solid fa-bars"></i></div>
     </header>
+
+    <div class="mobile-menu" id="mobileDrawer">
+        <div class="close-btn" onclick="toggleMenu(false)">&times;</div>
+        <a href="index.html" data-i18n="nav.home" onclick="toggleMenu(false)">Home</a>
+        <a href="inmuebles.html" data-i18n="nav.buy" onclick="toggleMenu(false)">Buy</a>
+        <a href="#" data-i18n="nav.rent" onclick="toggleMenu(false)">Rent</a>
+        <a href="#" data-i18n="nav.sell" onclick="toggleMenu(false)">Sell</a>
+        <a href="crm.html" onclick="toggleMenu(false)">Sign In</a>
+        
+        <div class="lang-selector-mob">
+            <a href="javascript:void(0)" onclick="setLanguage('es'); toggleMenu(false)">ES</a>
+            <a href="javascript:void(0)" onclick="setLanguage('en'); toggleMenu(false)">EN</a>
+            <a href="javascript:void(0)" onclick="setLanguage('de'); toggleMenu(false)">DE</a>
+            <a href="javascript:void(0)" onclick="setLanguage('nl'); toggleMenu(false)">NL</a>
+        </div>
+    </div>
 
     <div class="viewport">
         <aside class="list-sidebar">
@@ -423,7 +455,7 @@
                 <div style="grid-column: 1/-1; text-align: center; padding: 40px; color: #94a3b8;">Cargando inmuebles...</div>
             </div>
             <div style="padding: 10px 20px; border-top: 1px solid var(--border); font-size: 10px; color: #94a3b8; text-align: center;">
-                VERSION 4.2.10
+                VERSION 4.2.11
             </div>
         </aside>
 
@@ -646,6 +678,11 @@
                 toggleText.textContent = currentLang === 'es' ? 'Ver Mapa' : (currentLang === 'en' ? 'View Map' : 'Mapa');
                 toggleIcon.className = 'fa-solid fa-map';
             }
+        }
+
+        function toggleMenu(show) {
+            const drawer = document.getElementById('mobileDrawer');
+            if (drawer) drawer.classList.toggle('active', show);
         }
 
         // --- FILTERING ENGINE ---

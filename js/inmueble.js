@@ -162,5 +162,10 @@ function openContact() {
     alert("Formulario de contacto próximamente.");
 }
 
+function toggleMenu(show) {
+    const drawer = document.getElementById('mobileDrawer');
+    if (drawer) drawer.classList.toggle('active', show);
+}
+
 // Iniciar aplicación
 initPropertyDetail();
