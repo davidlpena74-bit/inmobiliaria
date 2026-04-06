@@ -44,16 +44,19 @@
 
         /* Tabs */
         .tabs {
-            display: flex;
+            display: flex !important; /* Force visibility */
             gap: 0;
+            margin-top: 10px;
             margin-bottom: 22px;
             border-bottom: 2px solid var(--border);
             background: var(--white);
-            border-radius: 10px 10px 0 0;
+            border-radius: 10px;
             padding: 0 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            overflow-x: auto; /* Handle overflow on smaller screens */
         }
         .tab {
-            padding: 13px 20px;
+            padding: 15px 22px;
             cursor: pointer;
             font-size: 13px;
             font-weight: 500;
@@ -61,6 +64,7 @@
             border-bottom: 2px solid transparent;
             margin-bottom: -2px;
             transition: 0.2s;
+            white-space: nowrap; /* Prevent wrapping */
         }
         .tab:hover { color: var(--text); }
         .tab.active { color: var(--link-blue); border-bottom-color: var(--link-blue); font-weight: 600; }
