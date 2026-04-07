@@ -257,19 +257,11 @@
     <!-- Leaflet JS -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
-        function toggleMenu(isOpen) {
-            const drawer = document.getElementById('mobileDrawer');
-            if (drawer) {
-                if (isOpen) drawer.classList.add('active');
-                else drawer.classList.remove('active');
-            }
-        }
-
         // Auth Sync
         document.addEventListener('DOMContentLoaded', () => {
             if (window.Auth) Auth.updateHeader();
         });
     </script>
-    <script src="js/inmueble.js"></script>
+    <script src="js/inmueble.js?v=5.5.0"></script>
 </body>
 </html>
