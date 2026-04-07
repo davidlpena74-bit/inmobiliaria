@@ -8,6 +8,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css" />
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         :root {
@@ -70,6 +72,19 @@
             .list-sidebar { width: 100%; position: absolute; bottom: 0; height: 40%; z-index: 2000; border-top: 2px solid var(--border); }
             .viewport { flex-direction: column; }
         }
+
+        /* CLUSTER STYLING */
+        .marker-cluster-small { background-color: rgba(0, 100, 229, 0.2) !important; }
+        .marker-cluster-small div { background-color: rgba(0, 100, 229, 0.8) !important; color: white !important; font-weight: 700; }
+        .marker-cluster-medium { background-color: rgba(0, 100, 229, 0.4) !important; }
+        .marker-cluster-medium div { background-color: rgba(0, 100, 229, 0.9) !important; color: white !important; font-weight: 700; }
+        .marker-cluster-large { background-color: rgba(0, 100, 229, 0.5) !important; }
+        .marker-cluster-large div { background-color: rgba(0, 100, 229, 1) !important; color: white !important; font-weight: 700; }
+        .marker-cluster div {
+            width: 30px; height: 30px; margin-left: 5px; margin-top: 5px;
+            text-align: center; border-radius: 15px; font-size: 12px; line-height: 30px;
+        }
+        .marker-cluster span { line-height: 30px; }
     </style>
 </head>
 <body>
@@ -109,6 +124,7 @@
     </div>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
     <script>
         const SB_URL = "https://dwbvegnxmyvpolvofkfn.supabase.co";
         const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR3YnZlZ254bXl2cG9sdm9ma2ZuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njc1Mzg1NTUsImV4cCI6MjA4MzExNDU1NX0.eT5ZSce8H8Yk8pWKyLUYChU0HtmZljywP4eEQd5FkOI";
@@ -121,6 +137,15 @@
         L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
             attribution: '&copy; OpenStreetMap contributors &copy; CARTO'
         }).addTo(map);
+
+        // Marker Cluster Group
+        const markerCluster = L.markerClusterGroup({
+            showCoverageOnHover: false,
+            zoomToBoundsOnClick: true,
+            spiderfyOnMaxZoom: true,
+            maxClusterRadius: 40
+        });
+        map.addLayer(markerCluster);
 
         async function initSearch() {
             const grid = document.getElementById('prop-items');
@@ -143,6 +168,7 @@
         function renderProperties(props) {
             const grid = document.getElementById('prop-items');
             grid.innerHTML = '';
+            markerCluster.clearLayers();
 
             props.forEach(p => {
                 const lat = p.latitud || 38.36 + (Math.random() * 0.05);
@@ -154,7 +180,8 @@
                     className: 'custom-marker',
                     html: precioStr
                 });
-                L.marker([lat, lng], { icon }).addTo(map);
+                const marker = L.marker([lat, lng], { icon });
+                markerCluster.addLayer(marker);
 
                 // Añadir Tarjeta
                 const fotos = p.imagenes_url || (p.caracteristicas ? p.caracteristicas.fotos : []) || [];

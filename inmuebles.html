@@ -18,6 +18,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css" />
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="js/i18n.js?v=4.2.4"></script>
     <style>
@@ -401,6 +403,19 @@
             font-weight: 600;
             text-transform: uppercase;
         }
+
+        /* CLUSTER STYLING */
+        .marker-cluster-small { background-color: rgba(0, 100, 229, 0.2) !important; }
+        .marker-cluster-small div { background-color: rgba(0, 100, 229, 0.8) !important; color: white !important; font-weight: 700; }
+        .marker-cluster-medium { background-color: rgba(0, 100, 229, 0.4) !important; }
+        .marker-cluster-medium div { background-color: rgba(0, 100, 229, 0.9) !important; color: white !important; font-weight: 700; }
+        .marker-cluster-large { background-color: rgba(0, 100, 229, 0.5) !important; }
+        .marker-cluster-large div { background-color: rgba(0, 100, 229, 1) !important; color: white !important; font-weight: 700; }
+        .marker-cluster div {
+            width: 30px; height: 30px; margin-left: 5px; margin-top: 5px;
+            text-align: center; border-radius: 15px; font-size: 12px; line-height: 30px;
+        }
+        .marker-cluster span { line-height: 30px; }
     </style>
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-5NQ2VHSND7"></script>
@@ -498,7 +513,7 @@
                 <div style="grid-column: 1/-1; text-align: center; padding: 40px; color: #94a3b8;">Cargando inmuebles...</div>
             </div>
             <div style="padding: 10px 15px; border-top: 1px solid var(--border); font-size: 10px; color: #94a3b8; text-align: center;">
-                VERSION 4.3.2
+                VERSION 4.4.0
             </div>
         </aside>
 
@@ -596,6 +611,7 @@
     </div>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
     <script>
         // Supabase Client
         const SUPABASE_URL = 'https://dwbvegnxmyvpolvofkfn.supabase.co';
@@ -642,6 +658,15 @@
 
         let currentBaseLayer = mapStyles.voyager;
         currentBaseLayer.addTo(map);
+
+        // Marker Cluster Group
+        const markerCluster = L.markerClusterGroup({
+            showCoverageOnHover: false,
+            zoomToBoundsOnClick: true,
+            spiderfyOnMaxZoom: true,
+            maxClusterRadius: 40
+        });
+        map.addLayer(markerCluster);
 
         function setMapStyle(style) {
             if (map.hasLayer(currentBaseLayer)) {
@@ -848,7 +873,7 @@
             const container = document.getElementById('prop-items');
             container.innerHTML = '';
             
-            Object.values(propertyMarkers).forEach(m => map.removeLayer(m));
+            markerCluster.clearLayers();
             for (let key in propertyMarkers) delete propertyMarkers[key];
 
             const startIdx = filteredProperties.length > 0 ? 1 : 0;
@@ -911,7 +936,8 @@
                         iconSize: null,
                         iconAnchor: null
                     });
-                    const marker = L.marker([p.latitud, p.longitud], { icon }).addTo(map);
+                    const marker = L.marker([p.latitud, p.longitud], { icon });
+                    markerCluster.addLayer(marker);
                     
                     // --- POPUP ESTILO COMPASS ---
                     const popupHtml = `
