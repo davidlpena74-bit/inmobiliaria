@@ -59,6 +59,28 @@ const Auth = {
     logout: function() {
         localStorage.removeItem(this.sessionKey);
         window.location.reload();
+    },
+
+    updateHeader: function() {
+        const desktopItem = document.getElementById('nav-auth-item');
+        const mobileItem = document.getElementById('nav-auth-item-mob');
+        const loggedIn = this.isLoggedIn();
+
+        if (loggedIn) {
+            const user = this.getUser();
+            const displayName = user.user || 'Admin';
+            
+            // Format for desktop
+            if (desktopItem) {
+                desktopItem.innerHTML = `<i class="fa-solid fa-user-check"></i> <span>${displayName}</span> <a href="javascript:Auth.logout()" style="margin-left: 10px; color: #ef4444; font-size: 11px;">(Logout)</a>`;
+                desktopItem.onclick = null;
+            }
+            // Format for mobile
+            if (mobileItem) {
+                mobileItem.innerHTML = `<i class="fa-solid fa-user-check"></i> <span>${displayName}</span> <span onclick="Auth.logout()" style="margin-left: 10px; color: #ef4444; font-size: 14px;">(Logout)</span>`;
+                mobileItem.onclick = null;
+            }
+        }
     }
 };
 

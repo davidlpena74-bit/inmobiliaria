@@ -534,7 +534,7 @@
         <a href="inmuebles.html" data-i18n="nav.buy" onclick="toggleMenu(false)">Buy</a>
         <a href="#" data-i18n="nav.rent" onclick="toggleMenu(false)">Rent</a>
         <a href="#" data-i18n="nav.sell" onclick="toggleMenu(false)">Sell</a>
-        <a href="crm.html" onclick="toggleMenu(false)">Sign In</a>
+        <a href="javascript:void(0)" id="nav-auth-item-mob" onclick="Auth.isLoggedIn() ? window.location.href='crm.html' : Auth.showModal(); toggleMenu(false)"><i class="fa-regular fa-user"></i> <span data-i18n="nav.signin">Sign In</span></a>
         
         <div class="lang-selector-mob">
             <a href="javascript:void(0)" onclick="setLanguage('es'); toggleMenu(false)">ES</a>
@@ -599,7 +599,7 @@
                 <div style="grid-column: 1/-1; text-align: center; padding: 40px; color: #94a3b8;">Cargando inmuebles...</div>
             </div>
             <div style="padding: 10px 15px; border-top: 1px solid var(--border); font-size: 10px; color: #94a3b8; text-align: center;">
-                VERSION 5.1.0
+                VERSION 5.2.0
             </div>
         </aside>
 
@@ -964,14 +964,6 @@
             if (drawer) drawer.classList.toggle('active', show);
         }
 
-        function updateAuthHeader() {
-            const authItem = document.getElementById('nav-auth-item');
-            if (Auth.isLoggedIn() && authItem) {
-                const user = Auth.getUser();
-                authItem.innerHTML = `<i class="fa-solid fa-user-check"></i> <span>${user.user}</span> <a href="javascript:Auth.logout()" style="margin-left: 10px; color: #ef4444; font-size: 11px;">(Logout)</a>`;
-                authItem.onclick = null; // Disable modal trigger
-            }
-        }
 
         // --- FILTERING ENGINE ---
 
@@ -1164,7 +1156,7 @@
         }
 
         fetchProperties();
-        updateAuthHeader();
+        Auth.updateHeader();
         if (typeof updateContent === 'function') updateContent();
     </script>
 </body>

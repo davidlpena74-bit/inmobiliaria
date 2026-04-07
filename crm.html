@@ -221,8 +221,12 @@
     const db = supabase.createClient(SB_URL, SB_KEY);
 
     function logout() {
-        localStorage.removeItem('weperty_session');
-        window.location.href = 'index.html';
+        if (window.Auth) {
+            Auth.logout();
+        } else {
+            localStorage.removeItem('weperty_session');
+            window.location.href = 'index.html';
+        }
     }
 
     let allProperties = [];

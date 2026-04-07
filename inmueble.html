@@ -18,6 +18,7 @@
     <!-- Supabase JS -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="js/i18n.js?v=5.1.5"></script>
+    <script src="js/auth.js?v=5.0.0"></script>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <style>
         :root {
@@ -113,7 +114,7 @@
                     <a href="javascript:void(0)" onclick="setLanguage('nl')"><img src="https://flagcdn.com/w40/nl.png" width="16" style="margin-right: 8px; vertical-align: middle;"> Nederlands</a>
                 </div>
             </div>
-            <a href="crm.html" style="margin-left: 30px;"><i class="fa-regular fa-user"></i> <span data-i18n="nav.signin">Iniciar Sesión</span></a>
+            <a href="javascript:void(0)" id="nav-auth-item" onclick="Auth.isLoggedIn() ? window.location.href='crm.html' : Auth.showModal()" style="margin-left: 30px;"><i class="fa-regular fa-user"></i> <span data-i18n="nav.signin">Sign In</span></a>
         </nav>
         <div class="hamburger" onclick="toggleMenu(true)"><i class="fa-solid fa-bars"></i></div>
     </header>
@@ -124,7 +125,7 @@
         <a href="inmuebles.html" data-i18n="nav.buy" onclick="toggleMenu(false)">Comprar</a>
         <a href="#" data-i18n="nav.rent" onclick="toggleMenu(false)">Alquilar</a>
         <a href="#" data-i18n="nav.sell" onclick="toggleMenu(false)">Vender</a>
-        <a href="crm.html" onclick="toggleMenu(false)">Sign In</a>
+        <a href="javascript:void(0)" id="nav-auth-item-mob" onclick="Auth.isLoggedIn() ? window.location.href='crm.html' : Auth.showModal(); toggleMenu(false)"><i class="fa-regular fa-user"></i> <span data-i18n="nav.signin">Sign In</span></a>
         
         <div class="lang-selector-mob">
             <a href="javascript:void(0)" onclick="setLanguage('es'); toggleMenu(false)">ES</a>
@@ -234,6 +235,12 @@
 
     <!-- Leaflet JS -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        // Auth Sync
+        document.addEventListener('DOMContentLoaded', () => {
+            if (window.Auth) Auth.updateHeader();
+        });
+    </script>
     <script src="js/inmueble.js"></script>
 </body>
 </html>

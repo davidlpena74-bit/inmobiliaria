@@ -28,6 +28,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="js/i18n.js?v=5.1.5"></script>
+    <script src="js/auth.js?v=5.0.0"></script>
     <style>
         :root {
             --compass-blue: #0060df;
@@ -252,7 +253,7 @@
                     <a href="javascript:void(0)" onclick="setLanguage('nl')"><img src="https://flagcdn.com/w40/nl.png" width="16" style="margin-right: 8px; vertical-align: middle;"> Nederlands</a>
                 </div>
             </div>
-            <a href="crm.html" style="margin-left: 30px;"><i class="fa-regular fa-user"></i> <span data-i18n="nav.signin">Sign In</span></a>
+            <a href="javascript:void(0)" id="nav-auth-item" onclick="Auth.isLoggedIn() ? window.location.href='crm.html' : Auth.showModal()" style="margin-left: 30px;"><i class="fa-regular fa-user"></i> <span data-i18n="nav.signin">Sign In</span></a>
         </nav>
         <div class="hamburger" onclick="toggleMenu(true)"><i class="fa-solid fa-bars"></i></div>
     </header>
@@ -263,7 +264,7 @@
         <a href="inmuebles.html" data-i18n="nav.buy" onclick="toggleMenu(false)">Buy</a>
         <a href="#" data-i18n="nav.rent" onclick="toggleMenu(false)">Rent</a>
         <a href="#" data-i18n="nav.sell" onclick="toggleMenu(false)">Sell</a>
-        <a href="crm.html" onclick="toggleMenu(false)">Sign In</a>
+        <a href="javascript:void(0)" id="nav-auth-item-mob" onclick="Auth.isLoggedIn() ? window.location.href='crm.html' : Auth.showModal(); toggleMenu(false)"><i class="fa-regular fa-user"></i> <span data-i18n="nav.signin">Sign In</span></a>
         
         <div class="lang-selector-mob">
             <a href="javascript:void(0)" onclick="setLanguage('es'); toggleMenu(false)">ES</a>
@@ -360,7 +361,7 @@
         <div class="footer-bottom">
             <div data-i18n="footer.bottom">© 2026 Weperty Real Estate. All rights reserved. | <a href="terms.html" style="color: #999; text-decoration: underline;">Terms</a> | <a href="privacy.html" style="color: #999; text-decoration: underline;">Privacy</a> | Alicante Authority | Equal Housing Opportunity.</div>
             <div style="display: flex; gap: 20px; align-items: center;">
-                <span style="font-size: 10px; color: #666; margin-right: 15px;">VERSION 5.1.0</span>
+                <span style="font-size: 10px; color: #666; margin-right: 15px;">VERSION 5.2.0</span>
                 <i class="fa-brands fa-instagram"></i>
                 <i class="fa-brands fa-linkedin-in"></i>
                 <i class="fa-brands fa-facebook-f"></i>
@@ -478,6 +479,11 @@
             if (drawer) drawer.classList.toggle('active', show);
         }
 
+        // --- AUTH SYNC ---
+        document.addEventListener('DOMContentLoaded', () => {
+            if (window.Auth) Auth.updateHeader();
+        });
+        
         window.onload = loadWebProperties;
     </script>
     <script src="js/cookies.js"></script>
