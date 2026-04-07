@@ -13,8 +13,8 @@
 }
 
 .auth-card { 
-    width: 100%; max-width: 480px; text-align: center; position: relative; 
-    padding: 40px; background: white; border-radius: 12px;
+    width: 100%; max-width: 380px; text-align: center; position: relative; 
+    padding: 35px; background: white; border-radius: 12px;
     box-shadow: 0 20px 40px rgba(0,0,0,0.3);
 }
 
@@ -35,19 +35,77 @@
     display: flex; align-items: center; justify-content: center; 
 }
 
-.auth-actions { 
-    display: flex; flex-direction: column; gap: 12px; 
-    margin-bottom: 40px; 
-}
+.auth-actions { display: flex; flex-direction: column; gap: 12px; margin-bottom: 30px; }
+        
+        /* NEW EMAIL FORM STYLES */
+        .auth-form-container { text-align: left; margin-bottom: 30px; }
+        .auth-field-group { margin-bottom: 25px; }
+        .auth-label { display: block; font-size: 16px; font-weight: 700; color: #111; margin-bottom: 8px; }
+        .auth-input { 
+            width: 100%; padding: 14px; border: 1px solid #717171; border-radius: 4px; 
+            font-size: 16px; outline: none; transition: border-color 0.2s;
+            color: #111;
+        }
+        .auth-input::placeholder { color: #999; }
+        .auth-input:focus { border-color: var(--compass-blue); }
 
-.btn-auth-role { 
-    width: 100%; padding: 16px; border: none; border-radius: 8px; 
-    background: #0060df; color: white; font-size: 16px; 
-    font-weight: 600; cursor: pointer; transition: transform 0.2s, background 0.2s; 
-}
+        .btn-auth-continue { 
+            width: 100%; padding: 16px; border: none; border-radius: 4px; 
+            background: var(--compass-blue); color: white; font-size: 16px; 
+            font-weight: 700; cursor: pointer; transition: background 0.2s, transform 0.1s;
+            margin-bottom: 40px;
+        }
+        .btn-auth-continue:hover { background: #0056c1; }
+        .btn-auth-continue:active { transform: scale(0.99); }
 
-.btn-auth-role:hover { background: #0056c1; transform: translateY(-1px); }
-.btn-auth-role:active { transform: translateY(0); }
+        .auth-divider { 
+            text-align: center; border-bottom: 1px solid transparent; 
+            margin-bottom: 15px; position: relative; 
+        }
+        .auth-divider span { 
+            background: white; padding: 0 10px; font-size: 16px; 
+            color: #111; font-weight: 400; 
+        }
+
+        /* GOOGLE BUTTON STYLES */
+        .auth-google-btn { 
+            display: flex; align-items: center; padding: 6px 16px; 
+            border: 1px solid #dadce0; border-radius: 4px; cursor: pointer; 
+            transition: background 0.2s; position: relative;
+        }
+        .auth-google-btn:hover { background: #f8f9fa; }
+        
+        .google-avatar { 
+            width: 36px; height: 36px; background: #4a5568; color: white; 
+            border-radius: 50%; display: flex; align-items: center; justify-content: center; 
+            font-weight: 600; font-size: 16px; margin-right: 12px;
+        }
+        .google-content { flex: 1; text-align: left; }
+        .google-text { font-size: 14px; font-weight: 600; color: #3c4043; }
+        .google-email { font-size: 12px; color: #70757a; }
+        .google-logo { width: 20px; height: 20px; }
+
+        /* DYNAMIC VIEW STYLES */
+        .auth-back { 
+            position: absolute; top: 40px; left: 40px; cursor: pointer; 
+            font-size: 18px; color: #666; transition: color 0.2s;
+        }
+        .auth-back:hover { color: var(--compass-blue); }
+
+        .auth-email-display { 
+            font-size: 16px; color: #666; margin-bottom: 20px; 
+            padding: 10px 0; border-bottom: 1px solid #eee;
+        }
+
+        .auth-link-small { 
+            display: inline-block; font-size: 13px; color: #666; 
+            text-decoration: none; margin-top: 10px; cursor: pointer;
+        }
+        .auth-link-small:hover { text-decoration: underline; color: #111; }
+
+        .auth-note { 
+            font-size: 13px; color: #666; margin-top: 15px; text-align: center;
+        }
 
 .auth-footer { font-size: 13px; color: #666; font-weight: 400; line-height: 1.5; }
 .auth-footer a { color: #111; text-decoration: underline; font-weight: 600; }

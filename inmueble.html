@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="css/inmueble.css?v=4.1.5">
     <link rel="stylesheet" href="css/user-menu.css?v=5.3.0">
-    <link rel="stylesheet" href="css/auth.css?v=5.4.0">
+    <link rel="stylesheet" href="css/auth.css?v=5.7.1">
     <!-- Supabase JS -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="js/i18n.js?v=5.1.5"></script>
@@ -83,7 +83,20 @@
         .lang-dropdown a { color: var(--compass-black); display: block; padding: 8px 20px; margin: 0; font-weight: 400; text-align: left; white-space: nowrap; }
         .lang-dropdown a:hover { background: #f7f7f7; color: var(--compass-blue); }
 
-        .hamburger { display: none; font-size: 24px; cursor: pointer; }
+        .hamburger { display: none; font-size: 24px; color: var(--compass-black); cursor: pointer; z-index: 2001; }
+        
+        .mobile-menu {
+            position: fixed; top: 0; right: -100%; width: 100%; height: 100%;
+            background: var(--white); z-index: 3000;
+            display: flex; flex-direction: column; align-items: start; padding: 100px 40px;
+            transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .mobile-menu.active { right: 0; }
+        .mobile-menu a { color: var(--compass-black); text-decoration: none; font-size: 24px; font-weight: 600; margin-bottom: 25px; font-family: 'Montserrat', sans-serif; }
+        .mobile-menu .close-btn { position: absolute; top: 30px; right: 40px; font-size: 30px; cursor: pointer; }
+        .mobile-menu .lang-selector-mob { border-top: 1px solid var(--border); width: 100%; padding-top: 25px; margin-top: 10px; display: flex; gap: 15px; flex-wrap: wrap; }
+        .mobile-menu .lang-selector-mob a { font-size: 14px; font-weight: 500; margin-bottom: 0; font-family: 'Montserrat', sans-serif; padding: 8px 15px; border: 1px solid var(--border); border-radius: 4px; }
+
         @media (max-width: 768px) {
             header { padding: 15px 20px; }
             nav#desktopNav { display: none; }
@@ -105,7 +118,7 @@
             <a href="#" data-i18n="nav.rent">Alquilar</a>
             <a href="#" data-i18n="nav.sell">Vender</a>
             <a href="#" data-i18n="nav.neighborhoods">Barrios</a>
-            <a href="#" data-i18n="nav.agents">Agentes</a>
+            <a href="crm.html" data-i18n="nav.agents">Agentes</a>
             
             <div class="lang-menu">
                 <span class="lang-active"><i class="fa-solid fa-globe"></i> EN <i class="fa-solid fa-chevron-down" style="font-size: 10px; margin-left: 4px;"></i></span>
@@ -127,6 +140,8 @@
         <a href="inmuebles.html" data-i18n="nav.buy" onclick="toggleMenu(false)">Comprar</a>
         <a href="#" data-i18n="nav.rent" onclick="toggleMenu(false)">Alquilar</a>
         <a href="#" data-i18n="nav.sell" onclick="toggleMenu(false)">Vender</a>
+        <a href="#" data-i18n="nav.neighborhoods" onclick="toggleMenu(false)">Barrios</a>
+        <a href="crm.html" data-i18n="nav.agents" onclick="toggleMenu(false)">Agentes</a>
         <a href="javascript:void(0)" id="nav-auth-item-mob" onclick="Auth.isLoggedIn() ? window.location.href='crm.html' : Auth.showModal(); toggleMenu(false)"><i class="fa-regular fa-user"></i> <span data-i18n="nav.signin">Sign In</span></a>
         
         <div class="lang-selector-mob">
@@ -238,6 +253,14 @@
     <!-- Leaflet JS -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
+        function toggleMenu(isOpen) {
+            const drawer = document.getElementById('mobileDrawer');
+            if (drawer) {
+                if (isOpen) drawer.classList.add('active');
+                else drawer.classList.remove('active');
+            }
+        }
+
         // Auth Sync
         document.addEventListener('DOMContentLoaded', () => {
             if (window.Auth) Auth.updateHeader();

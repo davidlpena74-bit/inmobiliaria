@@ -23,7 +23,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="js/i18n.js?v=5.1.5"></script>
     <script src="js/auth.js?v=5.1.0"></script>
-    <link rel="stylesheet" href="css/auth.css?v=5.4.0">
+    <link rel="stylesheet" href="css/auth.css?v=5.7.1">
     <link rel="stylesheet" href="css/user-menu.css?v=5.3.0">
     <style>
         :root {
@@ -98,8 +98,8 @@
 
         /* LIST AREA (LEFT) */
         .list-sidebar { 
-            width: 50%; 
-            max-width: 1200px; 
+            width: 45%; 
+            max-width: 650px; 
             min-width: 450px; 
             flex-shrink: 0;
             height: 100%; 
@@ -116,19 +116,17 @@
         .filter-pill { padding: 8px 15px; border: 1px solid var(--border); border-radius: 20px; font-size: 12px; font-weight: 600; cursor: pointer; }
         .filter-pill:hover { background: #f8fafc; }
 
-        .properties-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; padding: 20px; }
-@media (max-width: 1600px) {
-    .properties-grid { grid-template-columns: repeat(3, 1fr); }
-}
-@media (max-width: 1250px) {
-    .properties-grid { grid-template-columns: repeat(2, 1fr); }
-}
+        .properties-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; padding: 20px; }
         .prop-card { 
             cursor: pointer; display: flex; flex-direction: column; background: white;
-            border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden;
-            transition: box-shadow 0.2s, transform 0.2s;
+            border: 1px solid #eef2f6; border-radius: 12px; overflow: hidden;
+            box-shadow: 0 4px 4px rgba(0,0,0,0.15);
+            transition: box-shadow 0.25s ease, transform 0.25s ease;
         }
-        .prop-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.08); transform: translateY(-2px); }
+        .prop-card:hover { 
+            box-shadow: 0 8px 8px rgba(0,0,0,0.2); 
+            transform: translateY(-4px); 
+        }
         
         .prop-img { width: 100%; height: 220px; position: relative; overflow: hidden; }
         .prop-img img { width: 100%; height: 100%; object-fit: cover; }
@@ -507,6 +505,8 @@
         <a href="inmuebles.html" data-i18n="nav.buy" onclick="toggleMenu(false)">Buy</a>
         <a href="#" data-i18n="nav.rent" onclick="toggleMenu(false)">Rent</a>
         <a href="#" data-i18n="nav.sell" onclick="toggleMenu(false)">Sell</a>
+        <a href="#" data-i18n="nav.neighborhoods" onclick="toggleMenu(false)">Neighborhoods</a>
+        <a href="crm.html" data-i18n="nav.agents" onclick="toggleMenu(false)">Agents</a>
         <a href="javascript:void(0)" id="nav-auth-item-mob" onclick="Auth.isLoggedIn() ? window.location.href='crm.html' : Auth.showModal(); toggleMenu(false)"><i class="fa-regular fa-user"></i> <span data-i18n="nav.signin">Sign In</span></a>
         
         <div class="lang-selector-mob">
@@ -572,7 +572,7 @@
                 <div style="grid-column: 1/-1; text-align: center; padding: 40px; color: #94a3b8;">Cargando inmuebles...</div>
             </div>
             <div style="padding: 10px 15px; border-top: 1px solid var(--border); font-size: 10px; color: #94a3b8; text-align: center;">
-                VERSION 5.3.1
+                VERSION 5.4.0
             </div>
         </aside>
 
@@ -1091,6 +1091,14 @@
             if (marker && marker.getElement()) {
                 if (active) marker.getElement().classList.add('highlight');
                 else marker.getElement().classList.remove('highlight');
+            }
+        }
+
+        function toggleMenu(isOpen) {
+            const drawer = document.getElementById('mobileDrawer');
+            if (drawer) {
+                if (isOpen) drawer.classList.add('active');
+                else drawer.classList.remove('active');
             }
         }
 

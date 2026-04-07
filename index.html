@@ -30,7 +30,7 @@
     <script src="js/i18n.js?v=5.1.5"></script>
     <script src="js/auth.js?v=5.0.0"></script>
     <link rel="stylesheet" href="css/user-menu.css?v=5.3.0">
-    <link rel="stylesheet" href="css/auth.css?v=5.4.0">
+    <link rel="stylesheet" href="css/auth.css?v=5.7.1">
     <style>
         :root {
             --compass-blue: #0060df;
@@ -139,10 +139,14 @@
 
         .prop-card { 
             cursor: pointer; display: flex; flex-direction: column; background: white;
-            border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden;
-            transition: box-shadow 0.2s, transform 0.2s;
+            border: 1px solid #eef2f6; border-radius: 8px; overflow: hidden;
+            box-shadow: 0 4px 4px rgba(0,0,0,0.15);
+            transition: box-shadow 0.25s ease, transform 0.25s ease;
         }
-        .prop-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.08); transform: translateY(-2px); }
+        .prop-card:hover { 
+            box-shadow: 0 8px 8px rgba(0,0,0,0.2); 
+            transform: translateY(-4px); 
+        }
         
         .prop-img { width: 100%; height: 260px; position: relative; overflow: hidden; }
         .prop-img img { width: 100%; height: 100%; object-fit: cover; }
@@ -249,6 +253,7 @@
             <a href="#" data-i18n="nav.rent">Rent</a>
             <a href="#" data-i18n="nav.sell">Sell</a>
             <a href="#" data-i18n="nav.neighborhoods">Neighborhoods</a>
+            <a href="crm.html" data-i18n="nav.agents">Agents</a>
             <div class="lang-menu">
                 <span class="lang-active"><i class="fa-solid fa-globe"></i> EN <i class="fa-solid fa-chevron-down" style="font-size: 10px; margin-left: 4px;"></i></span>
                 <div class="lang-dropdown">
@@ -269,6 +274,7 @@
         <a href="inmuebles.html" data-i18n="nav.buy" onclick="toggleMenu(false)">Buy</a>
         <a href="#" data-i18n="nav.rent" onclick="toggleMenu(false)">Rent</a>
         <a href="#" data-i18n="nav.sell" onclick="toggleMenu(false)">Sell</a>
+        <a href="crm.html" data-i18n="nav.agents" onclick="toggleMenu(false)">Agents</a>
         <a href="javascript:void(0)" id="nav-auth-item-mob" onclick="Auth.isLoggedIn() ? window.location.href='crm.html' : Auth.showModal(); toggleMenu(false)"><i class="fa-regular fa-user"></i> <span data-i18n="nav.signin">Sign In</span></a>
         
         <div class="lang-selector-mob">
@@ -366,7 +372,7 @@
         <div class="footer-bottom">
             <div data-i18n="footer.bottom">© 2026 Weperty Real Estate. All rights reserved. | <a href="terms.html" style="color: #999; text-decoration: underline;">Terms</a> | <a href="privacy.html" style="color: #999; text-decoration: underline;">Privacy</a> | Alicante Authority | Equal Housing Opportunity.</div>
             <div style="display: flex; gap: 20px; align-items: center;">
-                <span style="font-size: 10px; color: #666; margin-right: 15px;">VERSION 5.3.1</span>
+                <span style="font-size: 10px; color: #666; margin-right: 15px;">VERSION 5.4.0</span>
                 <i class="fa-brands fa-instagram"></i>
                 <i class="fa-brands fa-linkedin-in"></i>
                 <i class="fa-brands fa-facebook-f"></i>
@@ -415,7 +421,7 @@
                     .select('*')
                     .eq('publicar_web', true)
                     .order('created_at', { ascending: false })
-                    .limit(6);
+                    .limit(8);
 
                 if (error || !data || data.length === 0) throw new Error("No properties found");
 
@@ -446,9 +452,9 @@
                     `;
                 }).join('');
             } catch (err) {
-                // FALLBACK: Cargar datos de ejemplo (6 iteraciones para 3x2)
+                // FALLBACK: Cargar datos de ejemplo (8 iteraciones para 4x2)
                 console.error(err);
-                grid.innerHTML = [1,2,3,4,5,6].map(i => `
+                grid.innerHTML = [1,2,3,4,5,6,7,8].map(i => `
                     <div class="prop-card">
                         <div class="prop-img">
                             <div class="badge-pills">

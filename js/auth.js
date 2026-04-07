@@ -9,24 +9,26 @@ const AUTH_MODAL_HTML = `
         <div class="auth-close" onclick="Auth.hideModal()">&times;</div>
         <h1 class="auth-title" data-i18n="auth.title">Register/Sign In</h1>
         
-        <div class="auth-illustration">
-            <svg width="200" height="150" viewBox="0 0 200 150" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M100 20L30 80H170L100 20Z" stroke="black" stroke-width="1.5" stroke-linejoin="round"/>
-                <rect x="50" y="80" width="100" height="60" stroke="black" stroke-width="1.5" stroke-linejoin="round"/>
-                <rect x="85" y="105" width="30" height="35" stroke="black" stroke-width="1.5" stroke-linejoin="round"/>
-                <rect x="65" y="95" width="20" height="20" stroke="black" stroke-width="1.5" stroke-linejoin="round"/>
-                <rect x="115" y="95" width="20" height="20" stroke="black" stroke-width="1.5" stroke-linejoin="round"/>
-                <circle cx="20" cy="110" r="15" stroke="black" stroke-width="1.5"/>
-                <line x1="20" y1="125" x2="20" y2="140" stroke="black" stroke-width="1.5"/>
-                <circle cx="180" cy="110" r="15" stroke="black" stroke-width="1.5"/>
-                <line x1="180" y1="125" x2="180" y2="140" stroke="black" stroke-width="1.5"/>
-            </svg>
-        </div>
+        <div class="auth-form-container">
+            <div class="auth-field-group">
+                <label class="auth-label" data-i18n="auth.label.email">Tu email</label>
+                <input type="email" id="auth-email-input" class="auth-input" placeholder="nombre@ejemplo.com">
+            </div>
 
-        <div class="auth-actions">
-            <button class="btn-auth-role" onclick="Auth.handleRole('agent')" data-i18n="auth.role.agent">Agent</button>
-            <button class="btn-auth-role" onclick="Auth.handleRole('buyer_seller')" data-i18n="auth.role.buyer_seller">Buyer or Seller</button>
-            <button class="btn-auth-role" onclick="Auth.handleRole('other')" data-i18n="auth.role.other">Other</button>
+            <button class="btn-auth-continue" onclick="Auth.handleContinue()" data-i18n="auth.btn.continue">Continuar</button>
+            
+            <div class="auth-divider">
+                <span data-i18n="auth.divider">También puedes</span>
+            </div>
+
+            <div class="auth-google-btn" onclick="Auth.handleGoogleLogin()">
+                <div class="google-avatar">D</div>
+                <div class="google-content">
+                    <div class="google-text">Continuar como David</div>
+                    <div class="google-email">davidlpena74@gmail.com</div>
+                </div>
+                <img src="https://www.gstatic.com/images/branding/product/2x/googleg_48dp.png" alt="Google" class="google-logo">
+            </div>
         </div>
 
         <p class="auth-footer">
@@ -40,6 +42,8 @@ const AUTH_MODAL_HTML = `
 
 const Auth = {
     sessionKey: 'weperty_session',
+    currentStep: 'email',
+    userEmail: '',
 
     isLoggedIn: function() {
         const session = localStorage.getItem(this.sessionKey);
@@ -66,12 +70,68 @@ const Auth = {
         }
 
         if (modal) {
-            // Ensure translations are applied before showing
-            if (typeof updateContent === 'function') updateContent();
+            this.currentStep = 'email';
+            this.userEmail = '';
+            this.renderStep('email');
             
             modal.style.display = 'flex';
-            document.body.style.overflow = 'hidden'; // Prevent scrolling
+            document.body.style.overflow = 'hidden'; 
         }
+    },
+
+    renderStep: function(step) {
+        const container = document.querySelector('.auth-form-container');
+        if (!container) return;
+
+        this.currentStep = step;
+        let html = '';
+
+        if (step === 'email') {
+            html = `
+                <div class="auth-field-group">
+                    <label class="auth-label" data-i18n="auth.label.email">Tu email</label>
+                    <input type="email" id="auth-email-input" class="auth-input" placeholder="nombre@ejemplo.com" value="${this.userEmail}">
+                </div>
+                <button class="btn-auth-continue" onclick="Auth.handleContinue()" data-i18n="auth.btn.continue">Continuar</button>
+                <div class="auth-divider"><span data-i18n="auth.divider">También puedes</span></div>
+                <div class="auth-google-btn" onclick="Auth.handleGoogleLogin()">
+                    <div class="google-avatar">D</div>
+                    <div class="google-content"><div class="google-text">Continuar como David</div><div class="google-email">davidlpena74@gmail.com</div></div>
+                    <img src="https://www.gstatic.com/images/branding/product/2x/googleg_48dp.png" alt="Google" class="google-logo">
+                </div>
+            `;
+        } else if (step === 'login') {
+            html = `
+                <div class="auth-back" onclick="Auth.renderStep('email')"><i class="fa-solid fa-arrow-left"></i></div>
+                <div class="auth-field-group">
+                    <label class="auth-label">${translations[currentLang]['auth.label.email']}</label>
+                    <div class="auth-email-display">${this.userEmail}</div>
+                </div>
+                <div class="auth-field-group">
+                    <label class="auth-label" data-i18n="auth.label.password">Contraseña</label>
+                    <input type="password" id="auth-password-input" class="auth-input" placeholder="••••••••">
+                    <a href="#" class="auth-link-small" data-i18n="auth.forgot">¿Has olvidado tu contraseña?</a>
+                </div>
+                <button class="btn-auth-continue" onclick="Auth.handleLogin()" data-i18n="auth.btn.continue">Continuar</button>
+            `;
+        } else if (step === 'register') {
+            html = `
+                <div class="auth-back" onclick="Auth.renderStep('email')"><i class="fa-solid fa-arrow-left"></i></div>
+                <div class="auth-field-group">
+                    <label class="auth-label" data-i18n="auth.label.create_pass">Crea una contraseña</label>
+                    <input type="password" id="auth-new-password" class="auth-input" placeholder="••••••••">
+                </div>
+                <div class="auth-field-group">
+                    <label class="auth-label" data-i18n="auth.label.confirm_pass">Confirma tu contraseña</label>
+                    <input type="password" id="auth-confirm-password" class="auth-input" placeholder="••••••••">
+                </div>
+                <button class="btn-auth-continue" onclick="Auth.handleRegister()" data-i18n="auth.btn.register">Crear cuenta</button>
+                <p class="auth-note" data-i18n="auth.register_note">Te enviaremos un email de confirmación.</p>
+            `;
+        }
+
+        container.innerHTML = html;
+        if (typeof updateContent === 'function') updateContent();
     },
 
     hideModal: function() {
@@ -82,16 +142,69 @@ const Auth = {
         }
     },
 
-    handleRole: function(role) {
-        console.log(`User selected role: ${role}`);
-        // Redirect to specific login pages or show a more detailed form
-        if (role === 'agent') {
-            window.location.href = 'crm/login.html';
-        } else {
-            // For Buyer/Seller or Other, we might open a dedicated sign-up/sign-in page later
-            const msg = (currentLang === 'es' ? 'Próximamente: Registro para ' : 'Coming Soon: Registration for ') + role;
-            alert(msg);
+    handleContinue: function() {
+        const emailInput = document.getElementById('auth-email-input');
+        const email = emailInput ? emailInput.value : '';
+        
+        if (!email || !email.includes('@')) {
+            alert(currentLang === 'es' ? 'Por favor, introduce un email válido.' : 'Please enter a valid email.');
+            return;
         }
+
+        this.userEmail = email;
+        const btn = document.querySelector('.btn-auth-continue');
+        if (btn) btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
+
+        // MOCK CHECK: Simple logic to simulate existing user vs new user
+        // We'll assume admin emails or those starting with 'test' are existing users
+        setTimeout(() => {
+            const isRegistered = email.includes('admin') || email.includes('david') || email.includes('test');
+            if (isRegistered) {
+                this.renderStep('login');
+            } else {
+                this.renderStep('register');
+            }
+        }, 800);
+    },
+
+    handleLogin: function() {
+        const pass = document.getElementById('auth-password-input').value;
+        if (!pass) return;
+
+        const btn = document.querySelector('.btn-auth-continue');
+        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
+
+        setTimeout(() => {
+            // Success Mock
+            localStorage.setItem(this.sessionKey, JSON.stringify({
+                user: this.userEmail.split('@')[0],
+                role: 'user',
+                loggedAt: new Date().getTime()
+            }));
+            window.location.reload();
+        }, 1000);
+    },
+
+    handleRegister: function() {
+        const p1 = document.getElementById('auth-new-password').value;
+        const p2 = document.getElementById('auth-confirm-password').value;
+
+        if (!p1 || p1.length < 6) {
+            alert(currentLang === 'es' ? 'La contraseña debe tener al menos 6 caracteres.' : 'Password must be at least 6 characters.');
+            return;
+        }
+        if (p1 !== p2) {
+            alert(currentLang === 'es' ? 'Las contraseñas no coinciden.' : 'Passwords do not match.');
+            return;
+        }
+
+        const btn = document.querySelector('.btn-auth-continue');
+        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
+
+        setTimeout(() => {
+            alert(currentLang === 'es' ? '¡Registro iniciado! Por favor, revisa tu email para confirmar.' : 'Registration started! Please check your email to confirm.');
+            this.hideModal();
+        }, 1500);
     },
 
     logout: function() {
