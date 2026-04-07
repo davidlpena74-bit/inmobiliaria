@@ -86,7 +86,14 @@ const translations = {
         "feat.parking": "Garaje",
         "feat.furnished": "Amueblado",
         "feat.exterior": "Exterior",
-        "feat.interior": "Interior"
+        "feat.interior": "Interior",
+        "auth.title": "Registro / Acceso",
+        "auth.role.agent": "Agente",
+        "auth.role.buyer_seller": "Comprador o Vendedor",
+        "auth.role.other": "Otro",
+        "auth.footer.main": "Acepto los",
+        "auth.footer.terms": "Términos de Servicio",
+        "auth.footer.privacy": "Política de Privacidad"
     },
     en: {
         "nav.home": "Home",
@@ -175,7 +182,14 @@ const translations = {
         "feat.parking": "Garage",
         "feat.furnished": "Furnished",
         "feat.exterior": "Exterior",
-        "feat.interior": "Interior"
+        "feat.interior": "Interior",
+        "auth.title": "Register / Sign In",
+        "auth.role.agent": "Agent",
+        "auth.role.buyer_seller": "Buyer or Seller",
+        "auth.role.other": "Other",
+        "auth.footer.main": "I accept Weperty",
+        "auth.footer.terms": "Terms of Service",
+        "auth.footer.privacy": "Privacy Policy"
     },
     de: {
         "nav.home": "Startseite",
@@ -253,7 +267,14 @@ const translations = {
         "feat.parking": "Garage",
         "feat.furnished": "Möbliert",
         "feat.exterior": "Außenbereich",
-        "feat.interior": "Innenbereich"
+        "feat.interior": "Innenbereich",
+        "auth.title": "Registrieren / Anmelden",
+        "auth.role.agent": "Makler",
+        "auth.role.buyer_seller": "Käufer o. Verkäufer",
+        "auth.role.other": "Andere",
+        "auth.footer.main": "Ich akzeptiere die",
+        "auth.footer.terms": "Nutzungsbedingungen",
+        "auth.footer.privacy": "Datenschutz"
     },
     nl: {
         "nav.home": "Home",
@@ -331,7 +352,14 @@ const translations = {
         "feat.parking": "Garage",
         "feat.furnished": "Gemeubileerd",
         "feat.exterior": "Buitenkant",
-        "feat.interior": "Binnenkant"
+        "feat.interior": "Binnenkant",
+        "auth.title": "Registreren / Inloggen",
+        "auth.role.agent": "Makelaar",
+        "auth.role.buyer_seller": "Koper of Verkoper",
+        "auth.role.other": "Anders",
+        "auth.footer.main": "Ik accepteer de",
+        "auth.footer.terms": "Gebruiksvoorwaarden",
+        "auth.footer.privacy": "Privacybeleid"
     },
 };
 
@@ -344,11 +372,12 @@ function updateContent() {
         let value = translations[currentLang][key];
         if (value) {
             if (Array.isArray(value)) {
-                // Seleccionar un mensaje aleatorio si es un array
                 value = value[Math.floor(Math.random() * value.length)];
             }
             if (el.tagName === "INPUT") {
                 el.placeholder = value;
+            } else if (el.hasAttribute('data-i18n-html')) {
+                el.innerHTML = value;
             } else {
                 el.textContent = value;
             }
@@ -363,24 +392,41 @@ function updateContent() {
         nl: "https://flagcdn.com/w40/nl.png"
     };
 
-    const langDisplay = document.querySelector(".lang-menu");
-    if (langDisplay) {
-        langDisplay.innerHTML = `<img src="${langFlags[currentLang]}" width="18" style="vertical-align: middle; margin-right: 5px;"> <i class="fa-solid fa-chevron-down" style="font-size: 10px; margin-left: 2px;"></i>
-            <div class="lang-dropdown">
-                <a href="javascript:void(0)" onclick="setLanguage('es')"><img src="${langFlags.es}" width="16" style="margin-right: 8px; vertical-align: middle;"> Español</a>
-                <a href="javascript:void(0)" onclick="setLanguage('en')"><img src="${langFlags.en}" width="16" style="margin-right: 8px; vertical-align: middle;"> English</a>
-                <a href="javascript:void(0)" onclick="setLanguage('de')"><img src="${langFlags.de}" width="16" style="margin-right: 8px; vertical-align: middle;"> Deutsch</a>
-                <a href="javascript:void(0)" onclick="setLanguage('nl')"><img src="${langFlags.nl}" width="16" style="margin-right: 8px; vertical-align: middle;"> Nederlands</a>
-            </div>`;
-    }
+    document.querySelectorAll(".lang-menu").forEach(menu => {
+        const dropdown = menu.querySelector(".lang-dropdown");
+        const activeWrapper = menu.querySelector(".lang-active");
+        
+        const indicatorHtml = `<img src="${langFlags[currentLang]}" width="18" style="vertical-align: middle; margin-right: 5px;"> <i class="fa-solid fa-chevron-down" style="font-size: 10px; margin-left: 2px;"></i>`;
+        
+        if (activeWrapper) {
+            activeWrapper.innerHTML = indicatorHtml;
+        } else {
+            // Fallback for old structure: only replace what's before the dropdown
+            const dropdownBackup = dropdown ? dropdown.cloneNode(true) : null;
+            menu.innerHTML = `<span class="lang-active">${indicatorHtml}</span>`;
+            if (dropdownBackup) menu.appendChild(dropdownBackup);
+        }
+    });
 }
 
 function setLanguage(lang) {
+    if (lang === currentLang) return; 
+    
     currentLang = lang;
     localStorage.setItem("weperty_lang", lang);
     updateContent();
     
-    // Recargar propiedades si la función existe (para aplicar traducciones dinámicas)
+    // Close any open dropdowns immediately
+    document.querySelectorAll('.lang-dropdown').forEach(drop => {
+        drop.style.opacity = '0';
+        drop.style.visibility = 'hidden';
+        // Reset after a short delay to allow future hover interactions
+        setTimeout(() => {
+            drop.style.opacity = '';
+            drop.style.visibility = '';
+        }, 100);
+    });
+
     if (typeof loadWebProperties === "function") {
         loadWebProperties();
     }

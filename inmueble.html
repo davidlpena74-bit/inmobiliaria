@@ -17,18 +17,76 @@
     <link rel="stylesheet" href="css/inmueble.css?v=4.1.5">
     <!-- Supabase JS -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="js/i18n.js?v=4.2.4"></script>
+    <script src="js/i18n.js?v=5.1.5"></script>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-5NQ2VHSND7"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
+    <style>
+        :root {
+            --compass-blue: #0060df;
+            --compass-black: #000000;
+            --compass-gray: #666666;
+            --compass-light-gray: #f7f7f7;
+            --border: #e4e8ee;
+            --white: #FFFFFF;
+        }
 
-      gtag('config', 'G-5NQ2VHSND7');
-    </script>
+        /* 🏠 Navegación Superior Unificada CSS */
+        header {
+            position: fixed; width: 100%; top: 0; z-index: 1000;
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 15px 40px; background: var(--white);
+            box-shadow: 0 1px 5px rgba(0,0,0,0.1);
+        }
+        .logo img { height: 35px; }
+        
+        nav { display: flex; align-items: center; }
+        nav a, .lang-menu { 
+            color: var(--compass-black); 
+            text-decoration: none; 
+            margin-left: 25px; 
+            font-size: 14px; 
+            font-weight: 500; 
+            transition: color 0.3s; 
+            position: relative; 
+            cursor: pointer; 
+        }
+        nav a:hover, .lang-menu:hover { color: var(--compass-blue); }
+
+        /* Bridge the gap between menu and dropdown to prevent flickering */
+        .lang-menu::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            height: 20px;
+            display: none;
+            z-index: 1999;
+        }
+        .lang-menu:hover::after { display: block; }
+
+        .lang-dropdown { 
+            position: absolute; top: 100%; right: -20px; background: var(--white); 
+            border: 1px solid var(--border); border-radius: 4px; padding: 10px 0; 
+            margin-top: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); 
+            opacity: 0; 
+            visibility: hidden; transition: all 0.2s; min-width: 160px; z-index: 2000;
+        }
+        .lang-dropdown::before { 
+            content: ''; position: absolute; top: -6px; right: 35px; width: 10px; height: 10px; 
+            background: var(--white); border-top: 1px solid var(--border); 
+            border-left: 1px solid var(--border); transform: rotate(45deg); 
+        }
+        .lang-menu:hover .lang-dropdown { opacity: 1; visibility: visible; }
+        .lang-dropdown a { color: var(--compass-black); display: block; padding: 8px 20px; margin: 0; font-weight: 400; text-align: left; white-space: nowrap; }
+        .lang-dropdown a:hover { background: #f7f7f7; color: var(--compass-blue); }
+
+        .hamburger { display: none; font-size: 24px; cursor: pointer; }
+        @media (max-width: 768px) {
+            header { padding: 15px 20px; }
+            nav#desktopNav { display: none; }
+            .hamburger { display: block; }
+        }
+    </style>
 </head>
 <body>
 
@@ -47,12 +105,12 @@
             <a href="#" data-i18n="nav.agents">Agentes</a>
             
             <div class="lang-menu">
-                <i class="fa-solid fa-globe"></i> EN <i class="fa-solid fa-chevron-down" style="font-size: 10px; margin-left: 4px;"></i>
+                <span class="lang-active"><i class="fa-solid fa-globe"></i> EN <i class="fa-solid fa-chevron-down" style="font-size: 10px; margin-left: 4px;"></i></span>
                 <div class="lang-dropdown">
-                    <a href="javascript:void(0)" onclick="setLanguage('es')">🇪🇸 Español</a>
-                    <a href="javascript:void(0)" onclick="setLanguage('en')">🇬🇧 English</a>
-                    <a href="javascript:void(0)" onclick="setLanguage('de')">🇩🇪 Deutsch</a>
-                    <a href="javascript:void(0)" onclick="setLanguage('nl')">🇳🇱 Nederlands</a>
+                    <a href="javascript:void(0)" onclick="setLanguage('es')"><img src="https://flagcdn.com/w40/es.png" width="16" style="margin-right: 8px; vertical-align: middle;"> Español</a>
+                    <a href="javascript:void(0)" onclick="setLanguage('en')"><img src="https://flagcdn.com/w40/gb.png" width="16" style="margin-right: 8px; vertical-align: middle;"> English</a>
+                    <a href="javascript:void(0)" onclick="setLanguage('de')"><img src="https://flagcdn.com/w40/de.png" width="16" style="margin-right: 8px; vertical-align: middle;"> Deutsch</a>
+                    <a href="javascript:void(0)" onclick="setLanguage('nl')"><img src="https://flagcdn.com/w40/nl.png" width="16" style="margin-right: 8px; vertical-align: middle;"> Nederlands</a>
                 </div>
             </div>
             <a href="crm.html" style="margin-left: 30px;"><i class="fa-regular fa-user"></i> <span data-i18n="nav.signin">Iniciar Sesión</span></a>

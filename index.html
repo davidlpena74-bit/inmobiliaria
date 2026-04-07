@@ -27,7 +27,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Libre+Baskerville:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="js/i18n.js?v=4.2.4"></script>
+    <script src="js/i18n.js?v=5.1.5"></script>
     <style>
         :root {
             --compass-blue: #0060df;
@@ -63,7 +63,24 @@
         header.scrolled nav a, header.scrolled .lang-menu { color: var(--compass-black); }
         nav a:hover, .lang-menu:hover { color: var(--compass-blue); }
         
-        .lang-dropdown { position: absolute; top: 100%; right: -20px; background: var(--white); border: 1px solid var(--border); border-radius: 4px; padding: 10px 0; margin-top: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); opacity: 0; visibility: hidden; transition: all 0.2s; min-width: 160px; }
+        /* Bridge the gap between menu and dropdown to prevent flickering */
+        .lang-menu::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            height: 20px;
+            display: none;
+            z-index: 1999;
+        }
+        .lang-menu:hover::after { display: block; }
+
+        .lang-dropdown { 
+            position: absolute; top: 100%; right: -20px; background: var(--white); 
+            border: 1px solid var(--border); border-radius: 4px; padding: 10px 0; 
+            margin-top: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); opacity: 0; visibility: hidden; transition: all 0.2s; min-width: 160px; z-index: 2000;
+        }
         .lang-dropdown::before { content: ''; position: absolute; top: -6px; right: 35px; width: 10px; height: 10px; background: var(--white); border-top: 1px solid var(--border); border-left: 1px solid var(--border); transform: rotate(45deg); }
         .lang-menu:hover .lang-dropdown { opacity: 1; visibility: visible; }
         .lang-dropdown a { color: var(--compass-black); display: block; padding: 8px 20px; margin: 0; font-weight: 400; text-align: left; white-space: nowrap; }
@@ -227,12 +244,12 @@
             <a href="#" data-i18n="nav.sell">Sell</a>
             <a href="#" data-i18n="nav.neighborhoods">Neighborhoods</a>
             <div class="lang-menu">
-                <i class="fa-solid fa-globe"></i> EN <i class="fa-solid fa-chevron-down" style="font-size: 10px; margin-left: 4px;"></i>
+                <span class="lang-active"><i class="fa-solid fa-globe"></i> EN <i class="fa-solid fa-chevron-down" style="font-size: 10px; margin-left: 4px;"></i></span>
                 <div class="lang-dropdown">
-                    <a href="javascript:void(0)" onclick="setLanguage('es')">🇪🇸 Español</a>
-                    <a href="javascript:void(0)" onclick="setLanguage('en')">🇬🇧 English</a>
-                    <a href="javascript:void(0)" onclick="setLanguage('de')">🇩🇪 Deutsch</a>
-                    <a href="javascript:void(0)" onclick="setLanguage('nl')">🇳🇱 Nederlands</a>
+                    <a href="javascript:void(0)" onclick="setLanguage('es')"><img src="https://flagcdn.com/w40/es.png" width="16" style="margin-right: 8px; vertical-align: middle;"> Español</a>
+                    <a href="javascript:void(0)" onclick="setLanguage('en')"><img src="https://flagcdn.com/w40/gb.png" width="16" style="margin-right: 8px; vertical-align: middle;"> English</a>
+                    <a href="javascript:void(0)" onclick="setLanguage('de')"><img src="https://flagcdn.com/w40/de.png" width="16" style="margin-right: 8px; vertical-align: middle;"> Deutsch</a>
+                    <a href="javascript:void(0)" onclick="setLanguage('nl')"><img src="https://flagcdn.com/w40/nl.png" width="16" style="margin-right: 8px; vertical-align: middle;"> Nederlands</a>
                 </div>
             </div>
             <a href="crm.html" style="margin-left: 30px;"><i class="fa-regular fa-user"></i> <span data-i18n="nav.signin">Sign In</span></a>
@@ -341,9 +358,9 @@
             </div>
         </div>
         <div class="footer-bottom">
-            <div data-i18n="footer.bottom">© 2026 Weperty Real Estate. All rights reserved. | Alicante Authority | Equal Housing Opportunity.</div>
+            <div data-i18n="footer.bottom">© 2026 Weperty Real Estate. All rights reserved. | <a href="terms.html" style="color: #999; text-decoration: underline;">Terms</a> | <a href="privacy.html" style="color: #999; text-decoration: underline;">Privacy</a> | Alicante Authority | Equal Housing Opportunity.</div>
             <div style="display: flex; gap: 20px; align-items: center;">
-                <span style="font-size: 10px; color: #666; margin-right: 15px;">VERSION 4.4.3</span>
+                <span style="font-size: 10px; color: #666; margin-right: 15px;">VERSION 5.1.0</span>
                 <i class="fa-brands fa-instagram"></i>
                 <i class="fa-brands fa-linkedin-in"></i>
                 <i class="fa-brands fa-facebook-f"></i>
