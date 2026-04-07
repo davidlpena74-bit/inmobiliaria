@@ -181,8 +181,8 @@ body.collapsed-sidebar .sidebar-bottom i { font-size: 18px; margin: 0; }
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    padding: 0 15px;
-    gap: 4px; /* Tighter gap like Inmoweb */
+    padding: 0 20px; /* Increased from 15px */
+    gap: 8px; /* Increased from 4px */
     flex-shrink: 0;
 }
 .topbar .search-box {
@@ -192,11 +192,11 @@ body.collapsed-sidebar .sidebar-bottom i { font-size: 18px; margin: 0; }
 .topbar .search-box input {
     padding: 6px 14px 6px 32px;
     border: 1px solid #e2e8f0;
-    border-radius: 6px; /* Less rounded like Inmoweb */
+    border-radius: 18px; /* More rounded like the screenshot */
     font-size: 12px;
-    width: 200px;
+    width: 210px; /* Slightly adjusted */
     outline: none;
-    background: #fff;
+    background: #f8fafc; /* Lighter background */
     font-family: inherit;
     transition: 0.2s;
 }

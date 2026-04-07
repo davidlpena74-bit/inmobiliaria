@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pasarelas (API) | Weperty CRM</title>
     <link rel="icon" type="image/png" href="../favicon.png">
+    <script src="auth-check.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="shell.css">
     <style>
@@ -147,7 +148,9 @@
 <!-- SIDEBAR -->
 <aside class="sidebar">
     <div class="sidebar-logo" style="flex-direction: column; align-items: flex-start; padding: 20px 18px; position: relative;">
-        <img src="../logos_corporativos/weperty_logo.png" alt="Weperty Logo" style="width: 150px; margin-bottom: 5px; display: block;">
+        <a href="index.html">
+            <img src="../logos_corporativos/weperty_logo.png" alt="Weperty Logo" style="width: 150px; margin-bottom: 5px; display: block;">
+        </a>
         <i class="fa-solid fa-bars hamburger" style="position: absolute; right: 18px; top: 28px;"></i>
     </div>
     <nav class="s-nav">
@@ -205,6 +208,7 @@
         <i class="fa-regular fa-calendar t-icon" style="order: 10;"></i>
         <i class="fa-solid fa-box-archive t-icon" style="order: 11;"></i>
         <div class="avatar" style="order: 12;"><i class="fa-solid fa-user"></i></div>
+        <i class="fa-solid fa-right-from-bracket t-icon" style="order: 13;" onclick="logout()" title="Cerrar sesión"></i>
     </header>
 
     <div class="page-content">

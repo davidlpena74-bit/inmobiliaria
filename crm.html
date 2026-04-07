@@ -12,6 +12,8 @@
             const session = localStorage.getItem('weperty_session');
             if (!session) {
                 window.location.href = 'crm/login.html';
+            } else {
+                window.location.href = 'crm/index.html';
             }
         })();
     </script>
