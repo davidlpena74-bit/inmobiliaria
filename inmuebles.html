@@ -258,11 +258,26 @@
             border-radius: 50%; font-size: 11px; display: flex; align-items: center; justify-content: center;
         }
 
-        .results-header { padding-bottom: 12px; margin-bottom: 15px; }
-        .results-meta { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; font-size: 13px; font-weight: 600; color: #111827; }
-        .results-subtext { color: #6b7280; font-weight: 400; font-size: 13px; }
-        .sort-row { display: flex; align-items: center; justify-content: flex-end; }
-        .sort-select { border: none; font-size: 13px; font-weight: 600; color: #0060df; cursor: pointer; background: transparent; outline: none; }
+        .results-header { display: flex; align-items: center; justify-content: space-between; padding-bottom: 12px; margin-bottom: 15px; border-bottom: 1px solid var(--border); }
+        .results-meta { font-size: 13px; font-weight: 600; color: #111827; }
+        
+        /* CUSTOM SORT DROPDOWN (COMPASS STYLE) */
+        .sort-container { display: flex; align-items: center; justify-content: flex-end; gap: 8px; font-size: 13px; font-weight: 500; color: #111827; }
+        .sort-dropdown { position: relative; }
+        .sort-trigger { 
+            display: flex; align-items: center; gap: 6px; cursor: pointer; color: var(--compass-blue); font-weight: 600; padding: 4px 8px; border-radius: 4px; transition: background 0.2s; 
+        }
+        .sort-trigger:hover { background: #f3f4f6; }
+        .sort-options { 
+            position: absolute; top: 100%; right: 0; background: white; border: 1px solid var(--border); border-radius: 8px; 
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1); width: 220px; z-index: 1001; 
+            margin-top: 5px; display: none; overflow: hidden; padding: 4px 0;
+        }
+        .sort-option { padding: 10px 16px; cursor: pointer; transition: background 0.2s; color: #374151; }
+        .sort-option:hover { background: #f8fafc; color: var(--compass-blue); }
+        .sort-option.active { color: var(--compass-blue); background: #f0f7ff; font-weight: 600; }
+        
+        .sort-select { display: none; } /* Hidden but functional background select if needed */
 
         /* ADVANCED FILTERS MODAL */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); z-index: 9999; display: none; align-items: center; justify-content: center; }
@@ -495,16 +510,23 @@
                 <div class="results-header">
                     <div class="results-meta">
                         <div id="results-label">... Inmuebles</div>
-                        <div class="results-subtext" data-i18n="results.tagline">Listas exclusivas de Weperty</div>
                     </div>
-                    <div class="sort-row">
+                    <div class="sort-container">
                         <span data-i18n="sort.by">Ordenar por</span>
-                        <select class="sort-select" id="sort-order" onchange="updateFilters()">
-                            <option value="recommended" data-i18n="sort.recommended">Recomendados</option>
-                            <option value="price-asc" data-i18n="sort.price.asc">Precio: Menor a Mayor</option>
-                            <option value="price-desc" data-i18n="sort.price.desc">Precio: Mayor a Menor</option>
-                        </select>
-                        <i class="fa-solid fa-chevron-down" style="font-size: 10px; color: #0060df; margin-left: 4px;"></i>
+                        <div class="sort-dropdown" id="sort-dropdown">
+                            <div class="sort-trigger" onclick="toggleSort()">
+                                <span id="current-sort-label" data-i18n="sort.recommended">Recomendados</span>
+                                <i class="fa-solid fa-chevron-down" style="font-size: 10px;"></i>
+                            </div>
+                            <div class="sort-options" id="sort-options">
+                                <div class="sort-option active" data-value="recommended" data-i18n="sort.recommended" onclick="selectSort('recommended')">Recomendados</div>
+                                <div class="sort-option" data-value="newest" data-i18n="sort.newest" onclick="selectSort('newest')">Nuevos anuncios</div>
+                                <div class="sort-option" data-value="price-asc" data-i18n="sort.price.asc" onclick="selectSort('price-asc')">Precio: de menor a mayor</div>
+                                <div class="sort-option" data-value="price-desc" data-i18n="sort.price.desc" onclick="selectSort('price-desc')">Precio: de mayor a menor</div>
+                                <div class="sort-option" data-value="sqft-desc" data-i18n="sort.sqft.desc" onclick="selectSort('sqft-desc')">Superficie: de mayor a menor</div>
+                                <div class="sort-option" data-value="sqft-asc" data-i18n="sort.sqft.asc" onclick="selectSort('sqft-asc')">Superficie: de menor a mayor</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -513,7 +535,7 @@
                 <div style="grid-column: 1/-1; text-align: center; padding: 40px; color: #94a3b8;">Cargando inmuebles...</div>
             </div>
             <div style="padding: 10px 15px; border-top: 1px solid var(--border); font-size: 10px; color: #94a3b8; text-align: center;">
-                VERSION 4.4.0
+                VERSION 4.4.1
             </div>
         </aside>
 
@@ -629,9 +651,8 @@
             maxPrice: Infinity,
             minSqft: 0,
             maxSqft: Infinity,
-            maxSqft: Infinity,
             sort: 'recommended',
-            mode: 'buy'
+            mode: 'rent'
         };
 
         const propertyMarkers = {}; 
@@ -751,10 +772,42 @@
         function updateFilters() {
             currentFilters.minPrice = parseInt(document.getElementById('min-price').value) || 0;
             currentFilters.maxPrice = parseInt(document.getElementById('max-price').value) || Infinity;
-            currentFilters.sort = document.getElementById('sort-order').value;
+            // Sorting is now handled via currentFilters.sort updated by selectSort()
             
             filteredProperties = performFiltering(true);
             renderProperties();
+        }
+
+        function toggleSort() {
+            const opts = document.getElementById('sort-options');
+            opts.style.display = (opts.style.display === 'block') ? 'none' : 'block';
+        }
+
+        function selectSort(val) {
+            currentFilters.sort = val;
+            
+            // UI Update
+            document.querySelectorAll('.sort-option').forEach(opt => {
+                opt.classList.toggle('active', opt.dataset.value === val);
+                if (opt.dataset.value === val) {
+                    document.getElementById('current-sort-label').textContent = opt.textContent;
+                }
+            });
+            
+            document.getElementById('sort-options').style.display = 'none';
+            updateFilters();
+        }
+
+        // Close dropdown on outside click
+        window.onclick = function(event) {
+            if (!event.target.closest('.sort-dropdown')) {
+                const opts = document.getElementById('sort-options');
+                if (opts) opts.style.display = 'none';
+            }
+            if (!event.target.closest('.lang-menu') && !event.target.closest('.hamburger')) {
+                const drop = document.querySelector('.lang-dropdown');
+                if (drop) drop.style.opacity = '0';
+            }
         }
 
         function resetFilters() {
@@ -823,6 +876,9 @@
             if (applySort) {
                 if (currentFilters.sort === 'price-asc') results.sort((a,b) => a.precio - b.precio);
                 if (currentFilters.sort === 'price-desc') results.sort((a,b) => b.precio - a.precio);
+                if (currentFilters.sort === 'sqft-desc') results.sort((a,b) => b.superficie - a.superficie);
+                if (currentFilters.sort === 'sqft-asc') results.sort((a,b) => a.superficie - b.superficie);
+                if (currentFilters.sort === 'newest') results.sort((a,b) => b.id - a.id);
             }
             return results;
         }
