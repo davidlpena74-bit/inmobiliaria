@@ -535,7 +535,7 @@
                 <div style="grid-column: 1/-1; text-align: center; padding: 40px; color: #94a3b8;">Cargando inmuebles...</div>
             </div>
             <div style="padding: 10px 15px; border-top: 1px solid var(--border); font-size: 10px; color: #94a3b8; text-align: center;">
-                VERSION 4.4.1
+                VERSION 4.4.2
             </div>
         </aside>
 
@@ -546,9 +546,13 @@
                     <div style="width:100%; height:100%; background:#f0f0f0;"></div>
                     <span>Gris</span>
                 </button>
-                <button class="style-btn" id="style-voyager" onclick="setMapStyle('voyager')" title="Standard">
+                <button class="style-btn" id="style-voyager" onclick="setMapStyle('voyager')" title="Voyager">
                     <div style="width:100%; height:100%; background:#a0d0f0;"></div>
                     <span>Color</span>
+                </button>
+                <button class="style-btn" id="style-osm" onclick="setMapStyle('osm')" title="Standard">
+                    <div style="width:100%; height:100%; background:#d6e6bd;"></div>
+                    <span>Standard</span>
                 </button>
                 <button class="style-btn" id="style-satellite" onclick="setMapStyle('satellite')" title="Satellite">
                     <div style="width:100%; height:100%; background:#2c3e50;"></div>
@@ -674,11 +678,21 @@
             }),
             satellite: L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
                 attribution: '&copy; ESRI'
+            }),
+            osm: L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; OpenStreetMap contributors'
             })
         };
 
-        let currentBaseLayer = mapStyles.voyager;
+        let currentBaseLayer = mapStyles.osm;
         currentBaseLayer.addTo(map);
+        
+        // Ensure UI state matches default
+        window.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.style-btn').forEach(btn => btn.classList.remove('active'));
+            const osmBtn = document.getElementById('style-osm');
+            if (osmBtn) osmBtn.classList.add('active');
+        });
 
         // Marker Cluster Group
         const markerCluster = L.markerClusterGroup({
