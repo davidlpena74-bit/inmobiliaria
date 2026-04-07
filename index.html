@@ -132,7 +132,7 @@
         /* TARJETAS DE PROPIEDAD (AS INMUEBLES.HTML) */
         .property-grid { 
             display: grid; 
-            grid-template-columns: repeat(3, 1fr); 
+            grid-template-columns: repeat(4, 1fr); 
             gap: 20px; 
             margin-bottom: 40px;
         }
@@ -192,6 +192,9 @@
         
         .footer-bottom { max-width: 1400px; margin: 0 auto; border-top: 1px solid #333; padding-top: 30px; display: flex; justify-content: space-between; color: #999; font-size: 12px; }
 
+        @media (max-width: 1150px) {
+            .property-grid { grid-template-columns: repeat(3, 1fr); }
+        }
         @media (max-width: 1024px) {
             .property-grid { grid-template-columns: repeat(2, 1fr); }
             header, .section, footer { padding: 20px; }
@@ -363,7 +366,7 @@
         <div class="footer-bottom">
             <div data-i18n="footer.bottom">© 2026 Weperty Real Estate. All rights reserved. | <a href="terms.html" style="color: #999; text-decoration: underline;">Terms</a> | <a href="privacy.html" style="color: #999; text-decoration: underline;">Privacy</a> | Alicante Authority | Equal Housing Opportunity.</div>
             <div style="display: flex; gap: 20px; align-items: center;">
-                <span style="font-size: 10px; color: #666; margin-right: 15px;">VERSION 5.3.0</span>
+                <span style="font-size: 10px; color: #666; margin-right: 15px;">VERSION 5.3.1</span>
                 <i class="fa-brands fa-instagram"></i>
                 <i class="fa-brands fa-linkedin-in"></i>
                 <i class="fa-brands fa-facebook-f"></i>
