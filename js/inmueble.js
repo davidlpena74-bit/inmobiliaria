@@ -160,11 +160,18 @@ function initMap(p) {
         }),
         satellite: L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
             attribution: '&copy; ESRI'
+        }),
+        osm: L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors'
         })
     };
 
-    currentBaseLayer = mapStyles.voyager;
+    currentBaseLayer = mapStyles.osm;
     currentBaseLayer.addTo(map);
+
+    // Update UI initial state
+    document.querySelectorAll('.style-btn').forEach(btn => btn.classList.remove('active'));
+    document.getElementById('style-osm').classList.add('active');
 
     L.marker([p.latitud, p.longitud]).addTo(map);
 }
