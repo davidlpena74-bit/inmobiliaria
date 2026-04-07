@@ -14,6 +14,7 @@
     <link rel="icon" type="image/png" href="favicon.png">
     <!-- Fonts & Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/inmueble.css?v=4.1.5">
     <link rel="stylesheet" href="css/user-menu.css?v=5.3.0">
     <link rel="stylesheet" href="css/auth.css?v=5.7.1">
@@ -118,7 +119,7 @@
             <a href="#" data-i18n="nav.rent">Alquilar</a>
             <a href="#" data-i18n="nav.sell">Vender</a>
             <a href="#" data-i18n="nav.neighborhoods">Barrios</a>
-            <a href="crm.html" data-i18n="nav.agents">Agentes</a>
+            <a href="javascript:void(0)" onclick="Auth.showAgentModal()" data-i18n="nav.agents">Agentes</a>
             
             <div class="lang-menu">
                 <span class="lang-active"><i class="fa-solid fa-globe"></i> EN <i class="fa-solid fa-chevron-down" style="font-size: 10px; margin-left: 4px;"></i></span>
@@ -141,7 +142,7 @@
         <a href="#" data-i18n="nav.rent" onclick="toggleMenu(false)">Alquilar</a>
         <a href="#" data-i18n="nav.sell" onclick="toggleMenu(false)">Vender</a>
         <a href="#" data-i18n="nav.neighborhoods" onclick="toggleMenu(false)">Barrios</a>
-        <a href="crm.html" data-i18n="nav.agents" onclick="toggleMenu(false)">Agentes</a>
+        <a href="javascript:void(0)" onclick="Auth.showAgentModal()" data-i18n="nav.agents" onclick="toggleMenu(false)">Agentes</a>
         <a href="javascript:void(0)" id="nav-auth-item-mob" onclick="Auth.isLoggedIn() ? window.location.href='crm.html' : Auth.showModal(); toggleMenu(false)"><i class="fa-regular fa-user"></i> <span data-i18n="nav.signin">Sign In</span></a>
         
         <div class="lang-selector-mob">

@@ -23,8 +23,8 @@
     <meta property="twitter:image" content="https://weperty.com/favicon.png">
 
     <link rel="icon" type="image/png" href="favicon.png">
-    <!-- Google Fonts: Libre Baskerville para títulos (Serif) y Montserrat para UI -->
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Libre+Baskerville:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Google Fonts: Libre Baskerville para títulos, Montserrat para UI y Outfit para Auth -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Libre+Baskerville:wght@400;700&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="js/i18n.js?v=5.1.5"></script>
@@ -253,7 +253,7 @@
             <a href="#" data-i18n="nav.rent">Rent</a>
             <a href="#" data-i18n="nav.sell">Sell</a>
             <a href="#" data-i18n="nav.neighborhoods">Neighborhoods</a>
-            <a href="crm.html" data-i18n="nav.agents">Agents</a>
+            <a href="javascript:void(0)" onclick="Auth.showAgentModal()" data-i18n="nav.agents">Agents</a>
             <div class="lang-menu">
                 <span class="lang-active"><i class="fa-solid fa-globe"></i> EN <i class="fa-solid fa-chevron-down" style="font-size: 10px; margin-left: 4px;"></i></span>
                 <div class="lang-dropdown">
@@ -274,7 +274,7 @@
         <a href="inmuebles.html" data-i18n="nav.buy" onclick="toggleMenu(false)">Buy</a>
         <a href="#" data-i18n="nav.rent" onclick="toggleMenu(false)">Rent</a>
         <a href="#" data-i18n="nav.sell" onclick="toggleMenu(false)">Sell</a>
-        <a href="crm.html" data-i18n="nav.agents" onclick="toggleMenu(false)">Agents</a>
+        <a href="javascript:void(0)" onclick="Auth.showAgentModal()" data-i18n="nav.agents" onclick="toggleMenu(false)">Agents</a>
         <a href="javascript:void(0)" id="nav-auth-item-mob" onclick="Auth.isLoggedIn() ? window.location.href='crm.html' : Auth.showModal(); toggleMenu(false)"><i class="fa-regular fa-user"></i> <span data-i18n="nav.signin">Sign In</span></a>
         
         <div class="lang-selector-mob">
@@ -346,7 +346,7 @@
                 <h4 data-i18n="footer.company">Company</h4>
                 <ul>
                     <li><a href="#" data-i18n="footer.company.about">About Us</a></li>
-                    <li><a href="crm.html" data-i18n="footer.company.agents">Agent Access</a></li>
+                    <li><a href="javascript:void(0)" onclick="Auth.showAgentModal()" data-i18n="footer.company.agents">Agent Access</a></li>
                     <li><a href="#" data-i18n="footer.company.careers">Careers</a></li>
                     <li><a href="#" data-i18n="footer.company.press">Press</a></li>
                 </ul>
@@ -372,7 +372,7 @@
         <div class="footer-bottom">
             <div data-i18n="footer.bottom">© 2026 Weperty Real Estate. All rights reserved. | <a href="terms.html" style="color: #999; text-decoration: underline;">Terms</a> | <a href="privacy.html" style="color: #999; text-decoration: underline;">Privacy</a> | Alicante Authority | Equal Housing Opportunity.</div>
             <div style="display: flex; gap: 20px; align-items: center;">
-                <span style="font-size: 10px; color: #666; margin-right: 15px;">VERSION 5.5.0</span>
+                <span style="font-size: 10px; color: #666; margin-right: 15px;">VERSION 5.18.0</span>
                 <i class="fa-brands fa-instagram"></i>
                 <i class="fa-brands fa-linkedin-in"></i>
                 <i class="fa-brands fa-facebook-f"></i>

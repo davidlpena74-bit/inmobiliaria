@@ -1,111 +1,147 @@
-/* =========================================
-   WEPERTY AUTH MODAL — Unified Styles
-   Compass / Inmoweb High-End Aesthetic
-   ========================================= */
+/* ============================================================
+   AUTH MODAL STYLES (v5.8.0)
+   Exact replica of Agent Login (crm/login.html)
+   ============================================================ */
+
+:root {
+    --auth-primary: #2563eb;
+    --auth-primary-dark: #1e40af;
+    --auth-glass: rgba(255, 255, 255, 0.85);
+    --auth-text-dark: #1e293b;
+}
 
 #auth-modal { 
     position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-    background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(5px); 
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(5px);
     z-index: 10000; 
     display: none; align-items: center; justify-content: center; 
     flex-direction: column; padding: 20px;
-    font-family: 'Inter', sans-serif;
+    font-family: 'Outfit', sans-serif;
 }
 
 .auth-card { 
-    width: 100%; max-width: 380px; text-align: center; position: relative; 
-    padding: 35px; background: white; border-radius: 12px;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+    background: var(--auth-glass);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 24px;
+    padding: 50px;
+    width: 100%;
+    max-width: 420px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    text-align: center;
+    position: relative;
+    z-index: 10;
 }
 
 .auth-close { 
-    position: absolute; top: 20px; right: 20px; font-size: 24px; 
-    cursor: pointer; color: #1a1a1a; transition: color 0.2s; 
+    position: absolute; top: 20px; right: 25px; 
+    font-size: 30px; cursor: pointer; color: #94a3b8; 
+    transition: color 0.2s; z-index: 100;
 }
+.auth-close:hover { color: var(--auth-primary); }
 
-.auth-close:hover { color: #0060df; }
+.auth-logo { width: 220px; margin-bottom: 30px; }
 
 .auth-title { 
-    font-size: 26px; font-weight: 700; color: #111; 
-    margin-bottom: 30px; letter-spacing: -0.5px; 
+    font-size: 28px; color: var(--auth-text-dark); 
+    margin-bottom: 8px; font-weight: 700; 
 }
 
-.auth-illustration { 
-    margin: 0 auto 40px; width: 220px; height: 160px; 
-    display: flex; align-items: center; justify-content: center; 
+.auth-subtitle { 
+    color: #64748b; font-size: 15px; margin-bottom: 35px; 
 }
 
-.auth-actions { display: flex; flex-direction: column; gap: 12px; margin-bottom: 30px; }
-        
-        /* NEW EMAIL FORM STYLES */
-        .auth-form-container { text-align: left; margin-bottom: 30px; }
-        .auth-field-group { margin-bottom: 25px; }
-        .auth-label { display: block; font-size: 16px; font-weight: 700; color: #111; margin-bottom: 8px; }
-        .auth-input { 
-            width: 100%; padding: 14px; border: 1px solid #717171; border-radius: 4px; 
-            font-size: 16px; outline: none; transition: border-color 0.2s;
-            color: #111;
-        }
-        .auth-input::placeholder { color: #999; }
-        .auth-input:focus { border-color: var(--compass-blue); }
+/* FORM ELEMENTS (EXACT COPY) */
+.auth-field-group { 
+    margin-bottom: 20px; position: relative; text-align: left; 
+}
 
-        .btn-auth-continue { 
-            width: 100%; padding: 16px; border: none; border-radius: 4px; 
-            background: var(--compass-blue); color: white; font-size: 16px; 
-            font-weight: 700; cursor: pointer; transition: background 0.2s, transform 0.1s;
-            margin-bottom: 40px;
-        }
-        .btn-auth-continue:hover { background: #0056c1; }
-        .btn-auth-continue:active { transform: scale(0.99); }
+.auth-field-group i { 
+    position: absolute; left: 18px; top: 50%; 
+    transform: translateY(-50%); color: #94a3b8; font-size: 18px; 
+}
 
-        .auth-divider { 
-            text-align: center; border-bottom: 1px solid transparent; 
-            margin-bottom: 15px; position: relative; 
-        }
-        .auth-divider span { 
-            background: white; padding: 0 10px; font-size: 16px; 
-            color: #111; font-weight: 400; 
-        }
+.auth-input { 
+    width: 100%;
+    padding: 15px 15px 15px 50px;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    outline: none;
+    transition: all 0.3s;
+    font-size: 15px;
+    background: white;
+    color: var(--auth-text-dark);
+}
 
-        /* GOOGLE BUTTON STYLES */
-        .auth-google-btn { 
-            display: flex; align-items: center; padding: 6px 16px; 
-            border: 1px solid #dadce0; border-radius: 4px; cursor: pointer; 
-            transition: background 0.2s; position: relative;
-        }
-        .auth-google-btn:hover { background: #f8f9fa; }
-        
-        .google-avatar { 
-            width: 36px; height: 36px; background: #4a5568; color: white; 
-            border-radius: 50%; display: flex; align-items: center; justify-content: center; 
-            font-weight: 600; font-size: 16px; margin-right: 12px;
-        }
-        .google-content { flex: 1; text-align: left; }
-        .google-text { font-size: 14px; font-weight: 600; color: #3c4043; }
-        .google-email { font-size: 12px; color: #70757a; }
-        .google-logo { width: 20px; height: 20px; }
+.auth-input:focus { 
+    border-color: var(--auth-primary); 
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1); 
+}
 
-        /* DYNAMIC VIEW STYLES */
-        .auth-back { 
-            position: absolute; top: 40px; left: 40px; cursor: pointer; 
-            font-size: 18px; color: #666; transition: color 0.2s;
-        }
-        .auth-back:hover { color: var(--compass-blue); }
+.btn-auth-continue { 
+    width: 100%;
+    padding: 15px;
+    background: var(--auth-primary);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
 
-        .auth-email-display { 
-            font-size: 16px; color: #666; margin-bottom: 20px; 
-            padding: 10px 0; border-bottom: 1px solid #eee;
-        }
+.btn-auth-continue:hover { 
+    background: var(--auth-primary-dark); 
+    transform: translateY(-2px); 
+}
 
-        .auth-link-small { 
-            display: inline-block; font-size: 13px; color: #666; 
-            text-decoration: none; margin-top: 10px; cursor: pointer;
-        }
-        .auth-link-small:hover { text-decoration: underline; color: #111; }
+/* DIVIDER & GOOGLE */
+.auth-divider { 
+    margin: 45px 0 5px; border-bottom: 1px solid #e2e8f0; 
+    position: relative; 
+}
+.auth-divider span { 
+    position: absolute; top: 50%; left: 50%; 
+    transform: translate(-50%, -50%); background: transparent; 
+    padding: 0 15px; font-size: 14px; color: #64748b; 
+}
 
-        .auth-note { 
-            font-size: 13px; color: #666; margin-top: 15px; text-align: center;
-        }
+.auth-google-btn { 
+    display: flex; align-items: center; padding: 12px 20px; 
+    border: 1px solid #e2e8f0; border-radius: 12px; 
+    cursor: pointer; transition: all 0.3s; background: white;
+    position: relative; margin-top: 20px;
+}
+.auth-google-btn:hover { background: #f8fafc; border-color: #cbd5e1; }
 
-.auth-footer { font-size: 13px; color: #666; font-weight: 400; line-height: 1.5; }
-.auth-footer a { color: #111; text-decoration: underline; font-weight: 600; }
+.google-avatar { 
+    width: 32px; height: 32px; border-radius: 50%; 
+    background: #6366f1; color: white; display: flex; 
+    align-items: center; justify-content: center; 
+    font-weight: 600; margin-right: 12px; font-size: 14px;
+}
+
+.google-content { text-align: left; }
+.google-text { font-size: 14px; font-weight: 600; color: #1e293b; }
+.google-email { font-size: 12px; color: #64748b; }
+
+.google-logo { width: 20px; height: 20px; margin-left: auto; }
+
+.auth-footer { 
+    margin-top: 30px; font-size: 13px; color: #64748b; line-height: 1.6;
+}
+.auth-footer a { color: var(--auth-primary); text-decoration: none; font-weight: 600; }
+
+/* ERROR MESSAGE */
+.auth-error {
+    color: #ef4444; background: #fee2e2; padding: 12px; 
+    border-radius: 8px; font-size: 13px; margin-top: 20px; display: none;
+}

@@ -7,15 +7,23 @@ const AUTH_MODAL_HTML = `
 <div id="auth-modal">
     <div class="auth-card">
         <div class="auth-close" onclick="Auth.hideModal()">&times;</div>
-        <h1 class="auth-title" data-i18n="auth.title">Register/Sign In</h1>
         
-        <div class="auth-form-container">
+        <img src="logos_corporativos/weperty_logo.png" alt="Weperty" class="auth-logo">
+        
+        <h1 class="auth-title" data-i18n="auth.title">Bienvenido a Weperty</h1>
+        <p class="auth-subtitle" data-i18n="auth.subtitle">Tu portal inmobiliario de confianza.</p>
+        
+        <div id="auth-step-container">
+            <!-- Dynamic content will be injected here -->
             <div class="auth-field-group">
-                <label class="auth-label" data-i18n="auth.label.email">Tu email</label>
-                <input type="email" id="auth-email-input" class="auth-input" placeholder="nombre@ejemplo.com">
+                <i class="fa-solid fa-envelope"></i>
+                <input type="email" id="auth-email-input" class="auth-input" placeholder="nombre@ejemplo.com" data-i18n-placeholder="auth.placeholder.email">
             </div>
 
-            <button class="btn-auth-continue" onclick="Auth.handleContinue()" data-i18n="auth.btn.continue">Continuar</button>
+            <button class="btn-auth-continue" onclick="Auth.handleContinue()">
+                <span data-i18n="auth.btn.continue">Continuar</span>
+                <i class="fa-solid fa-arrow-right"></i>
+            </button>
             
             <div class="auth-divider">
                 <span data-i18n="auth.divider">También puedes</span>
@@ -32,9 +40,9 @@ const AUTH_MODAL_HTML = `
         </div>
 
         <p class="auth-footer">
-            <span data-i18n="auth.footer.main">I accept Weperty</span> 
-            <a href="terms.html" data-i18n="auth.footer.terms">Terms of Service</a> & 
-            <a href="privacy.html" data-i18n="auth.footer.privacy">Privacy Policy</a>
+            <span data-i18n="auth.footer.main">Al continuar, aceptas</span> 
+            <a href="terms.html" data-i18n="auth.footer.terms">Términos</a> y 
+            <a href="privacy.html" data-i18n="auth.footer.privacy">Privacidad</a>
         </p>
     </div>
 </div>
@@ -55,6 +63,25 @@ const Auth = {
         } catch (e) {
             return false;
         }
+    },
+
+    showAgentModal: function() {
+        const session = this.getUser();
+        if (session && session.role === 'admin') {
+            window.location.href = 'crm.html';
+            return;
+        }
+
+        const modal = document.getElementById('auth-modal');
+        if (!modal) {
+            const div = document.createElement('div');
+            div.innerHTML = AUTH_MODAL_HTML;
+            document.body.appendChild(div);
+            if (typeof updateContent === 'function') updateContent();
+        }
+        this.renderStep('agent_login');
+        document.getElementById('auth-modal').style.display = 'flex';
+        document.body.style.overflow = 'hidden';
     },
 
     getUser: function() {
@@ -80,7 +107,7 @@ const Auth = {
     },
 
     renderStep: function(step) {
-        const container = document.querySelector('.auth-form-container');
+        const container = document.getElementById('auth-step-container');
         if (!container) return;
 
         this.currentStep = step;
@@ -89,44 +116,70 @@ const Auth = {
         if (step === 'email') {
             html = `
                 <div class="auth-field-group">
-                    <label class="auth-label" data-i18n="auth.label.email">Tu email</label>
-                    <input type="email" id="auth-email-input" class="auth-input" placeholder="nombre@ejemplo.com" value="${this.userEmail}">
+                    <i class="fa-solid fa-envelope"></i>
+                    <input type="email" id="auth-email-input" class="auth-input" placeholder="nombre@ejemplo.com" value="${this.userEmail}" data-i18n-placeholder="auth.placeholder.email">
                 </div>
-                <button class="btn-auth-continue" onclick="Auth.handleContinue()" data-i18n="auth.btn.continue">Continuar</button>
+                <button class="btn-auth-continue" onclick="Auth.handleContinue()">
+                    <span data-i18n="auth.btn.continue">Continuar</span>
+                    <i class="fa-solid fa-arrow-right"></i>
+                </button>
                 <div class="auth-divider"><span data-i18n="auth.divider">También puedes</span></div>
                 <div class="auth-google-btn" onclick="Auth.handleGoogleLogin()">
                     <div class="google-avatar">D</div>
-                    <div class="google-content"><div class="google-text">Continuar como David</div><div class="google-email">davidlpena74@gmail.com</div></div>
+                    <div class="google-content">
+                        <div class="google-text">Continuar como David</div>
+                        <div class="google-email">davidlpena74@gmail.com</div>
+                    </div>
                     <img src="https://www.gstatic.com/images/branding/product/2x/googleg_48dp.png" alt="Google" class="google-logo">
                 </div>
             `;
         } else if (step === 'login') {
             html = `
-                <div class="auth-back" onclick="Auth.renderStep('email')"><i class="fa-solid fa-arrow-left"></i></div>
+                <div class="auth-back" onclick="Auth.renderStep('email')" style="position: absolute; left: 10px; top: -45px; cursor: pointer; color: #94a3b8;"><i class="fa-solid fa-arrow-left"></i></div>
                 <div class="auth-field-group">
-                    <label class="auth-label">${translations[currentLang]['auth.label.email']}</label>
-                    <div class="auth-email-display">${this.userEmail}</div>
+                    <i class="fa-solid fa-envelope"></i>
+                    <input type="email" class="auth-input" value="${this.userEmail}" disabled style="opacity: 0.7; background: #f8fafc;">
                 </div>
                 <div class="auth-field-group">
-                    <label class="auth-label" data-i18n="auth.label.password">Contraseña</label>
-                    <input type="password" id="auth-password-input" class="auth-input" placeholder="••••••••">
-                    <a href="#" class="auth-link-small" data-i18n="auth.forgot">¿Has olvidado tu contraseña?</a>
+                    <i class="fa-solid fa-lock"></i>
+                    <input type="password" id="auth-password-input" class="auth-input" placeholder="••••••••" data-i18n-placeholder="auth.placeholder.password">
                 </div>
-                <button class="btn-auth-continue" onclick="Auth.handleLogin()" data-i18n="auth.btn.continue">Continuar</button>
+                <button class="btn-auth-continue" onclick="Auth.handleLogin()">
+                    <span data-i18n="auth.btn.login">Iniciar Sesión</span>
+                    <i class="fa-solid fa-arrow-right"></i>
+                </button>
             `;
         } else if (step === 'register') {
             html = `
-                <div class="auth-back" onclick="Auth.renderStep('email')"><i class="fa-solid fa-arrow-left"></i></div>
+                <div class="auth-back" onclick="Auth.renderStep('email')" style="position: absolute; left: 10px; top: -45px; cursor: pointer; color: #94a3b8;"><i class="fa-solid fa-arrow-left"></i></div>
                 <div class="auth-field-group">
-                    <label class="auth-label" data-i18n="auth.label.create_pass">Crea una contraseña</label>
-                    <input type="password" id="auth-new-password" class="auth-input" placeholder="••••••••">
+                    <i class="fa-solid fa-lock"></i>
+                    <input type="password" id="auth-new-password" class="auth-input" placeholder="Crea tu contraseña" data-i18n-placeholder="auth.placeholder.create_pass">
                 </div>
                 <div class="auth-field-group">
-                    <label class="auth-label" data-i18n="auth.label.confirm_pass">Confirma tu contraseña</label>
-                    <input type="password" id="auth-confirm-password" class="auth-input" placeholder="••••••••">
+                    <i class="fa-solid fa-shield-check"></i>
+                    <input type="password" id="auth-confirm-password" class="auth-input" placeholder="Confirma tu contraseña" data-i18n-placeholder="auth.placeholder.confirm_pass">
                 </div>
-                <button class="btn-auth-continue" onclick="Auth.handleRegister()" data-i18n="auth.btn.register">Crear cuenta</button>
-                <p class="auth-note" data-i18n="auth.register_note">Te enviaremos un email de confirmación.</p>
+                <button class="btn-auth-continue" onclick="Auth.handleRegister()">
+                    <span data-i18n="auth.btn.register">Crear Cuenta</span>
+                    <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            `;
+        } else if (step === 'agent_login') {
+            html = `
+                <div class="auth-field-group">
+                    <i class="fa-solid fa-user"></i>
+                    <input type="text" id="agent-username" class="auth-input" placeholder="Nombre de usuario" required>
+                </div>
+                <div class="auth-field-group">
+                    <i class="fa-solid fa-lock"></i>
+                    <input type="password" id="agent-password" class="auth-input" placeholder="Contraseña" required>
+                </div>
+                <button class="btn-auth-continue" id="agentLoginBtn" onclick="Auth.handleAgentLogin()">
+                    <span>Acceder al panel</span>
+                    <i class="fa-solid fa-arrow-right"></i>
+                </button>
+                <div id="agentErrorMsg" class="auth-error" style="color: #ef4444; background: #fee2e2; padding: 10px; border-radius: 8px; font-size: 13px; margin-top: 15px; display: none;"></div>
             `;
         }
 
@@ -147,7 +200,7 @@ const Auth = {
         const email = emailInput ? emailInput.value : '';
         
         if (!email || !email.includes('@')) {
-            alert(currentLang === 'es' ? 'Por favor, introduce un email válido.' : 'Please enter a valid email.');
+            alert('Por favor introduce un email válido');
             return;
         }
 
@@ -155,8 +208,7 @@ const Auth = {
         const btn = document.querySelector('.btn-auth-continue');
         if (btn) btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
 
-        // MOCK CHECK: Simple logic to simulate existing user vs new user
-        // We'll assume admin emails or those starting with 'test' are existing users
+        // Mock check
         setTimeout(() => {
             const isRegistered = email.includes('admin') || email.includes('david') || email.includes('test');
             if (isRegistered) {
@@ -165,6 +217,41 @@ const Auth = {
                 this.renderStep('register');
             }
         }, 800);
+    },
+
+    handleAgentLogin: async function() {
+        const user = document.getElementById('agent-username').value;
+        const pass = document.getElementById('agent-password').value;
+        const loginBtn = document.getElementById('agentLoginBtn');
+        const errorMsg = document.getElementById('agentErrorMsg');
+        
+        if (loginBtn) {
+            loginBtn.disabled = true;
+            loginBtn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Verificando...';
+        }
+        
+        if (errorMsg) errorMsg.style.display = 'none';
+
+        if (user === 'admin' && pass === 'paulita2003P?') {
+            localStorage.setItem('weperty_session', JSON.stringify({
+                user: 'administrador',
+                role: 'admin',
+                loggedAt: new Date().getTime()
+            }));
+            
+            setTimeout(() => {
+                window.location.href = 'crm.html';
+            }, 800);
+        } else {
+            if (errorMsg) {
+                errorMsg.innerText = "Error: Usuario o contraseña incorrectos.";
+                errorMsg.style.display = 'block';
+            }
+            if (loginBtn) {
+                loginBtn.disabled = false;
+                loginBtn.innerHTML = '<span>Acceder al panel</span> <i class="fa-solid fa-arrow-right"></i>';
+            }
+        }
     },
 
     handleLogin: function() {

@@ -15,7 +15,7 @@
     <meta property="og:image" content="https://weperty.com/favicon.png">
 
     <link rel="icon" type="image/png" href="favicon.png">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&family=Playfair+Display:wght@700&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css" />
@@ -484,7 +484,7 @@
             <a href="#" data-i18n="nav.rent">Rent</a>
             <a href="#" data-i18n="nav.sell">Sell</a>
             <a href="#" data-i18n="nav.neighborhoods">Neighborhoods</a>
-            <a href="crm.html" data-i18n="nav.agents">Agents</a>
+            <a href="javascript:void(0)" onclick="Auth.showAgentModal()" data-i18n="nav.agents">Agents</a>
             <div class="lang-menu">
                 <span class="lang-active"><i class="fa-solid fa-globe"></i> EN <i class="fa-solid fa-chevron-down" style="font-size: 10px; margin-left: 4px;"></i></span>
                 <div class="lang-dropdown">
@@ -506,7 +506,7 @@
         <a href="#" data-i18n="nav.rent" onclick="toggleMenu(false)">Rent</a>
         <a href="#" data-i18n="nav.sell" onclick="toggleMenu(false)">Sell</a>
         <a href="#" data-i18n="nav.neighborhoods" onclick="toggleMenu(false)">Neighborhoods</a>
-        <a href="crm.html" data-i18n="nav.agents" onclick="toggleMenu(false)">Agents</a>
+        <a href="javascript:void(0)" onclick="Auth.showAgentModal()" data-i18n="nav.agents" onclick="toggleMenu(false)">Agents</a>
         <a href="javascript:void(0)" id="nav-auth-item-mob" onclick="Auth.isLoggedIn() ? window.location.href='crm.html' : Auth.showModal(); toggleMenu(false)"><i class="fa-regular fa-user"></i> <span data-i18n="nav.signin">Sign In</span></a>
         
         <div class="lang-selector-mob">
@@ -572,7 +572,7 @@
                 <div style="grid-column: 1/-1; text-align: center; padding: 40px; color: #94a3b8;">Cargando inmuebles...</div>
             </div>
             <div style="padding: 10px 15px; border-top: 1px solid var(--border); font-size: 10px; color: #94a3b8; text-align: center;">
-                VERSION 5.5.0
+                VERSION 5.18.0
             </div>
         </aside>
 
