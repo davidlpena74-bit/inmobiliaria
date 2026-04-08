@@ -245,14 +245,12 @@
 
     <header id="mainHeader">
         <div class="logo">
-            <img src="logos_corporativos/weperty_logo_blanco_final.png" alt="Weperty Logo" id="headerLogo">
+            <img src="logos_corporativos/weperty_logo_blanco_final_registrado.png" alt="Weperty Logo" id="headerLogo">
         </div>
         <nav id="desktopNav">
-            <a href="inmuebles.html" data-i18n="nav.buy">Buy</a>
-            <a href="#" data-i18n="nav.rent">Rent</a>
-            <a href="#" data-i18n="nav.sell">Sell</a>
-            <a href="#" data-i18n="nav.neighborhoods">Neighborhoods</a>
+            <a href="#" data-i18n="nav.owners">Owners</a>
             <a href="javascript:void(0)" onclick="Auth.showAgentModal()" data-i18n="nav.agents">Agents</a>
+            <a href="inmuebles.html" data-i18n="nav.search_home">Looking for a home</a>
             <div class="lang-menu">
                 <span class="lang-active"><i class="fa-solid fa-globe"></i> EN <i class="fa-solid fa-chevron-down" style="font-size: 10px; margin-left: 4px;"></i></span>
                 <div class="lang-dropdown">
@@ -270,10 +268,9 @@
     <!-- MENU MÓVIL OVERLAY -->
     <div class="mobile-menu" id="mobileDrawer">
         <div class="close-btn" onclick="toggleMenu(false)">&times;</div>
-        <a href="inmuebles.html" data-i18n="nav.buy" onclick="toggleMenu(false)">Buy</a>
-        <a href="#" data-i18n="nav.rent" onclick="toggleMenu(false)">Rent</a>
-        <a href="#" data-i18n="nav.sell" onclick="toggleMenu(false)">Sell</a>
-        <a href="javascript:void(0)" onclick="Auth.showAgentModal()" data-i18n="nav.agents" onclick="toggleMenu(false)">Agents</a>
+        <a href="#" data-i18n="nav.owners" onclick="toggleMenu(false)">Owners</a>
+        <a href="javascript:void(0)" onclick="Auth.showAgentModal(); toggleMenu(false)" data-i18n="nav.agents">Agents</a>
+        <a href="inmuebles.html" data-i18n="nav.search_home" onclick="toggleMenu(false)">Looking for a home</a>
         <a href="javascript:void(0)" id="nav-auth-item-mob" onclick="Auth.isLoggedIn() ? window.location.href='crm.html' : Auth.showModal(); toggleMenu(false)"><i class="fa-regular fa-user"></i> <span data-i18n="nav.signin">Sign In</span></a>
         
         <div class="lang-selector-mob">
@@ -338,7 +335,7 @@
     <footer>
         <div class="footer-grid">
             <div class="footer-col">
-                <img src="logos_corporativos/weperty_logo_color_final.png" alt="Weperty" class="footer-logo">
+                <img src="logos_corporativos/weperty_logo_color_final_registrado.png" alt="Weperty" class="footer-logo">
                 <p style="opacity: 0.8; line-height: 1.6;" data-i18n="footer.tagline">Elevating the real estate experience in Costa Blanca with unmatched local expertise and global reach.</p>
             </div>
             <div class="footer-col">
@@ -371,7 +368,7 @@
         <div class="footer-bottom">
             <div data-i18n="footer.bottom">© 2026 Weperty Real Estate. All rights reserved. | <a href="terms.html" style="color: #999; text-decoration: underline;">Terms</a> | <a href="privacy.html" style="color: #999; text-decoration: underline;">Privacy</a> | Alicante Authority | Equal Housing Opportunity.</div>
             <div style="display: flex; gap: 20px; align-items: center;">
-                <span style="font-size: 10px; color: #666; margin-right: 15px;">VERSION 5.19.3</span>
+                <span style="font-size: 10px; color: #666; margin-right: 15px;">VERSION 5.19.4</span>
                 <i class="fa-brands fa-instagram"></i>
                 <i class="fa-brands fa-linkedin-in"></i>
                 <i class="fa-brands fa-facebook-f"></i>
@@ -386,10 +383,10 @@
             const logoImg = document.getElementById('headerLogo');
             if (window.scrollY > 50) {
                 header.classList.add('scrolled');
-                logoImg.src = 'logos_corporativos/weperty_logo_color_final.png';
+                logoImg.src = 'logos_corporativos/weperty_logo_color_final_registrado.png';
             } else {
                 header.classList.remove('scrolled');
-                logoImg.src = 'logos_corporativos/weperty_logo_blanco_final.png';
+                logoImg.src = 'logos_corporativos/weperty_logo_blanco_final_registrado.png';
             }
         });
  

@@ -477,14 +477,12 @@
     <!-- 🏠 Navegación Superior Unificada -->
     <header id="mainHeader">
         <div class="logo">
-            <img src="logos_corporativos/weperty_logo_color_final.png" alt="Weperty Logo" onclick="window.location.href='index.html'">
+            <img src="logos_corporativos/weperty_logo_color_final_registrado.png" alt="Weperty Logo" onclick="window.location.href='index.html'">
         </div>
         <nav>
-            <a href="#" data-i18n="nav.buy">Buy</a>
-            <a href="#" data-i18n="nav.rent">Rent</a>
-            <a href="#" data-i18n="nav.sell">Sell</a>
-            <a href="#" data-i18n="nav.neighborhoods">Neighborhoods</a>
+            <a href="#" data-i18n="nav.owners">Owners</a>
             <a href="javascript:void(0)" onclick="Auth.showAgentModal()" data-i18n="nav.agents">Agents</a>
+            <a href="inmuebles.html" data-i18n="nav.search_home">Looking for a home</a>
             <div class="lang-menu">
                 <span class="lang-active"><i class="fa-solid fa-globe"></i> EN <i class="fa-solid fa-chevron-down" style="font-size: 10px; margin-left: 4px;"></i></span>
                 <div class="lang-dropdown">
@@ -501,12 +499,9 @@
 
     <div class="mobile-menu" id="mobileDrawer">
         <div class="close-btn" onclick="toggleMenu(false)">&times;</div>
-        <a href="index.html" data-i18n="nav.home" onclick="toggleMenu(false)">Home</a>
-        <a href="inmuebles.html" data-i18n="nav.buy" onclick="toggleMenu(false)">Buy</a>
-        <a href="#" data-i18n="nav.rent" onclick="toggleMenu(false)">Rent</a>
-        <a href="#" data-i18n="nav.sell" onclick="toggleMenu(false)">Sell</a>
-        <a href="#" data-i18n="nav.neighborhoods" onclick="toggleMenu(false)">Neighborhoods</a>
-        <a href="javascript:void(0)" onclick="Auth.showAgentModal()" data-i18n="nav.agents" onclick="toggleMenu(false)">Agents</a>
+        <a href="#" data-i18n="nav.owners" onclick="toggleMenu(false)">Owners</a>
+        <a href="javascript:void(0)" onclick="Auth.showAgentModal(); toggleMenu(false)" data-i18n="nav.agents">Agents</a>
+        <a href="inmuebles.html" data-i18n="nav.search_home" onclick="toggleMenu(false)">Looking for a home</a>
         <a href="javascript:void(0)" id="nav-auth-item-mob" onclick="Auth.isLoggedIn() ? window.location.href='crm.html' : Auth.showModal(); toggleMenu(false)"><i class="fa-regular fa-user"></i> <span data-i18n="nav.signin">Sign In</span></a>
         
         <div class="lang-selector-mob">
@@ -572,7 +567,7 @@
                 <div style="grid-column: 1/-1; text-align: center; padding: 40px; color: #94a3b8;">Cargando inmuebles...</div>
             </div>
             <div style="padding: 10px 15px; border-top: 1px solid var(--border); font-size: 10px; color: #94a3b8; text-align: center;">
-                VERSION 5.19.3
+                VERSION 5.19.4
             </div>
         </aside>
 
