@@ -310,8 +310,14 @@
         <i class="fa-solid fa-circle-question t-icon" style="order: 9;"></i>
         <i class="fa-regular fa-calendar t-icon" style="order: 10;"></i>
         <i class="fa-solid fa-box-archive t-icon" style="order: 11;"></i>
-        <div class="avatar" style="order: 12;"><i class="fa-solid fa-user"></i></div>
-        <i class="fa-solid fa-right-from-bracket t-icon" style="order: 13;" onclick="logout()" title="Cerrar sesión"></i>
+        <div class="user-dropdown-container">
+            <div class="avatar"><i class="fa-solid fa-user"></i></div>
+            <div class="user-dropdown-menu">
+                <a href="../index.html"><i class="fa-solid fa-globe"></i> Salir a la web</a>
+                <div class="divider"></div>
+                <a href="javascript:logout()" class="logout-link"><i class="fa-solid fa-right-from-bracket"></i> Cerrar sesión</a>
+            </div>
+        </div>
     </header>
 
     <div class="page-content" style="padding: 15px 18px;">

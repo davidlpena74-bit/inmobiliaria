@@ -222,6 +222,90 @@ body.collapsed-sidebar .sidebar-bottom i { font-size: 18px; margin: 0; }
     display: flex; align-items: center; justify-content: center;
     font-size: 12px; color: var(--text-light);
     margin-left: 6px;
+    cursor: pointer;
+}
+
+/* User Dropdown Menu */
+.user-dropdown-container {
+    position: relative !important;
+    display: inline-flex !important;
+    align-items: center;
+    cursor: pointer;
+    order: 20; /* Keep it at the end of flex topbar */
+}
+
+.user-dropdown-menu {
+    display: none; /* Reliable hiding */
+    position: absolute !important;
+    top: 100% !important;
+    right: 0 !important;
+    min-width: 170px;
+    background: #ffffff !important;
+    border: 1px solid var(--border) !important;
+    border-radius: 8px !important;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1) !important;
+    z-index: 10000 !important;
+    padding: 8px 0 !important;
+    margin-top: 10px !important;
+}
+
+.user-dropdown-container:hover .user-dropdown-menu {
+    display: block !important;
+}
+
+/* Bridge to prevent menu closing */
+.user-dropdown-container::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    right: 0;
+    width: 100%;
+    height: 15px;
+    display: none;
+}
+.user-dropdown-container:hover::after { display: block; }
+
+.user-dropdown-menu a {
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+    padding: 10px 18px !important;
+    color: var(--text) !important;
+    text-decoration: none !important;
+    font-size: 13px !important;
+    font-family: 'Inter', sans-serif !important;
+    transition: background 0.15s;
+    line-height: 1.4 !important;
+}
+
+.user-dropdown-menu a i {
+    width: 16px;
+    text-align: center;
+    color: #64748b !important;
+    font-size: 14px !important;
+}
+
+.user-dropdown-menu a:hover {
+    background: #f8fafc !important;
+    color: var(--link-blue) !important;
+}
+
+.user-dropdown-menu a:hover i {
+    color: var(--link-blue) !important;
+}
+
+.user-dropdown-menu .divider {
+    height: 1px !important;
+    background: var(--border) !important;
+    margin: 6px 0 !important;
+}
+
+.user-dropdown-menu a.logout-link:hover {
+    color: var(--danger) !important;
+}
+
+.user-dropdown-menu a.logout-link:hover i {
+    color: var(--danger) !important;
 }
 
 /* ========= CONTENT AREA ========= */
