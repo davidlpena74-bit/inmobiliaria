@@ -104,7 +104,20 @@ const translations = {
         "auth.divider": "También puedes",
         "auth.footer.main": "Al continuar, aceptas",
         "auth.footer.terms": "Términos",
-        "auth.footer.privacy": "Privacidad"
+        "auth.footer.privacy": "Privacidad",
+        "type.apartamento": "Apartamento",
+        "type.piso": "Piso",
+        "type.chalet": "Chalet",
+        "type.casa": "Casa",
+        "type.estudio": "Estudio",
+        "type.duplex": "Dúplex",
+        "type.penthouse": "Ático",
+        "type.local": "Local Comercial",
+        "type.garaje": "Garaje",
+        "type.oficina": "Oficina",
+        "type.nave": "Nave Industrial",
+        "type.terreno": "Terreno",
+        "type.trastero": "Trastero"
     },
     en: {
         "nav.home": "Home",
@@ -211,7 +224,20 @@ const translations = {
         "auth.divider": "You can also",
         "auth.footer.main": "By continuing, you agree to",
         "auth.footer.terms": "Terms",
-        "auth.footer.privacy": "Privacy"
+        "auth.footer.privacy": "Privacy",
+        "type.apartamento": "Apartment",
+        "type.piso": "Flat",
+        "type.chalet": "Villa",
+        "type.casa": "House",
+        "type.estudio": "Studio",
+        "type.duplex": "Duplex",
+        "type.penthouse": "Penthouse",
+        "type.local": "Commercial Space",
+        "type.garaje": "Garage",
+        "type.oficina": "Office",
+        "type.nave": "Industrial Hub",
+        "type.terreno": "Land",
+        "type.trastero": "Storage"
     },
     de: {
         "nav.home": "Startseite",
@@ -298,7 +324,20 @@ const translations = {
         "auth.role.other": "Andere",
         "auth.footer.main": "Ich akzeptiere die",
         "auth.footer.terms": "Nutzungsbedingungen",
-        "auth.footer.privacy": "Datenschutz"
+        "auth.footer.privacy": "Datenschutz",
+        "type.apartamento": "Wohnung",
+        "type.piso": "Etagenwohnung",
+        "type.chalet": "Villa",
+        "type.casa": "Haus",
+        "type.estudio": "Studio",
+        "type.duplex": "Duplex",
+        "type.penthouse": "Penthouse",
+        "type.local": "Gewerbefläche",
+        "type.garaje": "Garage",
+        "type.oficina": "Büro",
+        "type.nave": "Industriehalle",
+        "type.terreno": "Grundstück",
+        "type.trastero": "Abstellraum"
     },
     nl: {
         "nav.home": "Home",
@@ -385,7 +424,20 @@ const translations = {
         "auth.role.other": "Anders",
         "auth.footer.main": "Ik accepteer de",
         "auth.footer.terms": "Gebruiksvoorwaarden",
-        "auth.footer.privacy": "Privacybeleid"
+        "auth.footer.privacy": "Privacybeleid",
+        "type.apartamento": "Appartement",
+        "type.piso": "Flat",
+        "type.chalet": "Villa",
+        "type.casa": "Huis",
+        "type.estudio": "Studio",
+        "type.duplex": "Duplex",
+        "type.penthouse": "Penthouse",
+        "type.local": "Bedrijfsruimte",
+        "type.garaje": "Garage",
+        "type.oficina": "Kantoor",
+        "type.nave": "Bedrijfshal",
+        "type.terreno": "Grondstuk",
+        "type.trastero": "Berging"
     },
 };
 
@@ -455,6 +507,11 @@ function setLanguage(lang) {
 
     if (typeof loadWebProperties === "function") {
         loadWebProperties();
+    }
+
+    // 🚩 Inmueble.js sync: Si estamos en modo detalle y hay datos cargados, re-renderizar
+    if (typeof renderProperty === "function" && window.currentProperty) {
+        renderProperty(window.currentProperty);
     }
 }
 

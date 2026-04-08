@@ -27,7 +27,8 @@ async function initPropertyDetail() {
             .single();
 
         if (error || !prop) throw error || new Error("Inmueble no encontrado");
-
+        
+        window.currentProperty = prop; // Guardar para re-renderizado
         renderProperty(prop);
     } catch (err) {
         console.error("Error cargando el inmueble:", err);
@@ -49,7 +50,11 @@ function renderProperty(p) {
     document.getElementById('labelBeds').textContent = `${p.habitaciones || 0} ${translations[currentLang]['prop.beds']}`;
     document.getElementById('labelBaths').textContent = `${p.banos || 0} ${translations[currentLang]['prop.baths']}`;
     document.getElementById('labelArea').textContent = `${p.superficie || 0} m²`;
-    document.getElementById('labelTipo').textContent = p.tipo || 'Inmueble';
+    
+    // Traducción del Tipo de Inmueble
+    const tipoNormalizado = (p.tipo || 'Inmueble').toLowerCase().trim();
+    const tipoTraducido = translations[currentLang][`type.${tipoNormalizado}`] || p.tipo || 'Inmueble';
+    document.getElementById('labelTipo').textContent = tipoTraducido;
 
     // Descripción
     document.getElementById('propDesc').innerHTML = t_prop(p, 'descripcion') || "Sin descripción disponible.";
@@ -99,7 +104,7 @@ function renderProperty(p) {
         if (!text) return "";
         const lower = text.toLowerCase().trim();
         
-        // Mapeo selectivo de valores comunes
+        // Mapeo selectivo de valores comunes (extensible)
         if (lower === "sí" || lower === "si") return currentLang === "es" ? "Sí" : (currentLang === "en" ? "Yes" : (currentLang === "de" ? "Ja" : "Ja"));
         if (lower === "no") return currentLang === "es" ? "No" : (currentLang === "en" ? "No" : (currentLang === "de" ? "Nein" : "Nee"));
 
@@ -108,10 +113,13 @@ function renderProperty(p) {
         if (lower.includes("jardín") || lower.includes("jardin")) return translations[currentLang]["feat.garden"];
         if (lower.includes("terraza")) return translations[currentLang]["feat.terrace"];
         if (lower.includes("ascensor")) return translations[currentLang]["feat.lift"];
-        if (lower.includes("garaje") || lower.includes("parking")) return translations[currentLang]["feat.parking"];
+        if (lower.includes("garaje") || lower.includes("parking") || lower.includes("aparcamiento")) return translations[currentLang]["feat.parking"];
         if (lower.includes("amueblado")) return translations[currentLang]["feat.furnished"];
         if (lower.includes("exterior")) return translations[currentLang]["feat.exterior"];
         if (lower.includes("interior")) return translations[currentLang]["feat.interior"];
+        if (lower.includes("vistas al mar")) return currentLang === "es" ? "Vistas al mar" : (currentLang === "en" ? "Sea views" : (currentLang === "de" ? "Meerblick" : "Zeezicht"));
+        if (lower.includes("calefacción")) return currentLang === "es" ? "Calefacción" : (currentLang === "en" ? "Heating" : (currentLang === "de" ? "Heizung" : "Verwarming"));
+        
         return text; // Fallback
     }
 
