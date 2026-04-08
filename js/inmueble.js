@@ -198,16 +198,26 @@ function openGallery(images, index) {
 
 // 📞 Acciones de Contacto
 function openWhatsapp() {
-    window.open(`https://wa.me/34654321098?text=Hola, estoy interesado en el inmueble ${propertyRef}`, '_blank');
+    alert(currentLang === 'es' ? "Servicio de chat disponible próximamente." : "Chat service available soon.");
 }
 
 function openContact() {
-    alert("Formulario de contacto próximamente.");
+    alert(currentLang === 'es' ? "Servicio de contacto disponible próximamente." : "Contact service available soon.");
 }
 
 function toggleMenu(show) {
     const drawer = document.getElementById('mobileDrawer');
     if (drawer) drawer.classList.toggle('active', show);
+}
+
+function revealPhone() {
+    const display = document.getElementById('phone-display');
+    if (display) {
+        display.innerHTML = `
+            <i class="fa-solid fa-phone" style="width: 14px; color: #888;"></i>
+            <a href="tel:+34663706497" style="color: inherit; text-decoration: none; font-weight: 600;">+34 663 706 497</a>
+        `;
+    }
 }
 
 // Iniciar aplicación

@@ -112,7 +112,7 @@
     <!-- 🏠 Navegación Superior Unificada -->
     <header>
         <a href="index.html" class="logo">
-            <img src="logos_corporativos/weperty_logo_azul.png" alt="Weperty Logo">
+            <img src="logos_corporativos/weperty_logo_color_final_registrado.png" alt="Weperty Logo">
         </a>
         <nav id="desktopNav">
             <a href="inmuebles.html" data-i18n="nav.buy">Comprar</a>
@@ -244,11 +244,20 @@
                         <i class="fa-brands fa-whatsapp"></i> <span data-i18n="btn.whatsapp">WhatsApp</span>
                     </a>
                 </div>
-                <div style="margin-top: 30px; border-top: 1px solid #eee; padding-top: 20px; display: flex; align-items: center; gap: 15px;">
-                    <img src="https://i.pravatar.cc/100?img=12" style="width: 50px; height: 50px; border-radius: 50%;">
-                    <div>
-                        <p style="font-weight: 700; font-size: 0.9rem;">David Peña</p>
-                        <p style="font-size: 0.8rem; color: #888;" data-i18n="agent.title">Agente Weperty San Juan</p>
+                <div style="margin-top: 30px; border-top: 1px solid #eee; padding-top: 20px;">
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px;">
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <img src="logos_corporativos/agent_laura_lopez.png" style="width: 45px; height: 45px; border-radius: 50%; object-fit: cover;">
+                            <div>
+                                <p style="font-weight: 700; font-size: 0.85rem; margin: 0;">Laura López</p>
+                                <p style="font-size: 0.75rem; color: #888; margin: 0;" data-i18n="agent.title">Agente Weperty</p>
+                            </div>
+                        </div>
+                        <img src="logos_corporativos/weperty_logo_azul.png" alt="Weperty" style="height: 28px;">
+                    </div>
+                    <div id="phone-display" style="font-size: 0.8rem; color: #444; display: flex; align-items: center; gap: 8px; margin-left: 35px;">
+                        <i class="fa-solid fa-phone" style="width: 14px; color: #888;"></i>
+                        <span onclick="revealPhone()" style="cursor: pointer; color: var(--compass-blue); font-weight: 600; text-decoration: underline;" data-i18n="agent.show_phone">Ver teléfono</span>
                     </div>
                 </div>
             </div>
