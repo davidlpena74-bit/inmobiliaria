@@ -198,11 +198,15 @@ function openGallery(images, index) {
 
 // 📞 Acciones de Contacto
 function openWhatsapp() {
-    alert(currentLang === 'es' ? "Servicio de chat disponible próximamente." : "Chat service available soon.");
+    const title = currentLang === 'es' ? "Chat Próximamente" : "Chat Coming Soon";
+    const msg = currentLang === 'es' ? "Estamos integrando nuestro sistema de chat directo. Estará disponible muy pronto." : "We are integrating our direct chat system. It will be available very soon.";
+    showNotice(title, msg);
 }
 
 function openContact() {
-    alert(currentLang === 'es' ? "Servicio de contacto disponible próximamente." : "Contact service available soon.");
+    const title = currentLang === 'es' ? "Contacto Próximamente" : "Contact Coming Soon";
+    const msg = currentLang === 'es' ? "El formulario de contacto directo está en mantenimiento. Por favor, intenta de nuevo en unos días." : "The direct contact form is under maintenance. Please try again in a few days.";
+    showNotice(title, msg);
 }
 
 function toggleMenu(show) {
@@ -217,6 +221,32 @@ function revealPhone() {
             <i class="fa-solid fa-phone" style="width: 14px; color: #888;"></i>
             <a href="tel:+34663706497" style="color: inherit; text-decoration: none; font-weight: 600;">+34 663 706 497</a>
         `;
+    }
+}
+
+function showNotice(title, message) {
+    const modal = document.getElementById('notice-modal');
+    document.getElementById('notice-title').innerText = title;
+    document.getElementById('notice-message').innerText = message;
+    if (modal) {
+        modal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+    }
+}
+
+function hideNotice() {
+    const modal = document.getElementById('notice-modal');
+    if (modal) {
+        modal.style.display = 'none';
+        document.body.style.overflow = '';
+    }
+}
+
+// Cerrar modal al hacer click fuera
+window.onclick = function(event) {
+    const modal = document.getElementById('notice-modal');
+    if (event.target == modal) {
+        hideNotice();
     }
 }
 

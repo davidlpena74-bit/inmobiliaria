@@ -98,6 +98,29 @@
         .mobile-menu .lang-selector-mob { border-top: 1px solid var(--border); width: 100%; padding-top: 25px; margin-top: 10px; display: flex; gap: 15px; flex-wrap: wrap; }
         .mobile-menu .lang-selector-mob a { font-size: 14px; font-weight: 500; margin-bottom: 0; font-family: 'Montserrat', sans-serif; padding: 8px 15px; border: 1px solid var(--border); border-radius: 4px; }
 
+        /* --- NOTICE MODAL --- */
+        #notice-modal {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.4); backdrop-filter: blur(8px);
+            display: none; align-items: center; justify-content: center; z-index: 5000;
+            animation: fadeIn 0.3s ease;
+        }
+        .notice-card {
+            background: white; border-radius: 20px; padding: 40px; width: 90%; max-width: 400px;
+            text-align: center; position: relative; box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            transform: scale(0.9); animation: scaleUp 0.3s ease forwards;
+        }
+        .notice-close { position: absolute; top: 15px; right: 20px; font-size: 24px; cursor: pointer; color: #94a3b8; }
+        .notice-icon { font-size: 40px; color: #3b82f6; margin-bottom: 20px; }
+        .notice-title { font-size: 1.5rem; font-weight: 700; color: #1e2844; margin-bottom: 15px; }
+        .notice-message { font-size: 0.95rem; color: #64748b; line-height: 1.6; margin-bottom: 30px; }
+        .btn-notice-ok {
+            background: var(--compass-blue); color: white; border: none; padding: 12px 40px;
+            border-radius: 10px; font-weight: 600; cursor: pointer; transition: opacity 0.2s;
+        }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes scaleUp { from { transform: scale(0.9); } to { transform: scale(1); } }
+
         @media (max-width: 768px) {
             header { padding: 15px 20px; }
             nav#desktopNav { display: none; }
@@ -273,5 +296,16 @@
         });
     </script>
     <script src="js/inmueble.js?v=5.5.0"></script>
+
+    <!-- 📢 Notice Modal Structure -->
+    <div id="notice-modal">
+        <div class="notice-card" onclick="event.stopPropagation()">
+            <div class="notice-close" onclick="hideNotice()">&times;</div>
+            <div class="notice-icon"><i class="fa-solid fa-circle-info"></i></div>
+            <h2 class="notice-title" id="notice-title">Próximamente</h2>
+            <p class="notice-message" id="notice-message">Este servicio estará disponible en una futura actualización.</p>
+            <button class="btn-notice-ok" onclick="hideNotice()">Entendido</button>
+        </div>
+    </div>
 </body>
 </html>
