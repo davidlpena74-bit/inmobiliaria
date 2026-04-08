@@ -368,7 +368,7 @@
         <div class="footer-bottom">
             <div data-i18n="footer.bottom">© 2026 Weperty Real Estate. All rights reserved. | <a href="terms.html" style="color: #999; text-decoration: underline;">Terms</a> | <a href="privacy.html" style="color: #999; text-decoration: underline;">Privacy</a> | Alicante Authority | Equal Housing Opportunity.</div>
             <div style="display: flex; gap: 20px; align-items: center;">
-                <span style="font-size: 10px; color: #666; margin-right: 15px;">VERSION 5.19.10</span>
+                <span style="font-size: 10px; color: #666; margin-right: 15px;">VERSION 5.19.11</span>
                 <a href="https://www.instagram.com/weperty/" target="_blank" style="color: inherit;"><i class="fa-brands fa-instagram"></i></a>
                 <a href="#" target="_blank" style="color: inherit;"><i class="fa-brands fa-linkedin-in"></i></a>
                 <a href="https://www.facebook.com/people/Weperty-Costa-Blanca/100037307204316/" target="_blank" style="color: inherit;"><i class="fa-brands fa-facebook-f"></i></a>
@@ -431,7 +431,13 @@
                         <div class="prop-card" onclick="window.location.href='inmueble.html?ref=${p.referencia}'" data-id="${p.id}">
                             <div class="prop-img">
                                 <div class="badge-pills">
-                                    <div class="badge-pill">${t_prop(p, 'destacada') ? translations[currentLang]['prop.exclusive'] : translations[currentLang]['prop.comingsoon']}</div>
+                                    ${t_prop(p, 'destacada') ? 
+                                        `<div class="badge-pill">${translations[currentLang]['prop.exclusive']}</div>` : 
+                                        (p.agente === 'Weperty Properties' ? 
+                                            `<img src="logos_corporativos/weperty_logo_azul.png" style="height: 22px; object-fit: contain;">` : 
+                                            `<div class="badge-pill">${translations[currentLang]['prop.comingsoon']}</div>`
+                                        )
+                                    }
                                 </div>
                                 <img src="${imgUrl}" alt="${t_prop(p, 'titulo')}">
                             </div>
@@ -455,7 +461,7 @@
                     <div class="prop-card">
                         <div class="prop-img">
                             <div class="badge-pills">
-                                <div class="badge-pill">WEPERTY COMING SOON</div>
+                                <img src="logos_corporativos/weperty_logo_azul.png" style="height: 22px; object-fit: contain;">
                             </div>
                             <img src="https://images.unsplash.com/photo-1620626011761-996317b8d101?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Mansion Alicante">
                         </div>

@@ -148,6 +148,27 @@ function renderProperty(p) {
     if (typeof updateContent === "function") {
         updateContent();
     }
+
+    // Agent/Agency Display
+    renderAgent(p);
+}
+
+function renderAgent(p) {
+    const agentNameEl = document.querySelector('.sidebar-info p[style*="font-weight: 700"]');
+    const agencyTitleEl = document.querySelector('.sidebar-info p[data-i18n="agent.title"]');
+    const agencyLogoEl = document.querySelector('.sidebar-info img[alt="Weperty"]');
+
+    if (p.agente === "Weperty Properties") {
+        if (agentNameEl) agentNameEl.textContent = "Laura López";
+        if (agencyTitleEl) agencyTitleEl.textContent = "Agente Weperty Properties";
+        if (agencyLogoEl) agencyLogoEl.src = "logos_corporativos/weperty_logo_azul.png";
+    } else if (p.agente) {
+        // Fallback para otras inmobiliarias
+        if (agentNameEl) agentNameEl.textContent = "Agente Inmobiliario";
+        if (agencyTitleEl) agencyTitleEl.textContent = p.agente;
+        // Podríamos ocultar el logo o poner uno genérico si no lo tenemos
+        if (agencyLogoEl) agencyLogoEl.style.display = 'none'; 
+    }
 }
 
 let map;

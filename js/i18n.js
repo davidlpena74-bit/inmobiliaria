@@ -24,7 +24,7 @@ const translations = {
         "search.tab.buy": "Comprar",
         "search.tab.rent": "Alquilar",
         "search.tab.sold": "Vendido",
-        "search.placeholder": "Busca por Ciudad, Barrio o Dirección en Alicante...",
+        "search.placeholder": "Busca por Ciudad, Barrio o Dirección en la Costa Blanca...",
         "search.btn": "Buscar",
         "section.exclusives.title": "Exclusivas Weperty",
         "section.exclusives.subtitle": "Propiedades de primer nivel disponibles exclusivamente a través de nosotros.",

@@ -73,7 +73,7 @@ def process_and_import(input_file='data/inmoweb_properties.json', use_supabase=T
             "estado_publicacion": status_map.get(item.get('status'), "Activo"),
             "origen_datos": "CRM_WEPERTY",
             "publicar_web": True,
-            "agente": "info@weperti.com"
+            "agente": "Weperty Properties"
         }
         
         if use_supabase:

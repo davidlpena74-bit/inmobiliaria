@@ -567,7 +567,7 @@
                 <div style="grid-column: 1/-1; text-align: center; padding: 40px; color: #94a3b8;">Cargando inmuebles...</div>
             </div>
             <div style="padding: 10px 15px; border-top: 1px solid var(--border); font-size: 10px; color: #94a3b8; text-align: center;">
-                VERSION 5.19.10
+                VERSION 5.19.11
             </div>
         </aside>
 
@@ -1015,7 +1015,13 @@
                             <div class="carousel-counter">1/${totalImages}</div>
                         ` : ''}
                         <div class="badge-pills">
-                            <div class="badge-pill">${t_prop(p, 'destacada') ? translations[currentLang]['prop.exclusive'] : translations[currentLang]['prop.comingsoon']}</div>
+                            ${t_prop(p, 'destacada') ? 
+                                `<div class="badge-pill">${translations[currentLang]['prop.exclusive']}</div>` : 
+                                (p.agente === 'Weperty Properties' ? 
+                                    `<img src="logos_corporativos/weperty_logo_azul.png" style="height: 22px; object-fit: contain;">` : 
+                                    `<div class="badge-pill">${translations[currentLang]['prop.comingsoon']}</div>`
+                                )
+                            }
                         </div>
                         <img src="${fotos[0] ? fotos[0] : 'weperty_placeholder.png'}">
                     </div>
@@ -1031,6 +1037,7 @@
                         </div>
                         <div class="address">${t_prop(p, 'titulo')}</div>
                         <div class="area">${p.caracteristicas?.ciudad || 'Alicante'}, CP ${p.caracteristicas?.cod_postal || '03001'}</div>
+                        <div class="agency" style="font-size: 11px; color: #0064E5; font-weight: 600; margin-top: 8px;">${p.agente || ''}</div>
                     </div>
                 `;
 
