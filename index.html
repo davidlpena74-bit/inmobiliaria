@@ -58,8 +58,7 @@
             padding: 15px 40px;
             box-shadow: 0 1px 5px rgba(0,0,0,0.1);
         }
-        .logo img { height: 35px; transition: transform 0.3s; filter: brightness(0) invert(1); }
-        header.scrolled .logo img { filter: none; }
+        .logo img { height: 35px; transition: transform 0.3s; }
         
         nav { display: flex; align-items: center; }
         nav a, .lang-menu { color: var(--white); text-decoration: none; margin-left: 30px; font-size: 14px; font-weight: 500; transition: color 0.3s; position: relative; cursor: pointer; }
@@ -245,9 +244,9 @@
 <body>
 
     <header id="mainHeader">
-        <a href="index.html" class="logo">
-            <img src="logos_corporativos/weperty_logo.png" alt="Weperty Logo" id="headerLogo">
-        </a>
+        <div class="logo">
+            <img src="logos_corporativos/weperty_logo_blanco_final.png" alt="Weperty Logo" id="headerLogo">
+        </div>
         <nav id="desktopNav">
             <a href="inmuebles.html" data-i18n="nav.buy">Buy</a>
             <a href="#" data-i18n="nav.rent">Rent</a>
@@ -339,7 +338,7 @@
     <footer>
         <div class="footer-grid">
             <div class="footer-col">
-                <img src="logos_corporativos/weperty_logo.png" alt="Weperty" class="footer-logo">
+                <img src="logos_corporativos/weperty_logo_color_final.png" alt="Weperty" class="footer-logo">
                 <p style="opacity: 0.8; line-height: 1.6;" data-i18n="footer.tagline">Elevating the real estate experience in Costa Blanca with unmatched local expertise and global reach.</p>
             </div>
             <div class="footer-col">
@@ -384,10 +383,13 @@
         // LÓGICA DE HEADER (SCROLL)
         window.addEventListener('scroll', function() {
             const header = document.getElementById('mainHeader');
+            const logoImg = document.getElementById('headerLogo');
             if (window.scrollY > 50) {
                 header.classList.add('scrolled');
+                logoImg.src = 'logos_corporativos/weperty_logo_color_final.png';
             } else {
                 header.classList.remove('scrolled');
+                logoImg.src = 'logos_corporativos/weperty_logo_blanco_final.png';
             }
         });
  
