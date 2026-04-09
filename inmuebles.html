@@ -564,7 +564,7 @@
                 <div style="grid-column: 1/-1; text-align: center; padding: 40px; color: #94a3b8;">Cargando inmuebles...</div>
             </div>
             <div style="padding: 10px 15px; border-top: 1px solid var(--border); font-size: 10px; color: #94a3b8; text-align: center;">
-                VERSION 5.20.0
+                VERSION 5.21.0
             </div>
         </aside>
 
@@ -918,9 +918,14 @@
                 const pAms = p.caracteristicas || {};
 
                 // Filtrado por Modo (Compra / Alquiler)
-                // Umbral: Alquiler < 10.000€, Venta >= 10.000€
-                if (currentFilters.mode === 'rent' && pPrice >= 10000) return false;
-                if (currentFilters.mode === 'buy' && pPrice < 10000) return false;
+                const targetOp = currentFilters.mode === 'rent' ? 'Alquiler' : 'Venta';
+                if (p.tipo_operacion) {
+                    if (p.tipo_operacion !== targetOp) return false;
+                } else {
+                    // Fallback de precio si no hay campo explícito
+                    if (currentFilters.mode === 'rent' && pPrice >= 10000) return false;
+                    if (currentFilters.mode === 'buy' && pPrice < 10000) return false;
+                }
  
                 if (pPrice < currentFilters.minPrice || pPrice > currentFilters.maxPrice) return false;
                 if (pBeds < currentFilters.bed) return false;

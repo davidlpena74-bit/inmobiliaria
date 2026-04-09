@@ -74,6 +74,7 @@ def migrar_datos():
                 "year_built": int(row.get('features-0-year_built', 0)) if pd.notna(row.get('features-0-year_built')) else 0
             },
             "origen_datos": "CRM_WEPERTY",
+            "tipo_operacion": "Alquiler" if prop["precio"] < 10000 else "Venta",
             "estado_publicacion": "Activo"
         }
         

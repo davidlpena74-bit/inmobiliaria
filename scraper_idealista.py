@@ -202,6 +202,7 @@ class IdealistaScraperEtico:
         propiedad['zona'] = self.zona.title()
         propiedad['ciudad'] = self.ciudad.title()
         propiedad['fecha_extraccion'] = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        propiedad['tipo_operacion'] = 'Alquiler' if 'alquiler' in self.base_url else 'Venta'
         
         return propiedad
     

@@ -45,6 +45,7 @@ CREATE TABLE IF NOT EXISTS inm_propiedades (
     longitud NUMERIC,
     destacada BOOLEAN DEFAULT false,
     estado_publicacion TEXT DEFAULT 'Activo' CHECK (estado_publicacion IN ('Borrador', 'Activo', 'Vendido', 'Alquilado', 'Pausado')),
+    tipo_operacion TEXT DEFAULT 'Venta' CHECK (tipo_operacion IN ('Venta', 'Alquiler')),
     origen_datos TEXT DEFAULT 'CRM_WEPERTY' CHECK (origen_datos IN ('CRM_WEPERTY', 'SCRAPER_EXTERNAL')),
     
     -- Controles de publicación

@@ -25,6 +25,7 @@ ALTER TABLE inm_propiedades ADD COLUMN IF NOT EXISTS propietario_id INTEGER REFE
 ALTER TABLE inm_propiedades ADD COLUMN IF NOT EXISTS latitud NUMERIC;
 ALTER TABLE inm_propiedades ADD COLUMN IF NOT EXISTS longitud NUMERIC;
 ALTER TABLE inm_propiedades ADD COLUMN IF NOT EXISTS estado_publicacion TEXT DEFAULT 'Borrador' CHECK (estado_publicacion IN ('Borrador', 'Activo', 'Vendido', 'Alquilado', 'Pausado'));
+ALTER TABLE inm_propiedades ADD COLUMN IF NOT EXISTS tipo_operacion TEXT DEFAULT 'Venta' CHECK (tipo_operacion IN ('Venta', 'Alquiler'));
 ALTER TABLE inm_propiedades ADD COLUMN IF NOT EXISTS imagenes_url JSONB; -- Array de URLs de fotos
 ALTER TABLE inm_propiedades ADD COLUMN IF NOT EXISTS destacada BOOLEAN DEFAULT false;
 

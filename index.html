@@ -745,7 +745,7 @@
         <div class="footer-bottom">
             <div data-i18n="footer.bottom">© 2026 Weperty Real Estate. All rights reserved. | <a href="terms.html" style="color: #666; text-decoration: underline;">Terms</a> | <a href="privacy.html" style="color: #666; text-decoration: underline;">Privacy</a> | Equal Housing Opportunity · Alicante</div>
             <div style="display: flex; gap: 12px; align-items: center;">
-                <span style="font-size: 10px; color: #555; letter-spacing: 1px;">VERSION 5.20.0</span>
+                <span style="font-size: 10px; color: #555; letter-spacing: 1px;">VERSION 5.21.0</span>
             </div>
         </div>
     </footer>
@@ -768,6 +768,9 @@
             currentSearchMode = mode;
             document.querySelectorAll('.tab-btn').forEach(tab => tab.classList.remove('active'));
             if (el) el.classList.add('active');
+            
+            // Recargar propiedades filtradas
+            loadWebProperties();
         }
  
         function executeSearch() {
@@ -855,20 +858,55 @@
             const row1 = document.getElementById('web-property-grid-row1');
             const row2 = document.getElementById('web-property-grid-row2');
             
+            // Guardar la promo card antes de limpiar el grid
+            const promoCard = row1.querySelector('.promo-card');
+            const promoHTML = promoCard ? promoCard.outerHTML : '';
+
+            const spinner = `
+                <div class="prop-card" style="background:#f5f5f5; min-height:280px; display:flex; align-items:center; justify-content:center; color:#aaa;">
+                    <i class="fa-solid fa-spinner fa-spin" style="font-size:24px;"></i>
+                </div>
+            `;
+            row1.innerHTML = spinner.repeat(3);
+            row2.innerHTML = spinner.repeat(4);
+
             try {
-                const { data, error } = await db
+                let data, error;
+                const opType = currentSearchMode === 'rent' ? 'Alquiler' : 'Venta';
+
+                // Intento 1: Usar el campo explícito tipo_operacion
+                ({ data, error } = await db
                     .from('inm_propiedades')
                     .select('*')
                     .eq('publicar_web', true)
+                    .eq('tipo_operacion', opType)
                     .order('created_at', { ascending: false })
-                    .limit(7);
+                    .limit(7));
+
+                // Si falla por columna inexistente (PGRST204 o 42703), reintentamos con la heurística de precio
+                if (error && (error.code === 'PGRST204' || error.code === '42703')) {
+                    console.log("Columna 'tipo_operacion' no encontrada. Usando fallback de precio.");
+                    let fallbackQuery = db
+                        .from('inm_propiedades')
+                        .select('*')
+                        .eq('publicar_web', true);
+                    
+                    if (currentSearchMode === 'rent') {
+                        fallbackQuery = fallbackQuery.lt('precio', 10000);
+                    } else {
+                        fallbackQuery = fallbackQuery.gte('precio', 10000);
+                    }
+
+                    ({ data, error } = await fallbackQuery
+                        .order('created_at', { ascending: false })
+                        .limit(7));
+                }
 
                 if (error || !data || data.length === 0) throw new Error("No properties found");
 
-                // Fila 1: primeras 3 + promo card (la promo ya está en el HTML)
-                const promoCard = row1.querySelector('.promo-card');
+                // Fila 1: primeras 3 + promo card
                 const first3 = data.slice(0, 3);
-                row1.innerHTML = first3.map(p => buildPropCard(p)).join('') + promoCard.outerHTML;
+                row1.innerHTML = first3.map(p => buildPropCard(p)).join('') + promoHTML;
 
                 // Fila 2: siguientes 4
                 const next4 = data.slice(3, 7);

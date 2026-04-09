@@ -72,6 +72,7 @@ def generar_datos_fake(cantidad=100):
             "ciudad": "Alicante",
             "tag": "FAKE_DATA" if not es_oportunidad else "OPORTUNIDAD_FAKE",
             "fecha_captura": datetime.now().isoformat(),
+            "tipo_operacion": "Alquiler" if precio < 10000 else "Venta",
             "estado_interno": "DUMMY_FOR_REPLACEMENT",
             "destacada": random.random() < 0.2
         }

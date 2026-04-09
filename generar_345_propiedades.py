@@ -108,6 +108,7 @@ for i in range(345):
         "subzona": subzona,
         "ciudad": "Madrid",
         "fecha_extraccion": "2026-02-14 13:40:00",
+        "tipo_operacion": "Alquiler" if precio < 10000 else "Venta",
         "publicar_web": True
     }
     
