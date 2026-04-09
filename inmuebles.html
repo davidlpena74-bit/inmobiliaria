@@ -568,7 +568,7 @@
                 <div style="grid-column: 1/-1; text-align: center; padding: 40px; color: #94a3b8;">Cargando inmuebles...</div>
             </div>
             <div style="padding: 10px 15px; border-top: 1px solid var(--border); font-size: 10px; color: #94a3b8; text-align: center;">
-                VERSION 5.19.18
+                VERSION 5.19.19
             </div>
         </aside>
 
@@ -1086,12 +1086,71 @@
             });
         }
 
+        let activeClusterHighlight = null;
+
         function highlightMarker(id, active) {
             const marker = propertyMarkers[id];
-            if (marker && marker.getElement()) {
+            if (!marker) return;
+
+            // Individual marker highlight (the dot expansion)
+            if (marker.getElement()) {
                 if (active) marker.getElement().classList.add('highlight');
                 else marker.getElement().classList.remove('highlight');
             }
+
+            if (active) {
+                // Clear previous cluster highlight
+                clearClusterHighlight();
+
+                // Find the visible parent (could be the marker itself or a cluster)
+                let visible = markerCluster.getVisibleParent(marker);
+                if (!visible || !visible._icon) {
+                    let node = marker;
+                    while (node) {
+                        if (node._icon) { visible = node; break; }
+                        node = node.__parent;
+                    }
+                }
+
+                // Only highlight if it's a CLUSTER (not the marker itself)
+                if (visible && visible._icon && visible !== marker) {
+                    const el = visible._icon;
+                    const inner = el.querySelector('div');
+                    activeClusterHighlight = {
+                        element: el,
+                        innerDiv: inner,
+                        originalBg: inner ? inner.style.backgroundColor : '',
+                        originalOutline: inner ? inner.style.outline : '',
+                        originalShadow: inner ? inner.style.boxShadow : '',
+                        originalColor: inner ? inner.style.color : '',
+                        originalZIndex: el.style.zIndex
+                    };
+
+                    if (inner) {
+                        inner.style.setProperty('background-color', '#000000', 'important');
+                        inner.style.setProperty('color', '#ffffff', 'important');
+                        inner.style.setProperty('outline', '4px solid #0064E5', 'important');
+                        inner.style.setProperty('outline-offset', '3px', 'important');
+                        inner.style.setProperty('box-shadow', '0 0 15px rgba(0,100,229,0.7)', 'important');
+                    }
+                    el.style.setProperty('z-index', '10000', 'important');
+                }
+            } else {
+                clearClusterHighlight();
+            }
+        }
+
+        function clearClusterHighlight() {
+            if (!activeClusterHighlight) return;
+            const h = activeClusterHighlight;
+            if (h.innerDiv) {
+                h.innerDiv.style.backgroundColor = h.originalBg;
+                h.innerDiv.style.outline = h.originalOutline;
+                h.innerDiv.style.boxShadow = h.originalShadow;
+                h.innerDiv.style.color = h.originalColor;
+            }
+            h.element.style.zIndex = h.originalZIndex;
+            activeClusterHighlight = null;
         }
 
         function toggleMenu(isOpen) {
