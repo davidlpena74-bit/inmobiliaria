@@ -50,6 +50,19 @@ PROXY_PORT = "823"                    # Puerto del proxy
 PROXY_USER_BASE = "43eae80e80002d6d67b2" # Usuario base de DataImpulse
 PROXY_PASS = "4a8d1549c089df41"          # Contraseña de DataImpulse
 
+# ========================================
+# CONFIGURACIÓN DE INMOWEB CRM
+# ========================================
+INMOWEB_DOMAIN = "weperti.com"
+INMOWEB_EMAIL = "info@weperti.com"
+INMOWEB_PASS = "Lacambio123P?"
+INMOWEB_LOGIN_URL = "https://panel.inmoweb.es/"
+
+# ========================================
+# CONFIGURACIÓN DE WEPERTI (PUBLIC SITE)
+# ========================================
+WEPERTI_URL = "http://weperti.com"
+
 # La rotación de IPs se hace añadiendo __session-RANDOM al usuario
 # Esto se manejará en el scraper
 

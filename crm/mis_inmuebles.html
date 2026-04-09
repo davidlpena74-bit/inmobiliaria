@@ -529,14 +529,14 @@
                             <th class="sortable">Visitas web</th>
                             <th>
                                 <div class="portal-header-icons">
-                                    <div class="ph-icon" style="background:#2563eb;" title="Web propia">W</div>
-                                    <div class="ph-icon" style="background:#1d4ed8;" title="Idealista">id</div>
-                                    <div class="ph-icon" style="background:#ef4444;" title="Fotocasa">fc</div>
-                                    <div class="ph-icon" style="background:#f97316;" title="Habitaclia">h</div>
-                                    <div class="ph-icon" style="background:#dc2626;" title="Pisos.com">p</div>
-                                    <div class="ph-icon" style="background:#059669;" title="Kyero">k</div>
-                                    <div class="ph-icon" style="background:#7c3aed;" title="ThinkSpain">ts</div>
-                                    <div class="ph-icon" style="background:#0284c7;" title="Rightmove">rm</div>
+                                    <div id="kpi-w" class="ph-icon" style="background:#2563eb;" title="Web propia">W</div>
+                                    <div id="kpi-id" class="ph-icon" style="background:#1d4ed8;" title="Idealista">id</div>
+                                    <div id="kpi-fc" class="ph-icon" style="background:#ef4444;" title="Fotocasa">fc</div>
+                                    <div id="kpi-h" class="ph-icon" style="background:#f97316;" title="Habitaclia">h</div>
+                                    <div id="kpi-p" class="ph-icon" style="background:#dc2626;" title="Pisos.com">p</div>
+                                    <div id="kpi-k" class="ph-icon" style="background:#059669;" title="Kyero">k</div>
+                                    <div id="kpi-ts" class="ph-icon" style="background:#7c3aed;" title="ThinkSpain">ts</div>
+                                    <div id="kpi-rm" class="ph-icon" style="background:#0284c7;" title="Rightmove">rm</div>
                                 </div>
                             </th>
                             <th class="sortable">Actualizado</th>
@@ -631,14 +631,23 @@
         return formatted + '€';
     }
 
-    // Generate portal checkboxes (random for demo, like the original)
-    function renderPortalChecks() {
-        const count = 8;
+    // Generate portal checkboxes based on real data
+    function renderPortalChecks(p) {
+        const portals = [
+            { field: 'publicar_web', active: !!p.publicar_web },
+            { field: 'publicar_idealista', active: !!p.publicar_idealista },
+            { field: 'publicar_fotocasa', active: !!p.publicar_fotocasa },
+            { field: 'publicar_habitaclia', active: !!p.publicar_habitaclia },
+            { field: 'publicar_pisoscom', active: !!p.publicar_pisoscom },
+            { field: 'publicar_kyero', active: !!p.publicar_kyero },
+            { field: 'publicar_thinkspain', active: !!p.publicar_thinkspain },
+            { field: 'publicar_rightmove', active: !!p.publicar_rightmove }
+        ];
+
         let html = '<div class="portal-checks">';
-        for (let i = 0; i < count; i++) {
-            const checked = Math.random() > 0.45;
-            html += `<div class="p-chk ${checked ? 'checked' : ''}"></div>`;
-        }
+        portals.forEach(pt => {
+            html += `<div class="p-chk ${pt.active ? 'checked' : ''}"></div>`;
+        });
         html += '</div>';
         return html;
     }
@@ -650,6 +659,29 @@
             return;
         }
         allProperties = data || [];
+
+        // Actualizar KPIs en los tooltips de los iconos de la cabecera
+        const total = allProperties.length;
+        const portalMap = {
+            'w': { title: 'Web propia', field: 'publicar_web' },
+            'id': { title: 'Idealista', field: 'publicar_idealista' },
+            'fc': { title: 'Fotocasa', field: 'publicar_fotocasa' },
+            'h': { title: 'Habitaclia', field: 'publicar_habitaclia' },
+            'p': { title: 'Pisos.com', field: 'publicar_pisoscom' },
+            'k': { title: 'Kyero', field: 'publicar_kyero' },
+            'ts': { title: 'ThinkSpain', field: 'publicar_thinkspain' },
+            'rm': { title: 'Rightmove', field: 'publicar_rightmove' }
+        };
+
+        Object.keys(portalMap).forEach(key => {
+            const config = portalMap[key];
+            const icon = document.getElementById(`kpi-${key}`);
+            const count = allProperties.filter(p => !!p[config.field]).length;
+            if (icon) {
+                icon.title = `${config.title} (${total} totales / ${count} publicados)`;
+            }
+        });
+
         applyFilters();
     }
 
@@ -722,14 +754,6 @@
                 <td class="price-cell">${formatPrice(p.precio, transaction)}</td>
                 <td class="visits-cell">${visits}</td>
                 <td>
-                    <div class="portal-checks">
-                        ${renderStatus(p.publicar_web, 'Web propia', '#2563eb', 'publicar_web')}
-                        ${renderStatus(p.publicar_idealista, 'Idealista', '#1d4ed8', 'publicar_idealista')}
-                        ${renderStatus(p.publicar_fotocasa, 'Fotocasa', '#ef4444', 'publicar_fotocasa')}
-                        ${renderStatus(p.publicar_pisoscom, 'Pisos.com', '#dc2626', 'publicar_pisoscom')}
-                        <div class="p-chk"></div>
-                        <div class="p-chk"></div>
-                        <div class="p-chk"></div>
                         <div class="p-chk"></div>
                     </div>
                 </td>

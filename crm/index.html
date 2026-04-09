@@ -9,6 +9,7 @@
     <script src="auth-check.js"></script>
     <link rel="stylesheet" href="shell.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         /* === DASHBOARD SPECIFIC STYLES === */
         .dash-content {
@@ -183,15 +184,16 @@
 
             <div class="stats-grid">
                 <div class="stat-card">
-                    <a href="#" class="ver-todo">Ver todo</a>
-                    <h3>Inmuebles</h3>
-                    <div class="value">99</div>
-                    <div class="sub">9 nuevos esta semana</div>
+                    <a href="mis_propiedades.html" class="ver-todo">Ver todo</a>
+                    <h3>Inmuebles Totales</h3>
+                    <div class="value" id="stat-total">-</div>
+                    <div class="sub">Total en CRM</div>
                 </div>
                 <div class="stat-card">
-                    <h3>Promociones</h3>
-                    <div class="value">0</div>
-                    <div class="sub">Añade tu primera promoción</div>
+                    <a href="mis_propiedades.html" class="ver-todo">Ver todo</a>
+                    <h3>Publicados Weperti</h3>
+                    <div class="value" id="stat-pub" style="color: #00c48c;">-</div>
+                    <div class="sub">En web actual</div>
                 </div>
                 <div class="stat-card">
                     <a href="#" class="ver-todo">Ver todo</a>
@@ -293,6 +295,38 @@
     </div>
 </div>
 
+<script>
+    const SB_URL = "https://dwbvegnxmyvpolvofkfn.supabase.co";
+    const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR3YnZlZ254bXl2cG9sdm9ma2ZuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njc1Mzg1NTUsImV4cCI6MjA4MzExNDU1NX0.eT5ZSce8H8Yk8pWKyLUYChU0HtmZljywP4eEQd5FkOI";
+    const supabaseClient = supabase.createClient(SB_URL, SB_KEY);
+
+    async function loadStats() {
+        try {
+            // Obtener total
+            const { count: totalCount, error: errorTotal } = await supabaseClient
+                .from('inm_propiedades')
+                .select('*', { count: 'exact', head: true });
+            
+            if (!errorTotal) {
+                document.getElementById('stat-total').textContent = totalCount;
+            }
+
+            // Obtener publicados en weperti.com
+            const { count: pubCount, error: errorPub } = await supabaseClient
+                .from('inm_propiedades')
+                .select('*', { count: 'exact', head: true })
+                .eq('publicado_weperti_com', true);
+            
+            if (!errorPub) {
+                document.getElementById('stat-pub').textContent = pubCount;
+            }
+        } catch (e) {
+            console.error("Error cargando stats:", e);
+        }
+    }
+
+    loadStats();
+</script>
 <script src="shell.js"></script>
 
 </body>
