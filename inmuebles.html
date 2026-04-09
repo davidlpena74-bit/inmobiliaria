@@ -412,13 +412,9 @@
         /* MAP STYLE SELECTOR */
         .map-style-selector {
             position: absolute;
-            top: 20px;
-            right: 20px;
+            bottom: 28px;
+            right: 58px;
             z-index: 1000;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            padding: 5px;
             display: flex;
             gap: 5px;
         }
@@ -568,7 +564,7 @@
                 <div style="grid-column: 1/-1; text-align: center; padding: 40px; color: #94a3b8;">Cargando inmuebles...</div>
             </div>
             <div style="padding: 10px 15px; border-top: 1px solid var(--border); font-size: 10px; color: #94a3b8; text-align: center;">
-                VERSION 5.19.19
+                VERSION 5.19.20
             </div>
         </aside>
 
@@ -731,11 +727,22 @@
         // Marker Cluster Group
         const markerCluster = L.markerClusterGroup({
             showCoverageOnHover: false,
-            zoomToBoundsOnClick: true,
+            zoomToBoundsOnClick: false, // Desactivado para control manual total
             spiderfyOnMaxZoom: true,
             maxClusterRadius: 40
         });
+
+        // Manejo manual del click en cluster para forzar márgenes (padding) generosos
+        markerCluster.on('clusterclick', function (a) {
+            a.layer.zoomToBounds({ padding: [120, 120] });
+        });
+
         map.addLayer(markerCluster);
+
+        // Actualizar sidebar al mover el mapa
+        map.on('moveend', () => {
+            updateSidebarFromViewport();
+        });
 
         function setMapStyle(style) {
             if (map.hasLayer(currentBaseLayer)) {
@@ -820,10 +827,10 @@
         function updateFilters() {
             currentFilters.minPrice = parseInt(document.getElementById('min-price').value) || 0;
             currentFilters.maxPrice = parseInt(document.getElementById('max-price').value) || Infinity;
-            // Sorting is now handled via currentFilters.sort updated by selectSort()
             
             filteredProperties = performFiltering(true);
-            renderProperties();
+            renderMarkers(); 
+            // Nota: renderMarkers llama a fitBounds, lo que dispara 'moveend' y actualiza la lista.
         }
 
         function saveSearch() {
@@ -980,25 +987,90 @@
             }
         }
 
-        function renderProperties() {
-            const container = document.getElementById('prop-items');
-            container.innerHTML = '';
+        function updateSidebarFromViewport() {
+            if (!map || !filteredProperties) return;
+            const bounds = map.getBounds();
             
+            const visibleProps = filteredProperties.filter(p => {
+                if (!p.latitud || !p.longitud) return false;
+                // Verificamos si las coordenadas están dentro del área visible
+                return bounds.contains([p.latitud, p.longitud]);
+            });
+            
+            renderSidebarList(visibleProps);
+        }
+
+        function renderMarkers() {
             markerCluster.clearLayers();
             for (let key in propertyMarkers) delete propertyMarkers[key];
 
-            const startIdx = filteredProperties.length > 0 ? 1 : 0;
-            const resText = currentLang === 'es' ? `${startIdx}-${filteredProperties.length} de ${allProperties.length} Inmuebles` : 
-                           (currentLang === 'en' ? `${startIdx}-${filteredProperties.length} of ${allProperties.length} Properties` : 
-                           (currentLang === 'de' ? `${startIdx}-${filteredProperties.length} von ${allProperties.length} Immobilien` : 
-                           `${startIdx}-${filteredProperties.length} van ${allProperties.length} Woningen`));
+            filteredProperties.forEach(p => {
+                if (p.latitud && p.longitud) {
+                    const precio = new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(p.precio);
+                    const icon = L.divIcon({
+                        className: 'custom-marker',
+                        html: `<span>${precio}</span>`,
+                        iconSize: null,
+                        iconAnchor: null
+                    });
+                    const marker = L.marker([p.latitud, p.longitud], { icon });
+                    
+                    // Popup logic
+                    const fotos = p.imagenes_url || p.imagenes || [];
+                    const popupHtml = `
+                        <div class="popup-card" onclick="window.location.href='inmueble.html?ref=${p.referencia}'">
+                            <div class="popup-img">
+                                <img src="${fotos[0] ? fotos[0] : 'weperty_placeholder.png'}">
+                            </div>
+                            <div class="popup-info">
+                                <div class="popup-tag">${translations[currentLang]['prop.exclusive']}</div>
+                                <div class="popup-price">${precio}</div>
+                                <div class="popup-stats">
+                                    ${p.habitaciones || 0} ${translations[currentLang]['prop.beds']} | 
+                                    ${p.banos || 0} ${translations[currentLang]['prop.baths']} | 
+                                    ${p.superficie || 0} m²
+                                </div>
+                                <div class="popup-address">${t_prop(p, 'titulo')}</div>
+                            </div>
+                        </div>
+                    `;
+                    marker.bindPopup(popupHtml, {
+                        maxWidth: 300, minWidth: 300, closeButton: false, offset: [0, -10], className: 'compass-popup'
+                    });
+
+                    markerCluster.addLayer(marker);
+                    propertyMarkers[p.id] = marker;
+                }
+            });
+
+            if (markerCluster.getLayers().length > 0) {
+                map.fitBounds(markerCluster.getBounds(), { padding: [120, 120], maxZoom: 16 });
+            } else {
+                // Si no hay resultados, forzar actualización de lista vacía
+                updateSidebarFromViewport();
+            }
+        }
+
+        function renderSidebarList(props) {
+            const container = document.getElementById('prop-items');
+            container.innerHTML = '';
+            
+            const startIdx = props.length > 0 ? 1 : 0;
+            const resText = currentLang === 'es' ? `${startIdx}-${props.length} de ${filteredProperties.length} Inmuebles visibles` : 
+                           (currentLang === 'en' ? `${startIdx}-${props.length} of ${filteredProperties.length} Visible properties` : 
+                           (currentLang === 'de' ? `${startIdx}-${props.length} von ${filteredProperties.length} Sichtbar` : 
+                           `${startIdx}-${props.length} van ${filteredProperties.length} Zichtbaar`));
             document.getElementById('results-label').textContent = resText;
 
-            filteredProperties.forEach(p => {
+            if (props.length === 0) {
+                container.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 40px; color: #94a3b8;">No hay inmuebles visibles en esta zona del mapa.</div>`;
+                return;
+            }
+
+            props.forEach(p => {
                 const precio = new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(p.precio);
                 const fotos = p.imagenes_url || p.imagenes || [];
                 const hasMultipleImages = fotos.length > 1;
-                const currentIdx = carouselIndices[p.id] || 0;
                 const totalImages = fotos.length;
 
                 const card = document.createElement('div');
@@ -1016,13 +1088,9 @@
                             <div class="carousel-counter">1/${totalImages}</div>
                         ` : ''}
                         <div class="badge-pills">
-                            ${t_prop(p, 'destacada') ? 
-                                `<div class="badge-pill">${translations[currentLang]['prop.exclusive']}</div>` : 
-                                (p.agente === 'Weperty Properties' ? 
-                                    `<img src="logos_corporativos/weperty_logo_azul.png" style="height: 22px; object-fit: contain;">` : 
-                                    `<div class="badge-pill">${translations[currentLang]['prop.comingsoon']}</div>`
-                                )
-                            }
+                            ${t_prop(p, 'destacada') ? `<div class="badge-pill">${translations[currentLang]['prop.exclusive']}</div>` : 
+                                (p.agente === 'Weperty Properties' ? `<img src="logos_corporativos/weperty_logo_azul.png" style="height: 22px; object-fit: contain;">` : 
+                                `<div class="badge-pill">${translations[currentLang]['prop.comingsoon']}</div>`)}
                         </div>
                         <img src="${fotos[0] ? fotos[0] : 'weperty_placeholder.png'}">
                     </div>
@@ -1043,46 +1111,6 @@
                 card.onmouseleave = () => highlightMarker(p.id, false);
                 card.onclick = () => window.location.href = `inmueble.html?ref=${p.referencia}`;
                 container.appendChild(card);
-
-                if (p.latitud && p.longitud) {
-                    const icon = L.divIcon( {
-                        className: 'custom-marker',
-                        html: `<span>${precio}</span>`,
-                        iconSize: null,
-                        iconAnchor: null
-                    });
-                    const marker = L.marker([p.latitud, p.longitud], { icon });
-                    markerCluster.addLayer(marker);
-                    
-                    // --- POPUP ESTILO COMPASS ---
-                    const popupHtml = `
-                        <div class="popup-card" onclick="window.location.href='inmueble.html?ref=${p.referencia}'">
-                            <div class="popup-img">
-                                <img src="${fotos[0] ? fotos[0] : 'weperty_placeholder.png'}">
-                            </div>
-                            <div class="popup-info">
-                                <div class="popup-tag">${translations[currentLang]['prop.exclusive']}</div>
-                                <div class="popup-price">${precio}</div>
-                                <div class="popup-stats">
-                                    ${p.habitaciones || 0} ${translations[currentLang]['prop.beds']} | 
-                                    ${p.banos || 0} ${translations[currentLang]['prop.baths']} | 
-                                    ${p.superficie || 0} m²
-                                </div>
-                                <div class="popup-address">${t_prop(p, 'titulo')}</div>
-                            </div>
-                        </div>
-                    `;
-                    
-                    marker.bindPopup(popupHtml, {
-                        maxWidth: 300,
-                        minWidth: 300,
-                        closeButton: false,
-                        offset: [0, -10],
-                        className: 'compass-popup'
-                    });
-
-                    propertyMarkers[p.id] = marker;
-                }
             });
         }
 

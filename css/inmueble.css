@@ -302,13 +302,9 @@ aside.sidebar-info > div {
 
 .map-style-selector {
     position: absolute;
-    top: 15px;
-    right: 15px;
+    bottom: 28px;
+    right: 58px;
     z-index: 1000;
-    background: white;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    padding: 5px;
     display: flex;
     gap: 5px;
 }

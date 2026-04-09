@@ -178,7 +178,8 @@ let mapStyles;
 function initMap(p) {
     if (!p.latitud || !p.longitud) return;
 
-    map = L.map('propertyMap').setView([p.latitud, p.longitud], 15);
+    map = L.map('propertyMap', { zoomControl: false }).setView([p.latitud, p.longitud], 15);
+    L.control.zoom({ position: 'bottomright' }).addTo(map);
 
     mapStyles = {
         light: L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
