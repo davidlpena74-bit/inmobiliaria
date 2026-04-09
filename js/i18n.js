@@ -488,22 +488,21 @@ function updateContent() {
 }
 
 function setLanguage(lang) {
-    if (lang === currentLang) return; 
+    // Close all open dropdowns regardless of whether the language changed
+    document.querySelectorAll('.lang-menu').forEach(menu => {
+        menu.classList.add('lang-selecting');
+        const onMouseLeave = () => {
+            menu.classList.remove('lang-selecting');
+            menu.removeEventListener('mouseleave', onMouseLeave);
+        };
+        menu.addEventListener('mouseleave', onMouseLeave);
+    });
+
+    if (lang === currentLang) return;
     
     currentLang = lang;
     localStorage.setItem("weperty_lang", lang);
     updateContent();
-    
-    // Close any open dropdowns immediately
-    document.querySelectorAll('.lang-dropdown').forEach(drop => {
-        drop.style.opacity = '0';
-        drop.style.visibility = 'hidden';
-        // Reset after a short delay to allow future hover interactions
-        setTimeout(() => {
-            drop.style.opacity = '';
-            drop.style.visibility = '';
-        }, 100);
-    });
 
     if (typeof loadWebProperties === "function") {
         loadWebProperties();

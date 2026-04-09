@@ -1,6 +1,6 @@
 {
     "name": "agente-precios-inmobiliarios",
-    "version": "5.19.11",
+    "version": "5.19.12",
     "description": "Agente especializado en búsqueda de precios inmobiliarios para la Comunidad de Madrid",
     "main": "agente_precios.js",
     "scripts": {
