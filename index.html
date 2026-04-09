@@ -31,6 +31,7 @@
     <script src="js/auth.js?v=5.0.0"></script>
     <link rel="stylesheet" href="css/user-menu.css?v=5.3.0">
     <link rel="stylesheet" href="css/auth.css?v=5.7.1">
+    <link rel="stylesheet" href="css/search-suggestions.css">
     <style>
         :root {
             --compass-blue: #0060df;
@@ -517,14 +518,20 @@
          ============================================================ -->
     <section class="hero">
         <h1 data-i18n="hero.title">Encuentra tu lugar en la Costa Blanca</h1>
-        <div class="search-wrapper">
-            <div class="search-tabs">
-                <span class="search-tab" onclick="setSearchMode('buy', this)" data-i18n="search.tab.buy">Buy</span>
-                <span class="search-tab active" onclick="setSearchMode('rent', this)" data-i18n="search.tab.rent">Rent</span>
-            </div>
-            <div class="search-container">
-                <input type="text" data-i18n="search.placeholder" id="mainSearch" placeholder="Search by City, Neighborhood, or Address at Alicante...">
-                <button class="search-btn" onclick="executeSearch()" data-i18n="search.btn">Buscar</button>
+        <div class="search-wrapper-v2">
+            <div class="search-row">
+                <div class="search-tabs-v2">
+                    <button class="tab-btn active" onclick="setSearchMode('rent', this)" data-i18n="search.tab.rent">Rent</button>
+                    <button class="tab-btn" onclick="setSearchMode('buy', this)" data-i18n="search.tab.buy">Buy</button>
+                </div>
+
+                <div class="search-input-wrapper">
+                    <i class="fa-solid fa-magnifying-glass search-icon-inner"></i>
+                    <input type="text" data-i18n="search.placeholder" id="mainSearch" placeholder="Ciudad, Barrio, Direccion...">
+                    <div id="searchSuggestions" class="search-suggestions-container"></div>
+                </div>
+
+                <button class="search-btn-v2" onclick="executeSearch()" data-i18n="search.btn">Buscar</button>
             </div>
         </div>
     </section>
@@ -738,7 +745,7 @@
         <div class="footer-bottom">
             <div data-i18n="footer.bottom">© 2026 Weperty Real Estate. All rights reserved. | <a href="terms.html" style="color: #666; text-decoration: underline;">Terms</a> | <a href="privacy.html" style="color: #666; text-decoration: underline;">Privacy</a> | Equal Housing Opportunity · Alicante</div>
             <div style="display: flex; gap: 12px; align-items: center;">
-                <span style="font-size: 10px; color: #555; letter-spacing: 1px;">VERSION 5.19.20</span>
+                <span style="font-size: 10px; color: #555; letter-spacing: 1px;">VERSION 5.20.0</span>
             </div>
         </div>
     </footer>
@@ -759,12 +766,18 @@
  
         function setSearchMode(mode, el) {
             currentSearchMode = mode;
-            document.querySelectorAll('.search-tab').forEach(tab => tab.classList.remove('active'));
-            el.classList.add('active');
+            document.querySelectorAll('.tab-btn').forEach(tab => tab.classList.remove('active'));
+            if (el) el.classList.add('active');
         }
  
         function executeSearch() {
-            window.location.href = `inmuebles.html?mode=${currentSearchMode}`;
+            const searchVal = document.getElementById('mainSearch').value;
+            let url = `inmuebles.html?mode=${currentSearchMode}`;
+            if (searchVal) {
+                // Si hay texto pero no se seleccionó una sugerencia, lo pasamos como búsqueda libre
+                url += `&q=${encodeURIComponent(searchVal)}`;
+            }
+            window.location.href = url;
         }
 
         // LÓGICA DE CARGA SUPABASE
@@ -901,6 +914,7 @@
         
         window.onload = loadWebProperties;
     </script>
+    <script src="js/search-suggestions.js"></script>
     <script src="js/cookies.js"></script>
 </body>
 </html>
