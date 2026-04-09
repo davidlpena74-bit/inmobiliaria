@@ -160,6 +160,20 @@
             box-shadow: 0 20px 25px -12px rgba(0, 0, 0, 0.7); 
             transform: translateY(-6px); 
         }
+
+        /* 🎡 CAROUSEL BUTTONS */
+        .prop-img:hover .carousel-arrow { opacity: 1; }
+        .carousel-arrow {
+            position: absolute; top: 50%; transform: translateY(-50%);
+            background: rgba(255,255,255,0.9); border: none; width: 32px; height: 32px;
+            border-radius: 50%; font-size: 14px; cursor: pointer; z-index: 10;
+            display: flex; align-items: center; justify-content: center;
+            opacity: 0; transition: opacity 0.3s, background 0.2s;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15); color: var(--compass-black);
+        }
+        .carousel-arrow:hover { background: #fff; }
+        .carousel-arrow.prev { left: 10px; }
+        .carousel-arrow.next { right: 10px; }
         
         .prop-img { width: 100%; height: 190px; position: relative; overflow: hidden; }
         .prop-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
@@ -745,7 +759,7 @@
         <div class="footer-bottom">
             <div data-i18n="footer.bottom">© 2026 Weperty Real Estate. All rights reserved. | <a href="terms.html" style="color: #666; text-decoration: underline;">Terms</a> | <a href="privacy.html" style="color: #666; text-decoration: underline;">Privacy</a> | Equal Housing Opportunity · Alicante</div>
             <div style="display: flex; gap: 12px; align-items: center;">
-                <span style="font-size: 10px; color: #555; letter-spacing: 1px;">VERSION 5.21.0</span>
+                <span style="font-size: 10px; color: #555; letter-spacing: 1px;">VERSION 5.21.1</span>
             </div>
         </div>
     </footer>
@@ -796,9 +810,17 @@
             const translations_safe = (typeof translations !== 'undefined') ? translations : {};
             const t = translations_safe[lang] || {};
 
+            const images = p.imagenes_url || [];
+            const hasMultiple = images.length > 1;
+            const initialImg = images[0] || 'weperty_placeholder.png';
+
             return `
                 <div class="prop-card" onclick="window.location.href='inmueble.html?ref=${p.referencia}'" data-id="${p.id}">
-                    <div class="prop-img">
+                    <div class="prop-img" id="img-container-${p.id}">
+                        ${hasMultiple ? `
+                            <button class="carousel-arrow prev" onclick="changeCardImage(event, -1, '${p.id}')"><i class="fa-solid fa-chevron-left"></i></button>
+                            <button class="carousel-arrow next" onclick="changeCardImage(event, 1, '${p.id}')"><i class="fa-solid fa-chevron-right"></i></button>
+                        ` : ''}
                         <div class="badge-pills">
                             ${p.destacada ?
                                 `<div class="badge-pill">${t['prop.exclusive'] || 'Exclusiva'}</div>` :
@@ -808,7 +830,7 @@
                                 )
                             }
                         </div>
-                        <img src="${imgUrl}" alt="${p.titulo || 'Propiedad'}">
+                        <img src="${initialImg}" alt="${p.titulo || 'Propiedad'}" class="main-img" data-index="0">
                     </div>
                     <div class="prop-info">
                         <div class="price">${precio}</div>
@@ -852,6 +874,29 @@
                     </div>
                 </div>
             `;
+        }
+
+        let loadedProperties = {};
+
+        async function changeCardImage(event, direction, propId) {
+            event.stopPropagation();
+            const p = loadedProperties[propId];
+            if (!p || !p.imagenes_url || p.imagenes_url.length <= 1) return;
+
+            const container = document.getElementById(`img-container-${propId}`);
+            const img = container.querySelector('.main-img');
+            let currentIndex = parseInt(img.getAttribute('data-index') || 0);
+            
+            currentIndex += direction;
+            if (currentIndex >= p.imagenes_url.length) currentIndex = 0;
+            if (currentIndex < 0) currentIndex = p.imagenes_url.length - 1;
+
+            img.style.opacity = '0.5';
+            setTimeout(() => {
+                img.src = p.imagenes_url[currentIndex];
+                img.setAttribute('data-index', currentIndex);
+                img.style.opacity = '1';
+            }, 100);
         }
 
         async function loadWebProperties() {
@@ -903,6 +948,9 @@
                 }
 
                 if (error || !data || data.length === 0) throw new Error("No properties found");
+
+                // Guardar en cache global para el carrusel
+                data.forEach(p => { loadedProperties[p.id] = p; });
 
                 // Fila 1: primeras 3 + promo card
                 const first3 = data.slice(0, 3);
