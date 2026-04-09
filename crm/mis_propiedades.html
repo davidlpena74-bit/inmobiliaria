@@ -301,6 +301,12 @@
             justify-content: center;
             font-size: 9px;
             background: #fff;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .p-chk:hover {
+            border-color: var(--link-blue);
+            transform: scale(1.1);
         }
         .p-chk.checked {
             background: #fff;
@@ -640,36 +646,62 @@
         return formatted + '€';
     }
 
-    // Generate portal checkboxes based on real data
+    // Generate portal checkboxes based on real data (interactive)
     function renderPortalChecks(p) {
         const portals = [
-            { field: 'publicar_web', active: !!p.publicar_web },
-            { field: 'publicar_idealista', active: !!p.publicar_idealista },
-            { field: 'publicar_fotocasa', active: !!p.publicar_fotocasa },
-            { field: 'publicar_habitaclia', active: !!p.publicar_habitaclia },
-            { field: 'publicar_pisoscom', active: !!p.publicar_pisoscom },
-            { field: 'publicar_kyero', active: !!p.publicar_kyero },
-            { field: 'publicar_thinkspain', active: !!p.publicar_thinkspain },
-            { field: 'publicar_rightmove', active: !!p.publicar_rightmove }
+            { field: 'publicar_web', active: !!p.publicar_web, title: 'Web propia' },
+            { field: 'publicar_idealista', active: !!p.publicar_idealista, title: 'Idealista' },
+            { field: 'publicar_fotocasa', active: !!p.publicar_fotocasa, title: 'Fotocasa' },
+            { field: 'publicar_habitaclia', active: !!p.publicar_habitaclia, title: 'Habitaclia' },
+            { field: 'publicar_pisoscom', active: !!p.publicar_pisoscom, title: 'Pisos.com' },
+            { field: 'publicar_kyero', active: !!p.publicar_kyero, title: 'Kyero' },
+            { field: 'publicar_thinkspain', active: !!p.publicar_thinkspain, title: 'ThinkSpain' },
+            { field: 'publicar_rightmove', active: !!p.publicar_rightmove, title: 'Rightmove' }
         ];
 
         let html = '<div class="portal-checks">';
         portals.forEach(pt => {
-            html += `<div class="p-chk ${pt.active ? 'checked' : ''}"></div>`;
+            html += `<div class="p-chk ${pt.active ? 'checked' : ''}" 
+                          title="Click para alternar ${pt.title}"
+                          onclick="togglePortal('${p.id}', '${pt.field}', this)"></div>`;
         });
         html += '</div>';
         return html;
     }
 
-    async function loadProperties() {
-        const { data, error } = await db.from('inm_propiedades').select('*').order('created_at', { ascending: false });
-        if (error) {
-            document.getElementById('prop-tbody').innerHTML = `<tr><td colspan="9" style="text-align:center;padding:30px;color:#e74c3c;">Error: ${error.message}</td></tr>`;
-            return;
-        }
-        allProperties = data || [];
+    async function togglePortal(id, field, element) {
+        // Estado actual basado en la clase UI
+        const isCurrentlyActive = element.classList.contains('checked');
+        const newState = !isCurrentlyActive;
 
-        // Actualizar KPIs en los tooltips de los iconos de la cabecera
+        // Feedback visual inmediato (optimista)
+        element.classList.toggle('checked', newState);
+
+        try {
+            const { error } = await db.from('inm_propiedades')
+                .update({ [field]: newState })
+                .eq('id', id);
+
+            if (error) {
+                console.error("Error al actualizar portal:", error);
+                // Revertir en caso de error
+                element.classList.toggle('checked', isCurrentlyActive);
+                alert("No se pudo actualizar el portal. Revisa la consola.");
+            } else {
+                // Actualizar el objeto local para que los KPIs se refresquen correctamente
+                const prop = allProperties.find(p => p.id == id);
+                if (prop) prop[field] = newState;
+                
+                // Refrescar KPIs de la cabecera
+                updateKpiTooltips();
+            }
+        } catch (e) {
+            console.error(e);
+            element.classList.toggle('checked', isCurrentlyActive);
+        }
+    }
+
+    function updateKpiTooltips() {
         const total = allProperties.length;
         const portalMap = {
             'w': { title: 'Web propia', field: 'publicar_web' },
@@ -690,6 +722,18 @@
                 icon.title = `${config.title} (${total} totales / ${count} publicados)`;
             }
         });
+    }
+
+    async function loadProperties() {
+        const { data, error } = await db.from('inm_propiedades').select('*').order('created_at', { ascending: false });
+        if (error) {
+            document.getElementById('prop-tbody').innerHTML = `<tr><td colspan="9" style="text-align:center;padding:30px;color:#e74c3c;">Error: ${error.message}</td></tr>`;
+            return;
+        }
+        allProperties = data || [];
+
+        // Actualizar KPIs en los tooltips de los iconos de la cabecera
+        updateKpiTooltips();
 
         applyFilters();
     }
