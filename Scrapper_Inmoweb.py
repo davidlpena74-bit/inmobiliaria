@@ -2,7 +2,7 @@
 Scrapper_Inmoweb.py
 ===================
 Agente para extraer todas las propiedades del CRM de Inmoweb.
-Requiere autenticación con las credenciales configuradas en config.py.
+Versión optimizada con selectores verificados y soporte para paginación.
 """
 
 from selenium import webdriver
@@ -11,12 +11,9 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.options import Options
 from selenium.common.exceptions import TimeoutException, NoSuchElementException
-import pandas as pd
 import time
-import random
-from datetime import datetime
-import os
 import json
+import os
 import config
 
 class InmowebScrapper:
@@ -28,141 +25,120 @@ class InmowebScrapper:
         self.propiedades = []
         self.driver = None
 
-    def iniciar_navegador(self, headless=False):
-        print("🚀 Iniciando navegador para Inmoweb...")
+    def iniciar_navegador(self, headless=True):
+        print("Iniciando navegador...")
         chrome_options = Options()
         if headless:
             chrome_options.add_argument('--headless=new')
-        
         chrome_options.add_argument('--window-size=1920,1080')
-        chrome_options.add_argument('--disable-blink-features=AutomationControlled')
-        chrome_options.add_experimental_option("excludeSwitches", ["enable-automation"])
-        chrome_options.add_experimental_option('useAutomationExtension', False)
-        
         self.driver = webdriver.Chrome(options=chrome_options)
-        self.driver.execute_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})")
-        print("✅ Navegador listo.")
+        print("Navegador listo.")
 
     def login(self):
-        print(f"🔑 Accediendo a {self.login_url}...")
+        print("Accediendo a login...")
         self.driver.get(self.login_url)
-        
+        wait = WebDriverWait(self.driver, 15)
         try:
-            # Esperar a que los campos estén presentes
-            wait = WebDriverWait(self.driver, 10)
+            # Rellenar Dominio
+            wait.until(EC.presence_of_element_located((By.ID, "wxp_domain"))).send_keys(self.domain)
+            # Rellenar Email
+            self.driver.find_element(By.NAME, "email").send_keys(self.email)
+            # Rellenar Password
+            self.driver.find_element(By.ID, "wxp_password").send_keys(self.password)
+            # Submit
+            self.driver.find_element(By.ID, "m_login_signin_submit").click()
             
-            print("📝 Introduciendo credenciales...")
-            # Dominio/Cuenta
-            dom_field = wait.until(EC.presence_of_element_located((By.ID, "wxp_domain")))
-            dom_field.send_keys(self.domain)
-            
-            # Email
-            email_field = self.driver.find_element(By.NAME, "email")
-            email_field.send_keys(self.email)
-            
-            # Password
-            pass_field = self.driver.find_element(By.ID, "wxp_password")
-            pass_field.send_keys(self.password)
-            
-            # Click Login
-            login_btn = self.driver.find_element(By.ID, "m_login_signin_submit")
-            login_btn.click()
-            
-            print("⏳ Esperando carga del panel...")
-            # Esperar a que cargue el dashboard (buscamos un elemento común del panel)
+            # Verificar éxito (esperar a que aparezca la botonera superior o similar)
             wait.until(EC.presence_of_element_located((By.CLASS_NAME, "m-header-menu")))
-            print("✅ Login exitoso.")
+            print("Login exitoso.")
             return True
-            
         except Exception as e:
-            print(f"❌ Error durante el login: {e}")
+            print("Error en login: " + str(e))
             return False
 
-    def navegar_a_inmuebles(self):
-        print("📁 Navegando a la lista de inmuebles...")
-        # Basado en la investigación, la URL suele ser /inmuebles/
-        # Si no, intentamos navegar por el menú
-        self.driver.get("https://panel.inmoweb.es/inmuebles/")
-        time.sleep(3)
-        
+    def navegar_a_propiedades(self):
+        url_inmuebles = "https://panel180.inmoweb.es/property/?feature[]=stat:::-1"
+        print("Navegando a lista completa...")
+        self.driver.get(url_inmuebles)
+        time.sleep(5)
+        return True
+
+    def extraer_pagina_actual(self):
+        print("Extrayendo datos de la pagina...")
         try:
+            # Esperar a que las filas estén presentes
             WebDriverWait(self.driver, 10).until(
-                EC.presence_of_element_located((By.CLASS_NAME, "m-datatable"))
+                EC.presence_of_all_elements_located((By.CSS_SELECTOR, "tr.wxp_data_container"))
             )
-            print("✅ Lista de inmuebles cargada.")
-            return True
-        except:
-            print("⚠️ No se encontró la tabla de inmuebles directamente. Intentando via menú...")
-            return False
-
-    def extraer_datos(self):
-        print("🔍 Extrayendo datos de la tabla...")
-        try:
-            rows = self.driver.find_elements(By.CSS_SELECTOR, ".m-datatable__row")
-            print(f"🏠 Encontradas {len(rows)} filas en esta página.")
             
+            rows = self.driver.find_elements(By.CSS_SELECTOR, "tr.wxp_data_container")
             for row in rows:
                 try:
-                    # La estructura exacta depende del cliente de Inmoweb, 
-                    # pero solemos buscar las columnas por su atributo data-field o posición
-                    cols = row.find_elements(By.TAG_NAME, "td")
+                    # Referencia está en td:nth-child(3)
+                    ref = row.find_element(By.CSS_SELECTOR, "td:nth-child(3)").text.strip()
                     
-                    # Mapeo tentativo basado en Metronic theme usado por Inmoweb
-                    datos = {
-                        "ref": row.find_element(By.CSS_SELECTOR, "[data-field='Referencia']").text if row.find_elements(By.CSS_SELECTOR, "[data-field='Referencia']") else "",
-                        "titulo": row.find_element(By.CSS_SELECTOR, "[data-field='Inmueble']").text if row.find_elements(By.CSS_SELECTOR, "[data-field='Inmueble']") else "",
-                        "precio": row.find_element(By.CSS_SELECTOR, "[data-field='Precio']").text if row.find_elements(By.CSS_SELECTOR, "[data-field='Precio']") else "",
-                        "municipio": row.find_element(By.CSS_SELECTOR, "[data-field='Municipio']").text if row.find_elements(By.CSS_SELECTOR, "[data-field='Municipio']") else "",
-                        "operacion": row.find_element(By.CSS_SELECTOR, "[data-field='Operacion']").text if row.find_elements(By.CSS_SELECTOR, "[data-field='Operacion']") else "",
-                        "fecha_captacion": datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
-                        "fuente": "Inmoweb CRM"
-                    }
-                    
-                    # Intentar obtener si está publicado en web propia (icono de globo)
-                    publicado_web = False
-                    web_col = row.find_elements(By.CSS_SELECTOR, "[data-field='Web'] i.fa-globe")
-                    if web_col:
-                        # Si el icono tiene color o clase active, está publicado
-                        style = web_col[0].get_attribute("style")
-                        if "color" in style or "text-success" in web_col[0].get_attribute("class"):
-                            publicado_web = True
-                    
-                    datos["publicado_inmoweb_web"] = publicado_web
-                    
-                    if datos["ref"]:
-                        self.propiedades.append(datos)
-                except Exception as row_error:
-                    print(f"⚠️ Error en una fila: {row_error}")
-                    continue
-                    
+                    # Publication Status (Columna 7)
+                    # El selector verificado es label[data-title="Mi web"] input
+                    try:
+                        web_checkbox = row.find_element(By.CSS_SELECTOR, 'label[data-title="Mi web"] input')
+                        esta_publicado = web_checkbox.get_attribute("checked") is not None
+                    except:
+                        esta_publicado = False
+
+                    self.propiedades.append({
+                        "ref": ref,
+                        "publicado_web": esta_publicado,
+                        "capturado_el": time.strftime("%Y-%m-%d %H:%M:%S")
+                    })
+                except Exception as row_e:
+                    print("Error en una fila: " + str(row_e))
+            
+            print("Pagina procesada. Total acumulado: " + str(len(self.propiedades)))
             return True
         except Exception as e:
-            print(f"❌ Error extrayendo datos: {e}")
+            print("Error extrayendo pagina: " + str(e))
             return False
 
-    def guardar_datos(self):
+    def siguiente_pagina(self):
+        try:
+            # El botón "Siguiente" suele tener clase 'next'
+            next_btn = self.driver.find_element(By.CSS_SELECTOR, "a.next")
+            if "disabled" in next_btn.get_attribute("class") or not next_btn.is_enabled():
+                return False
+            
+            print("Pasando a la siguiente pagina...")
+            next_btn.click()
+            time.sleep(4)
+            return True
+        except:
+            return False
+
+    def guardar(self):
         os.makedirs('data', exist_ok=True)
-        filename = 'data/inmoweb_properties.json'
-        with open(filename, 'w', encoding='utf-8') as f:
+        path = 'data/inmoweb_full_sync.json'
+        with open(path, 'w', encoding='utf-8') as f:
             json.dump(self.propiedades, f, indent=2, ensure_ascii=False)
-        print(f"💾 Guardados {len(self.propiedades)} inmuebles en {filename}")
+        print("Datos guardados en " + path)
 
     def cerrar(self):
         if self.driver:
             self.driver.quit()
-            print("🔒 Navegador cerrado.")
 
 def main():
-    scrapper = InmowebScrapper()
+    bot = InmowebScrapper()
     try:
-        scrapper.iniciar_navegador(headless=False) # False para ver que el login funciona
-        if scrapper.login():
-            if scrapper.navegar_a_inmuebles():
-                scrapper.extraer_datos()
-                # Aquí se podría añadir lógica de paginación si hay muchas propiedades
-                scrapper.guardar_datos()
+        bot.iniciar_navegador(headless=True)
+        if bot.login():
+            bot.navegar_a_propiedades()
+            
+            while True:
+                bot.extraer_pagina_actual()
+                if not bot.siguiente_pagina():
+                    break
+            
+            bot.guardar()
     finally:
-        scrapper.cerrar()
+        bot.cerrar()
 
 if __name__ == "__main__":
     main()

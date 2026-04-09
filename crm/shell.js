@@ -26,13 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // 2. Hamburguesa (Colapsar Sidebar)
-    const hamburger = document.querySelector('.hamburger');
-    if (hamburger) {
-        hamburger.addEventListener('click', () => {
-            document.body.classList.toggle('collapsed-sidebar');
-        });
-    }
+    // 2. Hamburguesa (Colapsar Sidebar) - Eliminada por petición del usuario
 
     // 3. Search Box Focus
     const searchInput = document.querySelector('.topbar .search-box input');

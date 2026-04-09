@@ -38,22 +38,20 @@
         .content-area {
             flex: 1;
             display: flex;
-            padding: 18px;
+            padding: 18px 18px 18px 0px; /* Alineado a la izquierda con el sidebar */
             gap: 18px;
             overflow: hidden;
         }
 
         /* ========= FILTER PANEL ========= */
         .filter-panel {
-            width: 240px;
-            min-width: 240px;
+            width: 190px;
             background: var(--white);
             border: 1px solid var(--border);
             border-radius: 10px;
-            padding: 18px;
-            align-self: flex-start;
-            overflow-y: auto;
-            max-height: calc(100vh - 100px);
+            padding: 16px;
+            flex-shrink: 0;
+            height: fit-content;
         }
         .filter-panel h4 {
             font-size: 14px;
@@ -279,14 +277,14 @@
         /* Portal Checkboxes */
         .portal-checks {
             display: flex;
-            gap: 3px;
+            gap: 4px;
             flex-wrap: nowrap;
         }
         .p-chk {
-            width: 16px;
-            height: 16px;
-            border: 1px solid #d1d5db;
-            border-radius: 2px;
+            width: 18px;
+            height: 18px;
+            border: 1.5px solid #94a3b8; /* Mas oscuro */
+            border-radius: 3px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -301,28 +299,49 @@
         }
         .p-chk.checked {
             background: #fff;
-            color: #10b981;
+            color: #064e3b; /* Verde bosque muy oscuro */
+            border-color: #064e3b;
+            font-weight: 800; /* Mas grueso para que se vea mejor */
         }
         .p-chk.checked::after {
             content: '\2713';
         }
+        .p-chk.checked.is-web {
+            background-image: url('../logos_corporativos/w_logo_color_final_registrado.png');
+            background-size: 13px;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-color: transparent;
+            color: transparent;
+            border-color: #94a3b8;
+            border-width: 1.5px;
+        }
+        .p-chk.checked.is-web::after { content: none; }
 
         /* Portal header icons */
         .portal-header-icons {
             display: flex;
-            gap: 3px;
+            gap: 4px;
             align-items: center;
         }
         .ph-icon {
-            width: 16px;
-            height: 16px;
+            width: 18px;
+            height: 18px;
             border-radius: 3px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 8px;
             color: #fff;
+            font-size: 9px;
             font-weight: 700;
+            cursor: help;
+        }
+        .ph-icon.is-web {
+            background: transparent !important;
+            border: 1.5px solid #94a3b8;
+        }
+        .ph-icon.is-web img {
+            width: 14px;
         }
 
         .updated-cell { color: var(--text-light); font-size: 11px; white-space: nowrap; }
@@ -392,7 +411,6 @@
         <a href="index.html">
             <img src="../logos_corporativos/w_logo_color_final_registrado.png" alt="Weperty Logo" style="width: 75px; margin-bottom: 5px; display: block;">
         </a>
-        <i class="fa-solid fa-bars hamburger" style="position: absolute; right: 18px; top: 28px;"></i>
     </div>
     <nav class="s-nav">
         <div class="s-item"><i class="fa-solid fa-house"></i> <span>Inicio</span> <i class="fa-solid fa-chevron-down chevron"></i></div>
@@ -535,7 +553,7 @@
                             <th class="sortable">Visitas web</th>
                             <th>
                                 <div class="portal-header-icons">
-                                    <div id="kpi-w" class="ph-icon" style="background:#2563eb;" title="Web propia">W</div>
+                                    <div id="kpi-w" class="ph-icon is-web" title="Web propia"><img src="../logos_corporativos/w_logo_color_final_registrado.png"></div>
                                     <div id="kpi-id" class="ph-icon" style="background:#1d4ed8;" title="Idealista">id</div>
                                     <div id="kpi-fc" class="ph-icon" style="background:#ef4444;" title="Fotocasa">fc</div>
                                     <div id="kpi-h" class="ph-icon" style="background:#f97316;" title="Habitaclia">h</div>
@@ -652,7 +670,8 @@
 
         let html = '<div class="portal-checks">';
         portals.forEach(pt => {
-            html += `<div class="p-chk ${pt.active ? 'checked' : ''}" 
+            const isWeb = pt.field === 'publicar_web';
+            html += `<div class="p-chk ${pt.active ? 'checked' : ''} ${isWeb ? 'is-web' : ''}" 
                           title="Click para alternar ${pt.title}"
                           onclick="togglePortal('${p.id}', '${pt.field}', this)"></div>`;
         });
@@ -761,8 +780,8 @@
 
         tbody.innerHTML = page.map(p => {
             const c = p.caracteristicas || {};
-            const fotos = c.fotos || [];
-            const imgUrl = fotos.length > 0 ? fotos[0] : '';
+            const fotos = p.imagenes_url || c.fotos || [];
+            const imgUrl = (Array.isArray(fotos) && fotos.length > 0) ? fotos[0] : '';
             const imgHtml = imgUrl
                 ? `<img src="${imgUrl}" class="thumb" loading="lazy" onerror="this.style.display='none'">`
                 : `<div class="thumb" style="background:#e2e8f0;"></div>`;

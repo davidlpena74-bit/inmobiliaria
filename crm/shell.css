@@ -64,13 +64,7 @@ body {
     letter-spacing: 0.5px;
     margin-top: 2px;
 }
-.sidebar-logo .hamburger { 
-    color: rgba(255,255,255,0.5); 
-    cursor: pointer; 
-    font-size: 18px;
-    transition: 0.2s;
-}
-.sidebar-logo .hamburger:hover { color: #fff; }
+.sidebar-logo .hamburger { display: none; }
 
 .icon-box {
     width: 28px; height: 28px;
@@ -131,45 +125,7 @@ body {
     transition: margin-left 0.2s ease;
 }
 
-/* ========= SIDEBAR TOGGLE (COLLAPSED) ========= */
-body.collapsed-sidebar .sidebar { width: 68px; min-width: 68px; }
-body.collapsed-sidebar .main { margin-left: 68px; }
-
-/* CSS-only text hiding */
-body.collapsed-sidebar .sidebar .sidebar-logo img,
-body.collapsed-sidebar .sidebar .brand,
-body.collapsed-sidebar .sidebar .chevron,
-body.collapsed-sidebar .sidebar .s-sub,
-body.collapsed-sidebar .sidebar .s-item span,
-body.collapsed-sidebar .sidebar .sidebar-bottom span {
-    display: none !important;
-}
-
-.sidebar-logo img {
-    transition: transform 0.3s;
-}
-
-body.collapsed-sidebar .sidebar .s-item {
-    justify-content: center;
-    padding: 12px 0;
-}
-body.collapsed-sidebar .sidebar .s-item i,
-body.collapsed-sidebar .sidebar .s-item .icon-box {
-    margin: 0;
-}
-
-body.collapsed-sidebar .sidebar-logo {
-    flex-direction: column;
-    padding: 20px 0;
-    gap: 20px;
-}
-body.collapsed-sidebar .sidebar-logo .hamburger { margin: 0; }
-
-body.collapsed-sidebar .sidebar-bottom {
-    justify-content: center;
-    padding: 20px 0;
-}
-body.collapsed-sidebar .sidebar-bottom i { font-size: 18px; margin: 0; }
+/* Estilos de plegado eliminados */
 
 /* Mini Logo removed as per user request to disappear logo when folded */
 
