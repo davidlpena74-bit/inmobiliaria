@@ -4,8 +4,9 @@
     <meta name="robots" content="noindex, nofollow">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mis Inmuebles | Weperty Inmoweb</title>
+    <title>Mis Propiedades | Weperty CRM</title>
     <link rel="icon" type="image/png" href="../favicon.png">
+    <script src="auth-check.js"></script>
     <link rel="stylesheet" href="shell.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -45,7 +46,7 @@
 
         /* ========= FILTER PANEL ========= */
         .filter-panel {
-            width: 190px;
+            width: 245px; /* +10% de ancho adicional */
             background: var(--white);
             border: 1px solid var(--border);
             border-radius: 10px;
@@ -252,6 +253,14 @@
             display: block;
             background: #f1f5f9;
         }
+        .thumb.no-image {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #cbd5e1;
+            font-size: 16px;
+            border: 1px dashed #e2e8f0;
+        }
 
         .ref-cell {
             display: flex;
@@ -307,16 +316,12 @@
             content: '\2713';
         }
         .p-chk.checked.is-web {
-            background-image: url('../logos_corporativos/w_logo_color_final_registrado.png');
-            background-size: 13px;
-            background-repeat: no-repeat;
-            background-position: center;
-            background-color: transparent;
-            color: transparent;
-            border-color: #94a3b8;
+            background-color: #334155;
+            border-color: #334155;
+            color: white;
             border-width: 1.5px;
         }
-        .p-chk.checked.is-web::after { content: none; }
+        /* Eliminamos el bloqueo del checkmark para que aparezca el tick blanco */
 
         /* Portal header icons */
         .portal-header-icons {
@@ -338,12 +343,11 @@
         }
         .ph-icon.is-web {
             background: transparent !important;
-            border: 1.5px solid #94a3b8;
+            border: 1.5px solid #64748b;
         }
         .ph-icon.is-web img {
             width: 14px;
         }
-
         .updated-cell { color: var(--text-light); font-size: 11px; white-space: nowrap; }
 
         .btn-ver {
@@ -421,7 +425,7 @@
         <div class="s-item open"><i class="fa-solid fa-building"></i> <span>Inmuebles</span> <i class="fa-solid fa-chevron-down chevron"></i></div>
         <div class="s-sub">
             <a href="ficha_inmueble.html">Nuevo inmueble</a>
-            <a href="mis_propiedades.html" class="active">Mis inmuebles</a>
+            <a href="mis_inmuebles.html" class="active">Mis inmuebles</a>
             <a href="#">Tipos de cartera</a>
             <a href="#">Gestor de zonas</a>
         </div>
@@ -447,7 +451,6 @@
     </nav>
     <div class="sidebar-bottom">
         <div class="s-item"><i class="fa-solid fa-gear"></i> <span>Administración</span></div>
-        <div class="s-item" onclick="logout()" style="color: #f87171; cursor: pointer; display: flex; align-items: center; gap: 10px; padding: 10px 15px; font-size: 13px;"><i class="fa-solid fa-right-from-bracket"></i> <span>Cerrar sesión</span></div>
     </div>
 </aside>
 
@@ -680,8 +683,11 @@
     }
 
     async function togglePortal(id, field, element) {
+        // Estado actual basado en la clase UI
         const isCurrentlyActive = element.classList.contains('checked');
         const newState = !isCurrentlyActive;
+
+        // Feedback visual inmediato (optimista)
         element.classList.toggle('checked', newState);
 
         try {
@@ -691,11 +697,15 @@
 
             if (error) {
                 console.error("Error al actualizar portal:", error);
+                // Revertir en caso de error
                 element.classList.toggle('checked', isCurrentlyActive);
-                alert("No se pudo actualizar el portal.");
+                alert("No se pudo actualizar el portal. Revisa la consola.");
             } else {
+                // Actualizar el objeto local para que los KPIs se refresquen correctamente
                 const prop = allProperties.find(p => p.id == id);
                 if (prop) prop[field] = newState;
+                
+                // Refrescar KPIs de la cabecera
                 updateKpiTooltips();
             }
         } catch (e) {
@@ -783,18 +793,10 @@
             const fotos = p.imagenes_url || c.fotos || [];
             const imgUrl = (Array.isArray(fotos) && fotos.length > 0) ? fotos[0] : '';
             const imgHtml = imgUrl
-                ? `<img src="${imgUrl}" class="thumb" loading="lazy" onerror="this.style.display='none'">`
-                : `<div class="thumb" style="background:#e2e8f0;"></div>`;
+                ? `<img src="${imgUrl}" class="thumb" loading="lazy">`
+                : `<div class="thumb no-image"><i class="fa-regular fa-image"></i></div>`;
             const transaction = c.transaction || '';
             const visits = Math.floor(Math.random() * 120) + 10;
-
-            // Renderizado de estados de publicación
-            const renderStatus = (active, title, color, field) => `
-                <div class="p-chk ${active ? 'checked' : ''}" 
-                     style="cursor:pointer; color:${active ? color : '#d1d5db'}" 
-                     title="${title}"
-                     onclick="togglePublish(${p.id}, '${field}', ${active})">
-                </div>`;
 
             return `<tr>
                 <td><input type="checkbox"></td>
@@ -809,28 +811,13 @@
                 <td>${getFamilyName(p.tipo)}</td>
                 <td class="price-cell">${formatPrice(p.precio, transaction)}</td>
                 <td class="visits-cell">${visits}</td>
-                <td>
-                        <div class="p-chk"></div>
-                    </div>
-                </td>
+                <td>${renderPortalChecks(p)}</td>
                 <td class="updated-cell">${timeAgo(p.created_at)}</td>
                 <td style="text-align:right;">
                     <button class="btn-ver" onclick="window.location.href='ficha_inmueble.html?id=${p.id}'">Ver <i class="fa-solid fa-chevron-down" style="font-size:9px;"></i></button>
                 </td>
             </tr>`;
         }).join('');
-    }
-
-    async function togglePublish(id, field, currentState) {
-        const { error } = await db.from('inm_propiedades').update({ [field]: !currentState }).eq('id', id);
-        if (error) {
-            alert("Error al actualizar estado: " + error.message);
-        } else {
-            const prop = allProperties.find(p => p.id === id);
-            if (prop) prop[field] = !currentState;
-            renderTable();
-        }
-    }
 
         // Pagination info
         document.getElementById('pag-info').textContent = `Mostrando ${start + 1} - ${end} de ${filteredProperties.length} resultados`;

@@ -262,7 +262,7 @@
         <div class="s-item active open"><i class="fa-solid fa-building"></i> <span>Inmuebles</span> <i class="fa-solid fa-chevron-down chevron"></i></div>
         <div class="s-sub">
             <a href="ficha_inmueble.html" class="active">Nuevo inmueble</a>
-            <a href="mis_propiedades.html">Mis inmuebles</a>
+            <a href="mis_inmuebles.html">Mis inmuebles</a>
             <a href="#">Tipos de cartera</a>
             <a href="#">Gestor de zonas</a>
         </div>
@@ -288,7 +288,6 @@
     </nav>
     <div class="sidebar-bottom">
         <div class="s-item"><i class="fa-solid fa-gear"></i> <span>Administración</span></div>
-        <div class="s-item" onclick="logout()" style="color: #f87171; cursor: pointer; display: flex; align-items: center; gap: 10px; padding: 10px 15px; font-size: 13px;"><i class="fa-solid fa-right-from-bracket"></i> <span>Cerrar sesión</span></div>
     </div>
 </aside>
 
@@ -325,7 +324,7 @@
                 <div class="subtitle" id="page-subtitle">Completa los datos para publicar en los portales</div>
             </div>
             <div class="header-actions">
-                <button class="btn btn-outline" onclick="window.location='mis_propiedades.html'"><i class="fa-solid fa-arrow-left"></i> Volver</button>
+                <button class="btn btn-outline" onclick="window.location='mis_inmuebles.html'"><i class="fa-solid fa-arrow-left"></i> Volver</button>
                 <button class="btn btn-primary" id="btn-save" onclick="guardarInmueble()"><i class="fa-solid fa-floppy-disk"></i> Guardar Inmueble</button>
             </div>
         </div>
@@ -640,7 +639,7 @@
             else { result = await db.from('inm_propiedades').insert(data); }
             if (result.error) throw result.error;
             showToast(editingId ? 'Inmueble actualizado' : 'Inmueble creado', 'success');
-            setTimeout(() => window.location = 'mis_propiedades.html', 1500);
+            setTimeout(() => window.location = 'mis_inmuebles.html', 1500);
         } catch (err) {
             showToast('Error: ' + err.message, 'error');
         } finally {
