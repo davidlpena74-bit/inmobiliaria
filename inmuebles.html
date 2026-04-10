@@ -684,7 +684,7 @@
                 <div style="grid-column: 1/-1; text-align: center; padding: 40px; color: #94a3b8;">Cargando inmuebles...</div>
             </div>
             <div style="padding: 10px 15px; border-top: 1px solid var(--border); font-size: 10px; color: #94a3b8; text-align: center;">
-                VERSION 5.23.2
+                VERSION 5.23.3
             </div>
         </aside>
 
@@ -845,13 +845,21 @@
 
         function toggleAdvancedFilters(show) {
             const container = document.getElementById('advanced-filters-inline');
+            const propItems = document.getElementById('prop-items');
+            
             if (show === undefined) {
                 const isHidden = window.getComputedStyle(container).display === 'none';
-                container.style.display = isHidden ? 'block' : 'none';
-            } else {
-                container.style.display = show ? 'block' : 'none';
+                show = isHidden;
             }
-            if (container.style.display === 'block') liveModalUpdate();
+            
+            if (show) {
+                container.style.display = 'block';
+                propItems.style.display = 'none';
+                liveModalUpdate();
+            } else {
+                container.style.display = 'none';
+                propItems.style.display = 'grid';
+            }
         }
 
         function changeStepper(field, delta) {
