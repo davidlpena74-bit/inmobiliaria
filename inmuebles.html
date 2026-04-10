@@ -303,18 +303,110 @@
         }
 
         /* MODERN FILTERS BAR (COMPASS STYLE) */
-        .search-controls-row { display: flex; align-items: center; gap: 8px; margin-bottom: 20px; }
-        .input-group { position: relative; flex: 1; border: 1px solid #d1d5db; border-radius: 4px; background: white; padding: 0 10px; display: flex; align-items: center; height: 44px; }
-        .input-group label { font-size: 14px; color: #1f2937; margin-right: 4px; }
-        .input-group input { flex: 1; border: none; padding: 8px 0; font-size: 15px; outline: none; background: transparent; }
-        .hyphen { color: #d1d5db; font-size: 14px; }
+
+        /* 🏙️ SIDEBAR HEADER REBOOT (COMPASS STYLE) */
+        .sidebar-header-group {
+            padding: 24px 24px 12px 24px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            background: white;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .header-row-1 {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+        }
+        .search-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin: 0;
+            line-height: 1.2;
+            font-family: var(--font-sans);
+        }
+        .btn-save-search { 
+            display: flex; align-items: center; gap: 8px; background: var(--compass-blue); border: none; 
+            padding: 10px 20px; border-radius: 4px; font-size: 14px; font-weight: 600; cursor: pointer; color: white; 
+            transition: opacity 0.2s; white-space: nowrap;
+        }
+        .btn-save-search:hover { opacity: 0.9; }
+
+        .header-row-2 {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding-top: 4px;
+        }
+        .price-range-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex: 1;
+        }
+        .price-input-wrap {
+            display: flex;
+            align-items: center;
+            background: white;
+            border: 1px solid #d1d5db;
+            border-radius: 4px;
+            padding: 0 12px;
+            height: 44px;
+            flex: 1;
+            max-width: 140px;
+        }
+        .price-input-wrap span {
+            color: #1a1a1a;
+            font-size: 14px;
+            margin-right: 4px;
+        }
+        .price-input-wrap input {
+            border: none;
+            outline: none;
+            width: 100%;
+            font-size: 14px;
+            font-family: var(--font-sans);
+        }
+
+        .header-row-3 {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            padding-bottom: 8px;
+        }
+        .results-meta-main {
+            font-size: 14px;
+            font-weight: 700;
+            color: #1a1a1a;
+        }
+        .results-subtext {
+            font-size: 13px;
+            color: #666;
+        }
+
         .btn-filters { 
             height: 44px; padding: 0 16px; border: 1px solid #d1d5db; border-radius: 4px; background: white; 
             font-size: 14px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px; 
+            transition: all 0.2s;
+        }
+        .btn-filters:hover { background: #f8fafc; }
+        .btn-filters.active-filter-btn {
+            background: #f1f5f9;
+            border-color: var(--compass-blue);
+            color: var(--compass-blue);
         }
         .btn-filters .badge { 
             background: #e5e7eb; color: #374151; width: 22px; height: 22px; 
             border-radius: 50%; font-size: 11px; display: flex; align-items: center; justify-content: center;
+        }
+        .btn-filters.active-filter-btn .badge {
+            background: var(--compass-blue);
+            color: white;
         }
 
         .results-header { display: flex; align-items: center; justify-content: space-between; padding-bottom: 12px; margin-bottom: 15px; border-bottom: 1px solid var(--border); }
@@ -516,6 +608,178 @@
             text-align: center; border-radius: 15px; font-size: 12px; line-height: 30px;
         }
         .marker-cluster span { line-height: 30px; }
+
+        /* 🧩 COMPASS STYLE FILTERS (REBOOT) */
+        #advanced-filters-inline {
+            display: none;
+            background: white;
+            border-bottom: 1px solid var(--border);
+            padding: 24px;
+            position: relative;
+        }
+        .filter-section {
+            margin-bottom: 32px;
+        }
+        .filter-section h3 {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 16px;
+            font-family: var(--font-sans);
+        }
+        .filter-sub-title {
+            font-size: 13px;
+            font-weight: 500;
+            color: #666;
+            margin-bottom: 8px;
+        }
+        .flex-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+        .filter-input-wrap {
+            flex: 1;
+            position: relative;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 8px 12px;
+            background: white;
+            display: flex;
+            align-items: center;
+        }
+        .filter-input-wrap label {
+            font-size: 13px;
+            color: #1a1a1a;
+            margin-right: 6px;
+        }
+        .filter-input-wrap input, .filter-input-wrap select {
+            border: none;
+            outline: none;
+            width: 100%;
+            font-size: 14px;
+            background: transparent;
+            font-family: var(--font-sans);
+        }
+        .compass-stepper {
+            display: flex;
+            align-items: center;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            overflow: hidden;
+            width: fit-content;
+        }
+        .compass-stepper button {
+            width: 40px;
+            height: 40px;
+            background: white;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+            transition: background 0.2s;
+        }
+        .compass-stepper button:hover { background: #f8fafc; }
+        .compass-stepper .value {
+            width: 80px;
+            text-align: center;
+            font-size: 14px;
+            border-left: 1px solid #ddd;
+            border-right: 1px solid #ddd;
+            line-height: 40px;
+        }
+        .checkbox-grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+        .compass-check {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            cursor: pointer;
+            color: #1a1a1a;
+        }
+        .compass-check input {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: var(--compass-blue);
+        }
+        .nested-check { margin-left: 28px; margin-top: 8px; }
+        
+        .keyword-input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .filters-footer-compass {
+            padding: 20px 24px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: white;
+            position: sticky;
+            bottom: 0;
+            z-index: 10;
+        }
+        .btn-reset-link {
+            background: none;
+            border: none;
+            color: #1a1a1a;
+            font-size: 14px;
+            font-weight: 600;
+            text-decoration: underline;
+            cursor: pointer;
+            padding: 0;
+        }
+        .btn-see-homes {
+            background: var(--compass-blue);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 12px 24px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+        .btn-see-homes:hover { opacity: 0.9; }
+
+        .close-filters-container {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 24px;
+        }
+        .btn-close-filters {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: white;
+            border: 1px solid #ddd;
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .filter-badge {
+            background: #e5e7eb;
+            color: #374151;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            font-size: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
     </style>
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-5NQ2VHSND7"></script>
@@ -570,112 +834,164 @@
     <div class="viewport">
         <aside class="list-sidebar">
             <div class="list-header">
-                <div class="header-top-row">
-                    <div class="mode-toggle">
-                        <button class="mode-btn" id="mode-buy" onclick="setMode('buy')">Comprar</button>
-                        <button class="mode-btn" id="mode-rent" onclick="setMode('rent')">Alquilar</button>
-                    </div>
+            <div class="sidebar-header-group">
+                <!-- Row 1: Title & Action -->
+                <div class="header-row-1">
+                    <h1 class="search-title" id="search-bar-location">Alicante, Costa Blanca</h1>
                     <button class="btn-save-search" onclick="saveSearch()">
-                        <i class="fa-regular fa-bell"></i> <span data-i18n="btn.save">Guardar Búsqueda</span>
+                        <i class="fa-regular fa-bell"></i> <span data-i18n="btn.save">Save Search</span>
                     </button>
                 </div>
-                <div class="search-controls-row">
-                    <div class="input-group">
-                        <label>€</label>
-                        <input type="text" id="min-price" data-i18n="filter.price.min" placeholder="Mín" onchange="updateFilters()">
+
+                <!-- Row 2: Price Range & Filters -->
+                <div class="header-row-2">
+                    <div class="price-range-group">
+                        <div class="price-input-wrap">
+                            <span>€</span>
+                            <input type="number" id="min-price" data-i18n="filter.no_min" placeholder="No Min" onchange="liveModalUpdate()">
+                        </div>
+                        <span class="hyphen">-</span>
+                        <div class="price-input-wrap">
+                            <span>€</span>
+                            <input type="number" id="max-price" data-i18n="filter.no_max" placeholder="No Max" onchange="liveModalUpdate()">
+                        </div>
                     </div>
-                    <div class="hyphen">-</div>
-                    <div class="input-group">
-                        <label>€</label>
-                        <input type="text" id="max-price" data-i18n="filter.price.max" placeholder="Máx" onchange="updateFilters()">
-                    </div>
-                    <button class="btn-filters" onclick="toggleAdvancedFilters()">
+                    <button class="btn-filters" id="btn-filters-main" onclick="toggleAdvancedFilters()">
                         <span data-i18n="filter.btn">Filters</span> <span class="badge" id="filter-count">0</span>
                     </button>
                 </div>
 
-                <div class="results-header">
-                    <div class="results-meta">
-                        <div id="results-label">... Inmuebles</div>
-                    </div>
-                    <div class="sort-container">
-                        <span data-i18n="sort.by">Ordenar por</span>
-                        <div class="sort-dropdown" id="sort-dropdown">
-                            <div class="sort-trigger" onclick="toggleSort()">
-                                <span id="current-sort-label" data-i18n="sort.recommended">Recomendados</span>
-                                <i class="fa-solid fa-chevron-down" style="font-size: 10px;"></i>
-                            </div>
-                            <div class="sort-options" id="sort-options">
-                                <div class="sort-option active" data-value="recommended" data-i18n="sort.recommended" onclick="selectSort('recommended')">Recomendados</div>
-                                <div class="sort-option" data-value="newest" data-i18n="sort.newest" onclick="selectSort('newest')">Nuevos anuncios</div>
-                                <div class="sort-option" data-value="price-asc" data-i18n="sort.price.asc" onclick="selectSort('price-asc')">Precio: de menor a mayor</div>
-                                <div class="sort-option" data-value="price-desc" data-i18n="sort.price.desc" onclick="selectSort('price-desc')">Precio: de mayor a menor</div>
-                                <div class="sort-option" data-value="sqft-desc" data-i18n="sort.sqft.desc" onclick="selectSort('sqft-desc')">Superficie: de mayor a menor</div>
-                                <div class="sort-option" data-value="sqft-asc" data-i18n="sort.sqft.asc" onclick="selectSort('sqft-asc')">Superficie: de menor a mayor</div>
+                <!-- Row 3: Meta & Sort -->
+                <div class="header-row-3">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-end;">
+                        <div class="results-meta-main">
+                            <span id="results-label">... Inmuebles</span>
+                        </div>
+                        <div class="sort-container">
+                            <span data-i18n="sort.by">Ordenar por</span>
+                            <div class="sort-dropdown" id="sort-dropdown">
+                                <div class="sort-trigger" onclick="toggleSort()">
+                                    <span id="current-sort-label" data-i18n="sort.recommended">Recomendados</span>
+                                    <i class="fa-solid fa-chevron-down" style="font-size: 10px;"></i>
+                                </div>
+                                <div class="sort-options" id="sort-options">
+                                    <div class="sort-option active" data-value="recommended" data-i18n="sort.recommended" onclick="selectSort('recommended')">Recomendados</div>
+                                    <div class="sort-option" data-value="newest" data-i18n="sort.newest" onclick="selectSort('newest')">Nuevos anuncios</div>
+                                    <div class="sort-option" data-value="price-asc" data-i18n="sort.price.asc" onclick="selectSort('price-asc')">Precio: de menor a mayor</div>
+                                    <div class="sort-option" data-value="price-desc" data-i18n="sort.price.desc" onclick="selectSort('price-desc')">Precio: de mayor a menor</div>
+                                    <div class="sort-option" data-value="sqft-desc" data-i18n="sort.sqft.desc" onclick="selectSort('sqft-desc')">Superficie: de mayor a menor</div>
+                                    <div class="sort-option" data-value="sqft-asc" data-i18n="sort.sqft.asc" onclick="selectSort('sqft-asc')">Superficie: de menor a mayor</div>
+                                </div>
                             </div>
                         </div>
                     </div>
+                    <div class="results-subtext">Coming soons, standard exclusives</div>
                 </div>
+            </div>
 
-                <!-- 🎛️ FILTROS AVANZADOS INLINE -->
+                <!-- 🎛️ FILTROS AVANZADOS COMPASS STYLE -->
                 <div id="advanced-filters-inline">
-                    <div class="modal-section" style="margin-top: 0;">
-                        <h3>Habitaciones</h3>
-                        <div class="stepper">
-                            <button onclick="changeStepper('bed', -1)">-</button>
-                            <div class="value" id="val-bed">Cualquiera</div>
-                            <button onclick="changeStepper('bed', 1)">+</button>
+                    <div style="height: 10px;"></div>
+
+                    <!-- Mode toggle moved to advanced filters for cleanliness -->
+                    <div class="filter-section">
+                        <h3 data-i18n="filter.listing_type">Listing Type</h3>
+                        <div class="mode-toggle">
+                            <button class="mode-btn" id="mode-buy" onclick="setMode('buy')" data-i18n="filter.buy">Buy</button>
+                            <button class="mode-btn" id="mode-rent" onclick="setMode('rent')" data-i18n="filter.rent">Rent</button>
                         </div>
                     </div>
 
-                    <div class="modal-section">
-                        <h3>Baños</h3>
-                        <div class="stepper">
-                            <button onclick="changeStepper('bath', -1)">-</button>
-                            <div class="value" id="val-bath">Cualquiera</div>
-                            <button onclick="changeStepper('bath', 1)">+</button>
+                        <!-- Rooms Section -->
+                        <div class="filter-section">
+                            <div style="display: flex; gap: 32px; flex-wrap: wrap;">
+                                <div style="flex: 1; min-width: 200px;">
+                                    <h3 data-i18n="filter.beds">Beds</h3>
+                                    <div class="flex-row">
+                                        <div class="filter-input-wrap">
+                                            <select id="min-beds" onchange="liveModalUpdate()">
+                                                <option value="0" data-i18n="filter.no_min">No Min</option>
+                                                <option value="1">1</option>
+                                                <option value="2">2</option>
+                                                <option value="3">3</option>
+                                                <option value="4">4</option>
+                                                <option value="5">5+</option>
+                                            </select>
+                                        </div>
+                                        <div class="hyphen">-</div>
+                                        <div class="filter-input-wrap">
+                                            <select id="max-beds" onchange="liveModalUpdate()">
+                                                <option value="99" data-i18n="filter.no_max">No Max</option>
+                                                <option value="1">1</option>
+                                                <option value="2">2</option>
+                                                <option value="3">3</option>
+                                                <option value="4">4</option>
+                                                <option value="5">5</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div style="flex: 1; min-width: 150px;">
+                                    <h3 data-i18n="filter.baths">Baths</h3>
+                                    <div class="compass-stepper">
+                                        <button onclick="changeStepper('bath', -1)">-</button>
+                                        <div class="value" id="val-bath" data-i18n="filter.no_min">No Min</div>
+                                        <button onclick="changeStepper('bath', 1)">+</button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="modal-section">
-                        <h3>Tipo de Propiedad</h3>
-                        <div class="checkbox-grid">
-                            <label class="check-item"><input type="checkbox" class="filter-type" value="Apartments" onchange="liveModalUpdate()"> Apartamento</label>
-                            <label class="check-item"><input type="checkbox" class="filter-type" value="Villas" onchange="liveModalUpdate()"> Chalet / Villa</label>
-                            <label class="check-item"><input type="checkbox" class="filter-type" value="Luxury Villas" onchange="liveModalUpdate()"> Villa de Lujo</label>
-                            <label class="check-item"><input type="checkbox" class="filter-type" value="Penthouses" onchange="liveModalUpdate()"> Ático</label>
-                            <label class="check-item"><input type="checkbox" class="filter-type" value="Terraced Houses" onchange="liveModalUpdate()"> Adosado</label>
-                            <label class="check-item"><input type="checkbox" class="filter-type" value="Duplex" onchange="liveModalUpdate()"> Dúplex</label>
-                            <label class="check-item"><input type="checkbox" class="filter-type" value="Studios" onchange="liveModalUpdate()"> Estudio</label>
-                            <label class="check-item"><input type="checkbox" class="filter-type" value="Bungalows" onchange="liveModalUpdate()"> Bungalow</label>
-                            <label class="check-item"><input type="checkbox" class="filter-type" value="Country Houses" onchange="liveModalUpdate()"> Casa de Campo</label>
+                        <!-- Property Type -->
+                        <div class="filter-section">
+                            <h3 data-i18n="filter.type">Property Type</h3>
+                            <div class="checkbox-grid-2">
+                                <label class="compass-check"><input type="checkbox" class="filter-type" value="Apartamento" onchange="liveModalUpdate()"> <span data-i18n="type.apartamento">Apartment</span></label>
+                                <label class="compass-check"><input type="checkbox" class="filter-type" value="Chalet" onchange="liveModalUpdate()"> <span data-i18n="type.chalet">House</span></label>
+                                <label class="compass-check"><input type="checkbox" class="filter-type" value="Ático" onchange="liveModalUpdate()"> <span data-i18n="type.penthouse">Penthouse</span></label>
+                                <label class="compass-check"><input type="checkbox" class="filter-type" value="Duplex" onchange="liveModalUpdate()"> <span data-i18n="type.duplex">Duplex</span></label>
+                                <label class="compass-check"><input type="checkbox" class="filter-type" value="Terreno" onchange="liveModalUpdate()"> <span data-i18n="type.terreno">Land</span></label>
+                                <label class="compass-check"><input type="checkbox" class="filter-type" value="Local" onchange="liveModalUpdate()"> <span data-i18n="type.local">Commercial</span></label>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="modal-section">
-                        <h3>Comodidades</h3>
-                        <div class="checkbox-grid">
-                            <label class="check-item"><input type="checkbox" class="filter-amenity" value="pool" onchange="liveModalUpdate()"> Piscina</label>
-                            <label class="check-item"><input type="checkbox" class="filter-amenity" value="elevator" onchange="liveModalUpdate()"> Ascensor</label>
-                            <label class="check-item"><input type="checkbox" class="filter-amenity" value="garage" onchange="liveModalUpdate()"> Garaje</label>
-                            <label class="check-item"><input type="checkbox" class="filter-amenity" value="garden" onchange="liveModalUpdate()"> Jardín</label>
-                            <label class="check-item"><input type="checkbox" class="filter-amenity" value="air_conditioner" onchange="liveModalUpdate()"> Aire Acondicionado</label>
-                            <label class="check-item"><input type="checkbox" class="filter-amenity" value="storage_room" onchange="liveModalUpdate()"> Trastero</label>
+                        <!-- Other Amenities -->
+                        <div class="filter-section">
+                            <h3 data-i18n="filter.amenities">Amenities</h3>
+                            <div style="display: flex; gap: 32px; margin-bottom: 24px; flex-wrap: wrap;">
+                                <div style="flex: 1; min-width: 150px;">
+                                    <div class="filter-sub-title" data-i18n="filter.parking">Parking Spaces</div>
+                                    <div class="compass-stepper">
+                                        <button onclick="changeStepper('parking', -1)">-</button>
+                                        <div class="value" id="val-parking" data-i18n="filter.no_min">No Min</div>
+                                        <button onclick="changeStepper('parking', 1)">+</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="checkbox-grid-2">
+                                <label class="compass-check"><input type="checkbox" class="filter-amenity" value="pool" onchange="liveModalUpdate()"> <span data-i18n="filter.must_have">Must Have</span> <span data-i18n="feat.pool">Pool</span></label>
+                                <label class="compass-check"><input type="checkbox" class="filter-amenity" value="garden" onchange="liveModalUpdate()"> <span data-i18n="filter.must_have">Must Have</span> <span data-i18n="feat.garden">Garden</span></label>
+                                <label class="compass-check"><input type="checkbox" class="filter-amenity" value="air_conditioner" onchange="liveModalUpdate()"> <span data-i18n="filter.must_have">Must Have</span> <span data-i18n="feat.ac">AC</span></label>
+                                <label class="compass-check"><input type="checkbox" class="filter-amenity" value="elevator" onchange="liveModalUpdate()"> <span data-i18n="filter.must_have">Must Have</span> <span data-i18n="feat.lift">Elevator</span></label>
+                                <label class="compass-check"><input type="checkbox" class="filter-amenity" value="garage" onchange="liveModalUpdate()"> <span data-i18n="filter.must_have">Must Have</span> <span data-i18n="feat.parking">Garage</span></label>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="modal-section">
-                        <h3>Superficie (m²)</h3>
-                        <div class="input-range">
-                            <input type="number" id="min-sqft" placeholder="Mínimo" onchange="liveModalUpdate()">
-                            <span>-</span>
-                            <input type="number" id="max-sqft" placeholder="Máximo" onchange="liveModalUpdate()">
+                        <!-- Keywords -->
+                        <div class="filter-section">
+                            <h3 data-i18n="filter.keywords">Keywords</h3>
+                            <input type="text" id="keywords" class="keyword-input" data-i18n="filter.keywords.placeholder" placeholder="Try waterfront, gym, or renovate" oninput="liveModalUpdate()">
                         </div>
-                    </div>
 
-                    <div class="filters-footer-inline">
-                        <button class="btn-reset" onclick="resetFilters()">Restablecer</button>
-                        <button class="btn-apply-inline" id="modal-apply-btn" onclick="toggleAdvancedFilters(false)">Ver Inmuebles</button>
+                    <div class="filters-footer-compass">
+                        <button class="btn-reset-link" onclick="resetFilters()" data-i18n="filter.reset">Reset</button>
+                        <div style="display: flex; align-items: center; gap: 16px;">
+                            <div style="font-size: 13px; color: #666; text-align: right; line-height: 1.2;">
+                                <span data-i18n="filter.unlock_homes">Unlock 3+ Homes</span><br>
+                                <span style="color:#1a1a1a; font-weight: 600;" data-i18n="filter.only_weperty">Only on Weperty</span>
+                            </div>
+                            <button class="btn-see-homes" id="modal-apply-btn" onclick="toggleAdvancedFilters(false)">See Homes</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -684,7 +1000,7 @@
                 <div style="grid-column: 1/-1; text-align: center; padding: 40px; color: #94a3b8;">Cargando inmuebles...</div>
             </div>
             <div style="padding: 10px 15px; border-top: 1px solid var(--border); font-size: 10px; color: #94a3b8; text-align: center;">
-                VERSION 5.23.3
+                VERSION 5.23.4
             </div>
         </aside>
 
@@ -726,17 +1042,18 @@
 
         let allProperties = [];
         let filteredProperties = [];
-        let currentFilters = {
-            bed: 0,
-            bath: 0,
-            types: [],
-            amenities: [],
-            minPrice: 0,
-            maxPrice: Infinity,
-            minSqft: 0,
-            maxSqft: Infinity,
-            sort: 'recommended',
-            mode: 'rent'
+        let currentFilters = { 
+            mode: 'buy', 
+            minPrice: 0, 
+            maxPrice: Infinity, 
+            minBeds: 0, 
+            maxBeds: 99, 
+            bath: 0, 
+            parking: 0,
+            types: [], 
+            amenities: [], 
+            keywords: '',
+            sort: 'recommended' 
         };
 
         const propertyMarkers = {}; 
@@ -846,6 +1163,7 @@
         function toggleAdvancedFilters(show) {
             const container = document.getElementById('advanced-filters-inline');
             const propItems = document.getElementById('prop-items');
+            const btnMain = document.getElementById('btn-filters-main');
             
             if (show === undefined) {
                 const isHidden = window.getComputedStyle(container).display === 'none';
@@ -855,37 +1173,62 @@
             if (show) {
                 container.style.display = 'block';
                 propItems.style.display = 'none';
+                
+                // Switch button to "Close Filters"
+                const closeText = translations[currentLang]['filter.close'] || 'Close Filters';
+                const count = document.getElementById('filter-count').textContent;
+                btnMain.innerHTML = `<span>${closeText}</span> <span class="badge" id="filter-count">${count}</span>`;
+                btnMain.classList.add('active-filter-btn');
+
                 liveModalUpdate();
             } else {
                 container.style.display = 'none';
                 propItems.style.display = 'grid';
+
+                // Switch button back to "Filters"
+                const filterText = translations[currentLang]['filter.btn'] || 'Filters';
+                const count = document.getElementById('filter-count').textContent;
+                btnMain.innerHTML = `<span data-i18n="filter.btn">${filterText}</span> <span class="badge" id="filter-count">${count}</span>`;
+                btnMain.classList.remove('active-filter-btn');
             }
         }
 
         function changeStepper(field, delta) {
             currentFilters[field] = Math.max(0, currentFilters[field] + delta);
-            const valueDisplay = currentFilters[field] === 0 ? (currentLang === 'es' ? 'Cualquiera' : (currentLang === 'en' ? 'Any' : (currentLang === 'de' ? 'Egal' : 'Elke'))) : currentFilters[field] + '+';
+            const valueDisplay = currentFilters[field] === 0 ? (translations[currentLang]['filter.no_min'] || 'No Min') : currentFilters[field] + '+';
             document.getElementById(`val-${field}`).textContent = valueDisplay;
             liveModalUpdate();
         }
 
         function liveModalUpdate() {
+            currentFilters.minPrice = parseInt(document.getElementById('min-price').value) || 0;
+            currentFilters.maxPrice = parseInt(document.getElementById('max-price').value) || Infinity;
+            currentFilters.minBeds = parseInt(document.getElementById('min-beds').value) || 0;
+            currentFilters.maxBeds = parseInt(document.getElementById('max-beds').value) || 99;
+            currentFilters.keywords = document.getElementById('keywords').value.toLowerCase();
+            
             currentFilters.types = Array.from(document.querySelectorAll('.filter-type:checked')).map(cb => cb.value);
             currentFilters.amenities = Array.from(document.querySelectorAll('.filter-amenity:checked')).map(cb => cb.value);
-            currentFilters.minSqft = parseInt(document.getElementById('min-sqft').value) || 0;
-            currentFilters.maxSqft = parseInt(document.getElementById('max-sqft').value) || Infinity;
 
             const count = performFiltering(false).length;
-            const btnLabel = currentLang === 'es' ? `Ver ${count} Inmuebles` : (currentLang === 'en' ? `View ${count} Properties` : (currentLang === 'de' ? `${count} Immobilien anzeigen` : `Bekijk ${count} Woningen`));
-            document.getElementById('modal-apply-btn').textContent = btnLabel;
             
+            // Traducir dinámicamente el botón de "Ver Inmuebles"
+            let btnText = translations[currentLang]['filter.see_homes'] || 'See {count} Homes';
+            btnText = btnText.replace('{count}', count.toLocaleString());
+            document.getElementById('modal-apply-btn').textContent = btnText;
+            
+            // Contador global de filtros activos
             let activeCount = 0;
-            if (currentFilters.bed > 0) activeCount++;
+            if (currentFilters.minBeds > 0 || currentFilters.maxBeds < 99) activeCount++;
             if (currentFilters.bath > 0) activeCount++;
+            if (currentFilters.parking > 0) activeCount++;
             if (currentFilters.types.length > 0) activeCount++;
             if (currentFilters.amenities.length > 0) activeCount++;
-            if (currentFilters.minSqft > 0 || currentFilters.maxSqft < Infinity) activeCount++;
+            if (currentFilters.keywords.length > 0) activeCount++;
+            if (currentFilters.minPrice > 0 || currentFilters.maxPrice < Infinity) activeCount++;
+            
             document.getElementById('filter-count').textContent = activeCount;
+            document.getElementById('filter-count-badge').textContent = activeCount;
 
             // Actualización LIVE de la lista
             updateFilters();
@@ -939,13 +1282,29 @@
         }
 
         function resetFilters() {
-            currentFilters = { bed: 0, bath: 0, types: [], amenities: [], minPrice: 0, maxPrice: Infinity, minSqft: 0, maxSqft: Infinity, sort: 'recommended' };
+            currentFilters = { 
+                mode: currentFilters.mode, // Mantener el modo actual (compra/alquiler)
+                minPrice: 0, maxPrice: Infinity, 
+                minBeds: 0, maxBeds: 99, 
+                bath: 0, parking: 0,
+                types: [], amenities: [], 
+                keywords: '', sort: 'recommended' 
+            };
+            
             document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
             document.querySelectorAll('input[type="number"]').forEach(input => input.value = '');
-            const anyText = (currentLang === 'es' ? 'Cualquiera' : (currentLang === 'en' ? 'Any' : (currentLang === 'de' ? 'Egal' : 'Elke')));
-            document.getElementById('val-bed').textContent = anyText;
-            document.getElementById('val-bath').textContent = anyText;
+            document.querySelectorAll('input[type="text"]').forEach(input => input.value = '');
+            document.querySelectorAll('select').forEach(sel => {
+                if (sel.id === 'max-beds' || sel.id === 'max-stories') sel.value = '99';
+                else sel.value = '0';
+            });
+
+            const noMinText = translations[currentLang]['filter.no_min'] || 'No Min';
+            document.getElementById('val-bath').textContent = noMinText;
+            document.getElementById('val-parking').textContent = noMinText;
+            
             updateFilters();
+            liveModalUpdate();
         }
 
         // --- MOBILE TOGGLE ---
@@ -981,7 +1340,6 @@
                 const pPrice = p.precio || 0;
                 const pBeds = p.habitaciones || 0;
                 const pBaths = p.banos || 0;
-                const pSqft = p.superficie || 0;
                 const pAms = p.caracteristicas || {};
 
                 // Filtrado por Modo (Compra / Alquiler)
@@ -989,15 +1347,20 @@
                 if (p.tipo_operacion) {
                     if (p.tipo_operacion !== targetOp) return false;
                 } else {
-                    // Fallback de precio si no hay campo explícito
                     if (currentFilters.mode === 'rent' && pPrice >= 10000) return false;
                     if (currentFilters.mode === 'buy' && pPrice < 10000) return false;
                 }
  
                 if (pPrice < currentFilters.minPrice || pPrice > currentFilters.maxPrice) return false;
-                if (pBeds < currentFilters.bed) return false;
+                if (pBeds < currentFilters.minBeds || pBeds > currentFilters.maxBeds) return false;
                 if (pBaths < currentFilters.bath) return false;
-                if (pSqft < currentFilters.minSqft || pSqft > currentFilters.maxSqft) return false;
+                
+                // Keywords search in title and description
+                if (currentFilters.keywords.length > 0) {
+                    const title = (p.titulo || '').toLowerCase();
+                    const desc = (p.descripcion || '').toLowerCase();
+                    if (!title.includes(currentFilters.keywords) && !desc.includes(currentFilters.keywords)) return false;
+                }
 
                 if (currentFilters.types.length > 0 && !currentFilters.types.includes(p.tipo)) return false;
 
