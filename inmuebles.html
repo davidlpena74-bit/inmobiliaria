@@ -157,6 +157,34 @@
         
         .badge-pills { position: absolute; top: 12px; left: 12px; display: flex; gap: 6px; z-index: 5; }
         .badge-pill { background: rgba(0,0,0,0.85); color: white; font-size: 10px; padding: 4px 12px; font-weight: 700; border-radius: 4px; }
+        
+        /* 👤 AGENT AVATAR IN CARD */
+        .agent-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+        .agent-avatar-card {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 1px solid #edf2f7;
+        }
+        .agent-card-info {
+            display: flex;
+            flex-direction: column;
+        }
+        .agent-card-name {
+            font-size: 11px;
+            font-weight: 700;
+            color: #1a202c;
+        }
+        .agent-card-title {
+            font-size: 10px;
+            color: #718096;
+        }
         .badge-pill.new { background: #00703c; }
 
         .prop-info { padding: 20px; display: flex; flex-direction: column; flex-grow: 1; position: relative; }
@@ -593,7 +621,7 @@
                 <div style="grid-column: 1/-1; text-align: center; padding: 40px; color: #94a3b8;">Cargando inmuebles...</div>
             </div>
             <div style="padding: 10px 15px; border-top: 1px solid var(--border); font-size: 10px; color: #94a3b8; text-align: center;">
-                VERSION 5.22.2
+                VERSION 5.23.0
             </div>
         </aside>
 
@@ -979,6 +1007,20 @@
             return results;
         }
 
+        function toggleFavorite(el, event, propId) {
+            event.stopPropagation();
+            if (!Auth.isLoggedIn()) {
+                Auth.showModal();
+                return;
+            }
+            const icon = el.querySelector('i');
+            icon.classList.toggle('fa-solid');
+            icon.classList.toggle('fa-regular');
+            
+            // Opcional: Aquí se podría añadir lógica para guardar en Supabase
+            console.log(`Propiedad ${propId} marcada como favorita`);
+        }
+
         // --- RENDER ---
 
         function changeImage(propId, delta, event) {
@@ -1133,7 +1175,8 @@
                         <div class="badge-pills">
                             ${t_prop(p, 'destacada') ? `<div class="badge-pill">${translations[currentLang]['prop.exclusive']}</div>` : 
                                 (p.agente === 'Weperty Properties' ? `<img src="logos_corporativos/weperty_logo_azul.png" style="height: 22px; object-fit: contain;">` : 
-                                `<div class="badge-pill">${translations[currentLang]['prop.comingsoon']}</div>`)}
+                                (p.agente === 'coldwellbanker' ? `<img src="logos_corporativos/coldwell_banker_logo.png" style="height: 22px; object-fit: contain;">` :
+                                `<div class="badge-pill">${translations[currentLang]['prop.comingsoon']}</div>`))}
                         </div>
                         <img src="${fotos[0] ? fotos[0] : 'weperty_placeholder.png'}" onerror="this.src='weperty_placeholder.png'">
                     </div>
@@ -1160,10 +1203,18 @@
                         </div>
                         <div class="description">${descSnippet}</div>
                         
+                        <div class="agent-container" style="${p.agente === 'Weperty Properties' ? '' : 'display: none;'}">
+                            <img src="logos_corporativos/agent_laura_lopez.png" class="agent-avatar-card" alt="Laura López">
+                            <div class="agent-card-info">
+                                <span class="agent-card-name">Laura López</span>
+                                <span class="agent-card-title">Agente Weperty</span>
+                            </div>
+                        </div>
+
                         <hr class="divider">
                         
                         <div class="footer">
-                            <div class="fav-btn" onclick="event.stopPropagation(); this.querySelector('i').classList.toggle('fa-solid'); this.querySelector('i').classList.toggle('fa-regular');">
+                            <div class="fav-btn" onclick="toggleFavorite(this, event, '${p.id}')">
                                 <i class="fa-regular fa-heart"></i>
                             </div>
                             <div class="price">${precio}</div>

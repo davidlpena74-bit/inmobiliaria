@@ -182,6 +182,34 @@
         .badge-pills { position: absolute; top: 10px; left: 10px; display: flex; gap: 5px; z-index: 5; flex-wrap: wrap; }
         .badge-pill { background: rgba(0,0,0,0.85); color: white; font-size: 10px; padding: 3px 8px; font-weight: 600; border-radius: 3px; }
         .badge-pill.new { background: #00703c; }
+        
+        /* 👤 AGENT AVATAR IN CARD */
+        .agent-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+        .agent-avatar-card {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 1px solid #edf2f7;
+        }
+        .agent-card-info {
+            display: flex;
+            flex-direction: column;
+        }
+        .agent-card-name {
+            font-size: 11px;
+            font-weight: 700;
+            color: #1a202c;
+        }
+        .agent-card-title {
+            font-size: 10px;
+            color: #718096;
+        }
 
         .prop-info { padding: 20px; display: flex; flex-direction: column; flex-grow: 1; }
         
@@ -792,7 +820,7 @@
         <div class="footer-bottom">
             <div data-i18n="footer.bottom">© 2026 Weperty Real Estate. All rights reserved. | <a href="terms.html" style="color: #666; text-decoration: underline;">Terms</a> | <a href="privacy.html" style="color: #666; text-decoration: underline;">Privacy</a> | Equal Housing Opportunity · Alicante</div>
             <div style="display: flex; gap: 12px; align-items: center;">
-                <span style="font-size: 10px; color: #555; letter-spacing: 1px;">VERSION 5.22.2</span>
+                <span style="font-size: 10px; color: #555; letter-spacing: 1px;">VERSION 5.23.0</span>
             </div>
         </div>
     </footer>
@@ -834,6 +862,20 @@
         const SB_URL = "https://dwbvegnxmyvpolvofkfn.supabase.co";
         const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR3YnZlZ254bXl2cG9sdm9ma2ZuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njc1Mzg1NTUsImV4cCI6MjA4MzExNDU1NX0.eT5ZSce8H8Yk8pWKyLUYChU0HtmZljywP4eEQd5FkOI";
         const db = supabase.createClient(SB_URL, SB_KEY);
+
+        function toggleFavorite(el, event, propId) {
+            event.stopPropagation();
+            if (!Auth.isLoggedIn()) {
+                Auth.showModal();
+                return;
+            }
+            const icon = el.querySelector('i');
+            icon.classList.toggle('fa-solid');
+            icon.classList.toggle('fa-regular');
+            
+            // Opcional: Aquí se podría añadir lógica para guardar en Supabase
+            console.log(`Propiedad ${propId} marcada como favorita`);
+        }
 
         function buildPropCard(p) {
             const fotos = p.imagenes_url || p.imagenes || [];
@@ -900,10 +942,18 @@
                         </div>
                         <div class="description">${descSnippet}</div>
                         
+                        <div class="agent-container" style="${p.agente === 'Weperty Properties' ? '' : 'display: none;'}">
+                            <img src="logos_corporativos/agent_laura_lopez.png" class="agent-avatar-card" alt="Laura López">
+                            <div class="agent-card-info">
+                                <span class="agent-card-name">Laura López</span>
+                                <span class="agent-card-title">Agente Weperty</span>
+                            </div>
+                        </div>
+
                         <hr class="divider">
                         
                         <div class="footer">
-                            <div class="fav-btn" onclick="event.stopPropagation(); this.querySelector('i').classList.toggle('fa-solid'); this.querySelector('i').classList.toggle('fa-regular');">
+                            <div class="fav-btn" onclick="toggleFavorite(this, event, '${p.id}')">
                                 <i class="fa-regular fa-heart"></i>
                             </div>
                             <div class="price">${precio}</div>

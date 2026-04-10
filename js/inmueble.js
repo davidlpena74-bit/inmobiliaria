@@ -162,24 +162,34 @@ function renderAgent(p) {
     const agentVal = (p.agente || "").toLowerCase().trim();
     console.log("Detectando agente:", agentVal);
 
+    // Reset default visibility
+    if (agencyLogoEl) agencyLogoEl.style.display = 'block';
+    if (agentAvatarEl) agentAvatarEl.style.display = 'block';
+
     if (agentVal === "weperty properties") {
         if (agentNameEl) agentNameEl.textContent = "Laura López";
         if (agencyTitleEl) agencyTitleEl.textContent = "Agente Weperty Properties";
         if (agencyLogoEl) agencyLogoEl.src = "logos_corporativos/weperty_logo_azul.png";
-        if (agentAvatarEl) agentAvatarEl.src = "logos_corporativos/agent_laura_lopez.png";
+        if (agentAvatarEl) {
+            agentAvatarEl.src = "logos_corporativos/agent_laura_lopez.png";
+            agentAvatarEl.style.display = 'block';
+        }
     } else if (agentVal === "coldwellbanker") {
         if (agentNameEl) agentNameEl.textContent = "Exclusive Advisor";
         if (agencyTitleEl) agencyTitleEl.textContent = "Coldwell Banker España";
-        if (agencyLogoEl) {
-            agencyLogoEl.src = "logos_corporativos/coldwell_banker_logo.png";
-            agencyLogoEl.style.display = 'block';
-        }
-        // Ocultar avatar o poner uno genérico para Coldwell Banker
-        if (agentAvatarEl) agentAvatarEl.src = "logos_corporativos/coldwell_banker_logo.png";
+        if (agencyLogoEl) agencyLogoEl.src = "logos_corporativos/coldwell_banker_logo.png";
+        // Si no hay foto específica del agente, ocultamos el avatar
+        if (agentAvatarEl) agentAvatarEl.style.display = 'none';
     } else if (p.agente) {
         if (agentNameEl) agentNameEl.textContent = "Agente Inmobiliario";
         if (agencyTitleEl) agencyTitleEl.textContent = p.agente;
-        if (agencyLogoEl) agencyLogoEl.style.display = 'none'; 
+        if (agencyLogoEl) agencyLogoEl.style.display = 'none';
+        if (agentAvatarEl) agentAvatarEl.style.display = 'none';
+    } else {
+        // Fallback genérico por si no hay información de agente
+        if (agentNameEl) agentNameEl.textContent = "Weperty Team";
+        if (agencyTitleEl) agencyTitleEl.textContent = "Inmobiliaria";
+        if (agentAvatarEl) agentAvatarEl.style.display = 'none';
     }
 }
 
