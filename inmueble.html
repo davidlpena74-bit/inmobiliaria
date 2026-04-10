@@ -272,14 +272,14 @@
                     <!-- Fila 1: Agente + Logo -->
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0px;">
                         <div style="display: flex; align-items: center; gap: 12px;">
-                            <img src="logos_corporativos/agent_laura_lopez.png" style="width: 45px; height: 45px; border-radius: 50%; object-fit: cover;">
+                            <img src="logos_corporativos/agent_laura_lopez.png" id="agent-avatar" style="width: 45px; height: 45px; border-radius: 50%; object-fit: cover;">
                             <div>
-                                <p style="font-weight: 700; font-size: 0.85rem; margin: 0;">Laura López</p>
-                                <p style="font-size: 0.75rem; color: #888; margin: 0;" data-i18n="agent.title">Agente Weperty</p>
+                                <p id="agent-name" style="font-weight: 700; font-size: 0.85rem; margin: 0;">Laura López</p>
+                                <p id="agency-title" style="font-size: 0.75rem; color: #888; margin: 0;" data-i18n="agent.title">Agente Weperty</p>
                             </div>
                         </div>
                         <div style="margin-right: 20px; display: flex; flex-direction: column; align-items: flex-start; gap: 8px;">
-                            <img src="logos_corporativos/weperty_logo_azul.png" alt="Weperty" style="height: 30px; margin-top: 16px;">
+                            <img src="logos_corporativos/weperty_logo_azul.png" id="agency-logo" alt="Weperty" style="height: 30px; margin-top: 16px;">
                             <div style="display: flex; gap: 10px; padding-left: 8px;">
                                 <a href="https://www.facebook.com/people/Weperty-Costa-Blanca/100037307204316/" target="_blank" style="color: #888; font-size: 0.95rem;"><i class="fa-brands fa-facebook"></i></a>
                                 <a href="https://www.instagram.com/weperty/" target="_blank" style="color: #888; font-size: 0.95rem;"><i class="fa-brands fa-instagram"></i></a>
@@ -304,7 +304,7 @@
             if (window.Auth) Auth.updateHeader();
         });
     </script>
-    <script src="js/inmueble.js?v=5.5.0"></script>
+    <script src="js/inmueble.js?v=5.6.0"></script>
 
     <!-- 📢 Notice Modal Structure -->
     <div id="notice-modal">

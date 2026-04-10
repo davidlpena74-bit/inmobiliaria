@@ -154,19 +154,31 @@ function renderProperty(p) {
 }
 
 function renderAgent(p) {
-    const agentNameEl = document.querySelector('.sidebar-info p[style*="font-weight: 700"]');
-    const agencyTitleEl = document.querySelector('.sidebar-info p[data-i18n="agent.title"]');
-    const agencyLogoEl = document.querySelector('.sidebar-info img[alt="Weperty"]');
+    const agentNameEl = document.getElementById('agent-name');
+    const agencyTitleEl = document.getElementById('agency-title');
+    const agencyLogoEl = document.getElementById('agency-logo');
+    const agentAvatarEl = document.getElementById('agent-avatar');
 
-    if (p.agente === "Weperty Properties") {
+    const agentVal = (p.agente || "").toLowerCase().trim();
+    console.log("Detectando agente:", agentVal);
+
+    if (agentVal === "weperty properties") {
         if (agentNameEl) agentNameEl.textContent = "Laura López";
         if (agencyTitleEl) agencyTitleEl.textContent = "Agente Weperty Properties";
         if (agencyLogoEl) agencyLogoEl.src = "logos_corporativos/weperty_logo_azul.png";
+        if (agentAvatarEl) agentAvatarEl.src = "logos_corporativos/agent_laura_lopez.png";
+    } else if (agentVal === "coldwellbanker") {
+        if (agentNameEl) agentNameEl.textContent = "Exclusive Advisor";
+        if (agencyTitleEl) agencyTitleEl.textContent = "Coldwell Banker España";
+        if (agencyLogoEl) {
+            agencyLogoEl.src = "logos_corporativos/coldwell_banker_logo.png";
+            agencyLogoEl.style.display = 'block';
+        }
+        // Ocultar avatar o poner uno genérico para Coldwell Banker
+        if (agentAvatarEl) agentAvatarEl.src = "logos_corporativos/coldwell_banker_logo.png";
     } else if (p.agente) {
-        // Fallback para otras inmobiliarias
         if (agentNameEl) agentNameEl.textContent = "Agente Inmobiliario";
         if (agencyTitleEl) agencyTitleEl.textContent = p.agente;
-        // Podríamos ocultar el logo o poner uno genérico si no lo tenemos
         if (agencyLogoEl) agencyLogoEl.style.display = 'none'; 
     }
 }
@@ -246,10 +258,13 @@ function toggleMenu(show) {
 
 function revealPhone() {
     const display = document.getElementById('phone-display');
+    const tel = window.currentProperty?.caracteristicas?.telefono_agencia || "+34 663 706 497";
+    const telLink = tel.replace(/\s+/g, '');
+    
     if (display) {
         display.innerHTML = `
             <i class="fa-solid fa-phone" style="width: 14px; color: #888;"></i>
-            <a href="tel:+34663706497" style="color: inherit; text-decoration: none; font-weight: 600;">+34 663 706 497</a>
+            <a href="tel:${telLink}" style="color: inherit; text-decoration: none; font-weight: 600;">${tel}</a>
         `;
     }
 }

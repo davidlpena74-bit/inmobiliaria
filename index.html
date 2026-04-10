@@ -759,7 +759,7 @@
         <div class="footer-bottom">
             <div data-i18n="footer.bottom">© 2026 Weperty Real Estate. All rights reserved. | <a href="terms.html" style="color: #666; text-decoration: underline;">Terms</a> | <a href="privacy.html" style="color: #666; text-decoration: underline;">Privacy</a> | Equal Housing Opportunity · Alicante</div>
             <div style="display: flex; gap: 12px; align-items: center;">
-                <span style="font-size: 10px; color: #555; letter-spacing: 1px;">VERSION 5.21.1</span>
+                <span style="font-size: 10px; color: #555; letter-spacing: 1px;">VERSION 5.22.0</span>
             </div>
         </div>
     </footer>
@@ -826,7 +826,10 @@
                                 `<div class="badge-pill">${t['prop.exclusive'] || 'Exclusiva'}</div>` :
                                 (p.agente === 'Weperty Properties' ?
                                     `<img src="logos_corporativos/weperty_logo_azul.png" style="height: 20px; object-fit: contain;">` :
-                                    `<div class="badge-pill">${t['prop.comingsoon'] || 'Próximamente'}</div>`
+                                    (p.agente === 'coldwellbanker' ?
+                                        `<img src="logos_corporativos/coldwell_banker_logo.png" style="height: 20px; object-fit: contain;">` :
+                                        `<div class="badge-pill">${t['prop.comingsoon'] || 'Próximamente'}</div>`
+                                    )
                                 )
                             }
                         </div>

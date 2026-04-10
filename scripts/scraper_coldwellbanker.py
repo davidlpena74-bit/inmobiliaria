@@ -131,6 +131,22 @@ def scrape_coldwell_banker(url):
         except:
             pass
 
+        # Contact Info (Phone/Email)
+        telefono = ""
+        email = ""
+        try:
+            # Look for tel links in the sidebar
+            tel_links = driver.find_elements(By.CSS_SELECTOR, ".contentWithSidebar__sidebar a[href^='tel:']")
+            if tel_links:
+                telefono = tel_links[0].text.strip()
+            
+            # Look for mailto links
+            mail_links = driver.find_elements(By.CSS_SELECTOR, ".contentWithSidebar__sidebar a[href^='mailto:']")
+            if mail_links:
+                email = mail_links[0].text.strip()
+        except:
+            pass
+
         # Location from URL
         url_parts = url.split("/")
         zona = ""
@@ -165,7 +181,7 @@ def scrape_coldwell_banker(url):
             "longitud": 0.1631,
             "publicar_web": True,
             "estado_publicacion": "Activo",
-            "origen_datos": "COLDWELL_BANKER",
+            "origen_datos": "SCRAPER_EXTERNAL",
             "caracteristicas": {
                 "ciudad": ciudad,
                 "cod_postal": "",
@@ -177,6 +193,8 @@ def scrape_coldwell_banker(url):
                 "air_conditioner": has_ac,
                 "storage_room": has_storage,
                 "year_built": 0,
+                "telefono_agencia": telefono,
+                "email_agencia": email,
                 "features_list": features
             }
         }
