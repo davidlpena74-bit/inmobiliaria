@@ -364,6 +364,35 @@
         .btn-apply { background: var(--compass-blue); color: white; border: none; padding: 12px 24px; border-radius: 4px; font-weight: 600; cursor: pointer; }
         .btn-reset { background: transparent; color: var(--compass-gray); border: none; text-decoration: underline; cursor: pointer; font-size: 13px; }
         
+        /* 📱 INLINE FILTERS (NEW) */
+        #advanced-filters-inline {
+            display: none;
+            background: #f8fafc;
+            border-bottom: 1px solid var(--border);
+            padding: 24px;
+            animation: fadeIn 0.3s ease;
+        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .filters-footer-inline {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
+        }
+        .filters-footer-inline .btn-apply-inline {
+            background: var(--compass-blue);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 13px;
+        }
+        
 
         /* LEAFLET POPUP CUSTOM STYLING (COMPASS STYLE) */
         .leaflet-popup-content-wrapper { 
@@ -560,7 +589,7 @@
                         <label>€</label>
                         <input type="text" id="max-price" data-i18n="filter.price.max" placeholder="Máx" onchange="updateFilters()">
                     </div>
-                    <button class="btn-filters" onclick="toggleModal(true)">
+                    <button class="btn-filters" onclick="toggleAdvancedFilters()">
                         <span data-i18n="filter.btn">Filters</span> <span class="badge" id="filter-count">0</span>
                     </button>
                 </div>
@@ -587,13 +616,75 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- 🎛️ FILTROS AVANZADOS INLINE -->
+                <div id="advanced-filters-inline">
+                    <div class="modal-section" style="margin-top: 0;">
+                        <h3>Habitaciones</h3>
+                        <div class="stepper">
+                            <button onclick="changeStepper('bed', -1)">-</button>
+                            <div class="value" id="val-bed">Cualquiera</div>
+                            <button onclick="changeStepper('bed', 1)">+</button>
+                        </div>
+                    </div>
+
+                    <div class="modal-section">
+                        <h3>Baños</h3>
+                        <div class="stepper">
+                            <button onclick="changeStepper('bath', -1)">-</button>
+                            <div class="value" id="val-bath">Cualquiera</div>
+                            <button onclick="changeStepper('bath', 1)">+</button>
+                        </div>
+                    </div>
+
+                    <div class="modal-section">
+                        <h3>Tipo de Propiedad</h3>
+                        <div class="checkbox-grid">
+                            <label class="check-item"><input type="checkbox" class="filter-type" value="Apartments" onchange="liveModalUpdate()"> Apartamento</label>
+                            <label class="check-item"><input type="checkbox" class="filter-type" value="Villas" onchange="liveModalUpdate()"> Chalet / Villa</label>
+                            <label class="check-item"><input type="checkbox" class="filter-type" value="Luxury Villas" onchange="liveModalUpdate()"> Villa de Lujo</label>
+                            <label class="check-item"><input type="checkbox" class="filter-type" value="Penthouses" onchange="liveModalUpdate()"> Ático</label>
+                            <label class="check-item"><input type="checkbox" class="filter-type" value="Terraced Houses" onchange="liveModalUpdate()"> Adosado</label>
+                            <label class="check-item"><input type="checkbox" class="filter-type" value="Duplex" onchange="liveModalUpdate()"> Dúplex</label>
+                            <label class="check-item"><input type="checkbox" class="filter-type" value="Studios" onchange="liveModalUpdate()"> Estudio</label>
+                            <label class="check-item"><input type="checkbox" class="filter-type" value="Bungalows" onchange="liveModalUpdate()"> Bungalow</label>
+                            <label class="check-item"><input type="checkbox" class="filter-type" value="Country Houses" onchange="liveModalUpdate()"> Casa de Campo</label>
+                        </div>
+                    </div>
+
+                    <div class="modal-section">
+                        <h3>Comodidades</h3>
+                        <div class="checkbox-grid">
+                            <label class="check-item"><input type="checkbox" class="filter-amenity" value="pool" onchange="liveModalUpdate()"> Piscina</label>
+                            <label class="check-item"><input type="checkbox" class="filter-amenity" value="elevator" onchange="liveModalUpdate()"> Ascensor</label>
+                            <label class="check-item"><input type="checkbox" class="filter-amenity" value="garage" onchange="liveModalUpdate()"> Garaje</label>
+                            <label class="check-item"><input type="checkbox" class="filter-amenity" value="garden" onchange="liveModalUpdate()"> Jardín</label>
+                            <label class="check-item"><input type="checkbox" class="filter-amenity" value="air_conditioner" onchange="liveModalUpdate()"> Aire Acondicionado</label>
+                            <label class="check-item"><input type="checkbox" class="filter-amenity" value="storage_room" onchange="liveModalUpdate()"> Trastero</label>
+                        </div>
+                    </div>
+
+                    <div class="modal-section">
+                        <h3>Superficie (m²)</h3>
+                        <div class="input-range">
+                            <input type="number" id="min-sqft" placeholder="Mínimo" onchange="liveModalUpdate()">
+                            <span>-</span>
+                            <input type="number" id="max-sqft" placeholder="Máximo" onchange="liveModalUpdate()">
+                        </div>
+                    </div>
+
+                    <div class="filters-footer-inline">
+                        <button class="btn-reset" onclick="resetFilters()">Restablecer</button>
+                        <button class="btn-apply-inline" id="modal-apply-btn" onclick="toggleAdvancedFilters(false)">Ver Inmuebles</button>
+                    </div>
+                </div>
             </div>
             
             <div class="properties-grid" id="prop-items">
                 <div style="grid-column: 1/-1; text-align: center; padding: 40px; color: #94a3b8;">Cargando inmuebles...</div>
             </div>
             <div style="padding: 10px 15px; border-top: 1px solid var(--border); font-size: 10px; color: #94a3b8; text-align: center;">
-                VERSION 5.23.1
+                VERSION 5.23.2
             </div>
         </aside>
 
@@ -623,76 +714,6 @@
         </button>
     </div>
 
-    <!-- ADVANCED FILTERS MODAL -->
-    <div class="modal-overlay" id="filter-modal">
-        <div class="modal-card">
-            <div class="modal-header">
-                <h2 style="font-size: 18px;">Todos los Filtros</h2>
-                <i class="fa-solid fa-xmark" style="cursor:pointer; font-size: 20px;" onclick="toggleModal(false)"></i>
-            </div>
-            <div class="modal-body">
-                
-                <div class="modal-section">
-                    <h3>Habitaciones</h3>
-                    <div class="stepper">
-                        <button onclick="changeStepper('bed', -1)">-</button>
-                        <div class="value" id="val-bed">Cualquiera</div>
-                        <button onclick="changeStepper('bed', 1)">+</button>
-                    </div>
-                </div>
-
-                <div class="modal-section">
-                    <h3>Baños</h3>
-                    <div class="stepper">
-                        <button onclick="changeStepper('bath', -1)">-</button>
-                        <div class="value" id="val-bath">Cualquiera</div>
-                        <button onclick="changeStepper('bath', 1)">+</button>
-                    </div>
-                </div>
-
-                <div class="modal-section">
-                    <h3>Tipo de Propiedad</h3>
-                    <div class="checkbox-grid">
-                        <label class="check-item"><input type="checkbox" class="filter-type" value="Apartments"> Apartamento</label>
-                        <label class="check-item"><input type="checkbox" class="filter-type" value="Villas"> Chalet / Villa</label>
-                        <label class="check-item"><input type="checkbox" class="filter-type" value="Luxury Villas"> Villa de Lujo</label>
-                        <label class="check-item"><input type="checkbox" class="filter-type" value="Penthouses"> Ático</label>
-                        <label class="check-item"><input type="checkbox" class="filter-type" value="Terraced Houses"> Adosado</label>
-                        <label class="check-item"><input type="checkbox" class="filter-type" value="Duplex"> Dúplex</label>
-                        <label class="check-item"><input type="checkbox" class="filter-type" value="Studios"> Estudio</label>
-                        <label class="check-item"><input type="checkbox" class="filter-type" value="Bungalows"> Bungalow</label>
-                        <label class="check-item"><input type="checkbox" class="filter-type" value="Country Houses"> Casa de Campo</label>
-                    </div>
-                </div>
-
-                <div class="modal-section">
-                    <h3>Comodidades</h3>
-                    <div class="checkbox-grid">
-                        <label class="check-item"><input type="checkbox" class="filter-amenity" value="pool"> Piscina</label>
-                        <label class="check-item"><input type="checkbox" class="filter-amenity" value="elevator"> Ascensor</label>
-                        <label class="check-item"><input type="checkbox" class="filter-amenity" value="garage"> Garaje</label>
-                        <label class="check-item"><input type="checkbox" class="filter-amenity" value="garden"> Jardín</label>
-                        <label class="check-item"><input type="checkbox" class="filter-amenity" value="air_conditioner"> Aire Acondicionado</label>
-                        <label class="check-item"><input type="checkbox" class="filter-amenity" value="storage_room"> Trastero</label>
-                    </div>
-                </div>
-
-                <div class="modal-section">
-                    <h3>Superficie (m²)</h3>
-                    <div class="input-range">
-                        <input type="number" id="min-sqft" placeholder="Mínimo" onchange="liveModalUpdate()">
-                        <span>-</span>
-                        <input type="number" id="max-sqft" placeholder="Máximo" onchange="liveModalUpdate()">
-                    </div>
-                </div>
-
-            </div>
-            <div class="modal-footer">
-                <button class="btn-reset" onclick="resetFilters()">Restablecer</button>
-                <button class="btn-apply" id="modal-apply-btn" onclick="toggleModal(false)">Ver Inmuebles</button>
-            </div>
-        </div>
-    </div>
 
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -822,9 +843,15 @@
             rentBtn.textContent = rentText;
         }
 
-        function toggleModal(show) {
-            document.getElementById('filter-modal').style.display = show ? 'flex' : 'none';
-            if (show) liveModalUpdate();
+        function toggleAdvancedFilters(show) {
+            const container = document.getElementById('advanced-filters-inline');
+            if (show === undefined) {
+                const isHidden = window.getComputedStyle(container).display === 'none';
+                container.style.display = isHidden ? 'block' : 'none';
+            } else {
+                container.style.display = show ? 'block' : 'none';
+            }
+            if (container.style.display === 'block') liveModalUpdate();
         }
 
         function changeStepper(field, delta) {
@@ -851,6 +878,9 @@
             if (currentFilters.amenities.length > 0) activeCount++;
             if (currentFilters.minSqft > 0 || currentFilters.maxSqft < Infinity) activeCount++;
             document.getElementById('filter-count').textContent = activeCount;
+
+            // Actualización LIVE de la lista
+            updateFilters();
         }
 
         function updateFilters() {
