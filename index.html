@@ -152,13 +152,14 @@
 
         .prop-card { 
             cursor: pointer; display: flex; flex-direction: column; background: white;
-            border: 1px solid #eef2f6; border-radius: 8px; overflow: hidden;
+            border: 1px solid #eef2f6; border-radius: 12px; overflow: hidden;
             box-shadow: 0 12px 12px -8px rgba(0, 0, 0, 0.5);
-            transition: box-shadow 0.25s ease, transform 0.25s ease;
+            transition: all 0.3s ease;
+            height: 100%;
         }
         .prop-card:hover { 
             box-shadow: 0 20px 25px -12px rgba(0, 0, 0, 0.7); 
-            transform: translateY(-6px); 
+            transform: translateY(-5px); 
         }
 
         /* 🎡 CAROUSEL BUTTONS */
@@ -182,13 +183,45 @@
         .badge-pill { background: rgba(0,0,0,0.85); color: white; font-size: 10px; padding: 3px 8px; font-weight: 600; border-radius: 3px; }
         .badge-pill.new { background: #00703c; }
 
-        .prop-info { padding: 16px; }
-        .prop-info .price { font-size: 22px; font-weight: 700; color: #1a1a1a; margin-bottom: 8px; }
-        .prop-info .stats { display: flex; align-items: center; gap: 6px; font-size: 13px; color: #4a4a4a; margin-bottom: 8px; }
-        .stats span.sep { color: #d1d5db; }
-        .stats .underline { text-decoration: underline; text-underline-offset: 3px; }
-        .prop-info .address { font-size: 13px; color: #4a4a4a; font-weight: 400; line-height: 1.4; }
-        .prop-info .area { font-size: 12px; color: #888; font-weight: 400; }
+        .prop-info { padding: 20px; display: flex; flex-direction: column; flex-grow: 1; }
+        
+        .prop-info .location { 
+            display: flex; align-items: center; gap: 6px; 
+            font-size: 13px; color: #718096; margin-bottom: 12px;
+            font-weight: 500;
+        }
+        .prop-info .location i { color: #a0aec0; font-size: 14px; }
+
+        .prop-info .title { 
+            font-size: 18px; font-weight: 700; color: #1a202c; 
+            margin-bottom: 16px; line-height: 1.3;
+            display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+            height: 46px; /* Altura para 2 líneas */
+        }
+
+        .prop-info .stats { 
+            display: flex; align-items: center; gap: 15px; 
+            font-size: 14px; color: #4a5568; margin-bottom: 16px; 
+        }
+        .stats .stat-item { display: flex; align-items: center; gap: 6px; }
+        .stats .stat-item i { color: #718096; font-size: 16px; }
+
+        .prop-info .description { 
+            font-size: 13px; color: #718096; line-height: 1.5;
+            margin-bottom: 20px;
+            display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+            height: 40px;
+        }
+
+        .prop-card .divider { border: 0; border-top: 1px solid #edf2f7; margin: 0 0 16px 0; }
+
+        .prop-info .footer { 
+            display: flex; justify-content: space-between; align-items: center; 
+            margin-top: auto; 
+        }
+        .footer .fav-btn { color: #cbd5e0; font-size: 18px; cursor: pointer; transition: color 0.2s; }
+        .footer .fav-btn:hover { color: #f56565; }
+        .footer .price { font-size: 20px; font-weight: 800; color: #1a202c; }
 
         /* TARJETA PROMO OSCURA (Compass-style exclusives card) */
         .promo-card {
@@ -759,7 +792,7 @@
         <div class="footer-bottom">
             <div data-i18n="footer.bottom">© 2026 Weperty Real Estate. All rights reserved. | <a href="terms.html" style="color: #666; text-decoration: underline;">Terms</a> | <a href="privacy.html" style="color: #666; text-decoration: underline;">Privacy</a> | Equal Housing Opportunity · Alicante</div>
             <div style="display: flex; gap: 12px; align-items: center;">
-                <span style="font-size: 10px; color: #555; letter-spacing: 1px;">VERSION 5.22.0</span>
+                <span style="font-size: 10px; color: #555; letter-spacing: 1px;">VERSION 5.22.1</span>
             </div>
         </div>
     </footer>
@@ -814,6 +847,15 @@
             const hasMultiple = images.length > 1;
             const initialImg = images[0] || 'weperty_placeholder.png';
 
+            // Datos para el nuevo diseño
+            const location = `${p.caracteristicas?.ciudad || 'Alicante'}, ${p.zona || ''}`;
+            const title = t_prop(p, 'titulo') || 'Propiedad en Costa Blanca';
+            const desc = t_prop(p, 'descripcion') || '';
+            const descSnippet = desc.length > 100 ? desc.substring(0, 100) + '...' : desc;
+            
+            // Superficie Parcela (si existe en caracteristicas)
+            const supParcela = p.caracteristicas?.['Sup. parcela'] || p.caracteristicas?.['parcela'] || null;
+
             return `
                 <div class="prop-card" onclick="window.location.href='inmueble.html?ref=${p.referencia}'" data-id="${p.id}">
                     <div class="prop-img" id="img-container-${p.id}">
@@ -833,17 +875,39 @@
                                 )
                             }
                         </div>
-                        <img src="${initialImg}" alt="${p.titulo || 'Propiedad'}" class="main-img" data-index="0">
+                        <img src="${initialImg}" alt="${p.titulo || 'Propiedad'}" class="main-img" data-index="0" onerror="this.src='weperty_placeholder.png'">
                     </div>
                     <div class="prop-info">
-                        <div class="price">${precio}</div>
-                        <div class="stats">
-                            ${p.habitaciones || 0} ${t['prop.beds'] || 'hab'} <span class="sep">|</span>
-                            <span class="underline">${p.banos || 0} ${t['prop.baths'] || 'baños'}</span> <span class="sep">|</span>
-                            ${p.superficie || 0} m²
+                        <div class="location">
+                            <i class="fa-solid fa-location-dot"></i> ${location}
                         </div>
-                        <div class="address">${p.titulo || 'Propiedad en Costa Blanca'}</div>
-                        <div class="area">${p.caracteristicas?.ciudad || 'Alicante'}, CP ${p.caracteristicas?.cod_postal || '03001'}</div>
+                        <div class="title">${title}</div>
+                        <div class="stats">
+                            <div class="stat-item" title="Superficie construida">
+                                <i class="fa-solid fa-vector-square"></i> ${p.superficie || 0} m²
+                            </div>
+                            ${supParcela ? `
+                                <div class="stat-item" title="Superficie parcela">
+                                    <i class="fa-solid fa-map"></i> ${supParcela}
+                                </div>
+                            ` : ''}
+                            <div class="stat-item" title="Habitaciones">
+                                <i class="fa-solid fa-bed"></i> ${p.habitaciones || 0}
+                            </div>
+                            <div class="stat-item" title="Baños">
+                                <i class="fa-solid fa-bath"></i> ${p.banos || 0}
+                            </div>
+                        </div>
+                        <div class="description">${descSnippet}</div>
+                        
+                        <hr class="divider">
+                        
+                        <div class="footer">
+                            <div class="fav-btn" onclick="event.stopPropagation(); this.querySelector('i').classList.toggle('fa-solid'); this.querySelector('i').classList.toggle('fa-regular');">
+                                <i class="fa-regular fa-heart"></i>
+                            </div>
+                            <div class="price">${precio}</div>
+                        </div>
                     </div>
                 </div>
             `;
@@ -871,7 +935,7 @@
                     </div>
                     <div class="prop-info">
                         <div class="price">${prices[i % prices.length]}</div>
-                        <div class="stats">4 hab <span class="sep">|</span> <span class="underline">3 baños</span> <span class="sep">|</span> 280 m²</div>
+                        <div class="stats">4 hab <span class="sep">|</span> 3 baños <span class="sep">|</span> 280 m²</div>
                         <div class="address">${titles[i % titles.length]}</div>
                         <div class="area">Alicante, CP 03590</div>
                     </div>

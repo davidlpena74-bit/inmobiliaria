@@ -106,7 +106,11 @@ class WepertiScraper:
 
             # 2. Título
             try:
-                data['titulo'] = self.driver.find_element(By.TAG_NAME, "h1").text.strip()
+                raw_title = self.driver.find_element(By.TAG_NAME, "h1").text.strip()
+                # Limpiar texto ", for rent" o ", for sale"
+                clean_title = re.sub(r',\s*for\s*rent', '', raw_title, flags=re.IGNORECASE)
+                clean_title = re.sub(r',\s*for\s*sale', '', clean_title, flags=re.IGNORECASE)
+                data['titulo'] = clean_title.strip()
             except:
                 data['titulo'] = "Propiedad Weperti"
 

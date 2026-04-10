@@ -571,15 +571,29 @@ function setLanguage(lang) {
  * Función de conveniencia para obtener traducciones de propiedades de Supabase
  */
 function t_prop(prop, field) {
-    if (currentLang === "es") return prop[field]; // Default es español
-    
+    let val = prop[field];
+
     // Intentar buscar en la columna 'traducciones' (JSONB)
-    if (prop.traducciones && prop.traducciones[currentLang] && prop.traducciones[currentLang][field]) {
-        return prop.traducciones[currentLang][field];
+    if (currentLang !== "es" && prop.traducciones && prop.traducciones[currentLang] && prop.traducciones[currentLang][field]) {
+        val = prop.traducciones[currentLang][field];
     }
     
-    // Fallback: Si no hay traducción, devolver el original
-    return prop[field];
+    // Limpieza especial para títulos
+    if (field === 'titulo' && val) {
+        val = cleanTitle(val);
+    }
+    
+    return val || prop[field];
+}
+
+/**
+ * cleanTitle(title)
+ * Elimina sufijos no deseados como ", for rent"
+ */
+function cleanTitle(title) {
+    if (!title) return "";
+    // Eliminar ", for rent" o ", for sale" (con o sin espacio)
+    return title.replace(/,\s*for\s*rent/gi, "").replace(/,\s*for\s*sale/gi, "").trim();
 }
 
 window.addEventListener("DOMContentLoaded", updateContent);
