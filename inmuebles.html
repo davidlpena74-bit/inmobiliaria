@@ -1000,7 +1000,7 @@
                 <div style="grid-column: 1/-1; text-align: center; padding: 40px; color: #94a3b8;">Cargando inmuebles...</div>
             </div>
             <div style="padding: 10px 15px; border-top: 1px solid var(--border); font-size: 10px; color: #94a3b8; text-align: center;">
-                VERSION 5.23.4
+                VERSION 5.23.5
             </div>
         </aside>
 
@@ -1134,7 +1134,7 @@
         function setMode(mode) {
             currentFilters.mode = mode;
             updateModeUI();
-            updateFilters();
+            liveModalUpdate(); // Sync the "See X Homes" button count
         }
  
         function updateModeUI() {
@@ -1190,6 +1190,9 @@
                 const count = document.getElementById('filter-count').textContent;
                 btnMain.innerHTML = `<span data-i18n="filter.btn">${filterText}</span> <span class="badge" id="filter-count">${count}</span>`;
                 btnMain.classList.remove('active-filter-btn');
+
+                // Force a clean filter update when closing the modal
+                updateFilters();
             }
         }
 
@@ -1201,23 +1204,20 @@
         }
 
         function liveModalUpdate() {
-            currentFilters.minPrice = parseInt(document.getElementById('min-price').value) || 0;
-            currentFilters.maxPrice = parseInt(document.getElementById('max-price').value) || Infinity;
-            currentFilters.minBeds = parseInt(document.getElementById('min-beds').value) || 0;
-            currentFilters.maxBeds = parseInt(document.getElementById('max-beds').value) || 99;
-            currentFilters.keywords = document.getElementById('keywords').value.toLowerCase();
-            
-            currentFilters.types = Array.from(document.querySelectorAll('.filter-type:checked')).map(cb => cb.value);
-            currentFilters.amenities = Array.from(document.querySelectorAll('.filter-amenity:checked')).map(cb => cb.value);
+            // Read all DOM values to currentFilters global object
+            updateFilters(false); // Update object but don't re-render list yet to avoid heavy map calls during typing
 
             const count = performFiltering(false).length;
             
-            // Traducir dinámicamente el botón de "Ver Inmuebles"
-            let btnText = translations[currentLang]['filter.see_homes'] || 'See {count} Homes';
-            btnText = btnText.replace('{count}', count.toLocaleString());
-            document.getElementById('modal-apply-btn').textContent = btnText;
+            // Update "See X Homes" button text
+            const applyBtn = document.getElementById('modal-apply-btn');
+            if (applyBtn) {
+                let btnText = translations[currentLang]['filter.see_homes'] || 'See {count} Homes';
+                btnText = btnText.replace('{count}', count.toLocaleString());
+                applyBtn.textContent = btnText;
+            }
             
-            // Contador global de filtros activos
+            // Update active filter counter in the header
             let activeCount = 0;
             if (currentFilters.minBeds > 0 || currentFilters.maxBeds < 99) activeCount++;
             if (currentFilters.bath > 0) activeCount++;
@@ -1227,20 +1227,39 @@
             if (currentFilters.keywords.length > 0) activeCount++;
             if (currentFilters.minPrice > 0 || currentFilters.maxPrice < Infinity) activeCount++;
             
-            document.getElementById('filter-count').textContent = activeCount;
-            document.getElementById('filter-count-badge').textContent = activeCount;
+            const countEl = document.getElementById('filter-count');
+            if (countEl) countEl.textContent = activeCount;
 
-            // Actualización LIVE de la lista
-            updateFilters();
-        }
-
-        function updateFilters() {
-            currentFilters.minPrice = parseInt(document.getElementById('min-price').value) || 0;
-            currentFilters.maxPrice = parseInt(document.getElementById('max-price').value) || Infinity;
-            
+            // Live update the list in the background
             filteredProperties = performFiltering(true);
             renderMarkers(); 
-            // Nota: renderMarkers llama a fitBounds, lo que dispara 'moveend' y actualiza la lista.
+            updateSidebarFromViewport();
+        }
+
+        function updateFilters(fullRender = true) {
+            // Price (Header Row 2)
+            const minP = document.getElementById('min-price');
+            const maxP = document.getElementById('max-price');
+            if (minP) currentFilters.minPrice = parseInt(minP.value) || 0;
+            if (maxP) currentFilters.maxPrice = parseInt(maxP.value) || Infinity;
+
+            // Advanced Filters (Drawer)
+            const minB = document.getElementById('min-beds');
+            const maxB = document.getElementById('max-beds');
+            const kw = document.getElementById('keywords');
+
+            if (minB) currentFilters.minBeds = parseInt(minB.value) || 0;
+            if (maxB) currentFilters.maxBeds = parseInt(maxB.value) || 99;
+            if (kw) currentFilters.keywords = kw.value.toLowerCase().trim();
+            
+            currentFilters.types = Array.from(document.querySelectorAll('.filter-type:checked')).map(cb => cb.value);
+            currentFilters.amenities = Array.from(document.querySelectorAll('.filter-amenity:checked')).map(cb => cb.value);
+            
+            if (fullRender) {
+                filteredProperties = performFiltering(true);
+                renderMarkers(); 
+                updateSidebarFromViewport();
+            }
         }
 
         function saveSearch() {
@@ -1299,12 +1318,13 @@
                 else sel.value = '0';
             });
 
+            updateModeUI();
+            
             const noMinText = translations[currentLang]['filter.no_min'] || 'No Min';
-            document.getElementById('val-bath').textContent = noMinText;
-            document.getElementById('val-parking').textContent = noMinText;
+            if (document.getElementById('val-bath')) document.getElementById('val-bath').textContent = noMinText;
+            if (document.getElementById('val-parking')) document.getElementById('val-parking').textContent = noMinText;
             
             updateFilters();
-            liveModalUpdate();
         }
 
         // --- MOBILE TOGGLE ---
@@ -1344,9 +1364,13 @@
 
                 // Filtrado por Modo (Compra / Alquiler)
                 const targetOp = currentFilters.mode === 'rent' ? 'Alquiler' : 'Venta';
+                const pOp = (p.tipo_operacion || '').toLowerCase();
+                const targetOpLower = targetOp.toLowerCase();
+
                 if (p.tipo_operacion) {
-                    if (p.tipo_operacion !== targetOp) return false;
+                    if (pOp !== targetOpLower) return false;
                 } else {
+                    // Heurística si falta el campo
                     if (currentFilters.mode === 'rent' && pPrice >= 10000) return false;
                     if (currentFilters.mode === 'buy' && pPrice < 10000) return false;
                 }
