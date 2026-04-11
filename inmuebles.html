@@ -377,19 +377,16 @@
 
         .header-row-3 {
             display: flex;
-            flex-direction: column;
-            gap: 4px;
+            align-items: center;
+            justify-content: space-between;
             padding-bottom: 8px;
         }
         .results-meta-main {
             font-size: 14px;
-            font-weight: 700;
+            font-weight: 400;
             color: #1a1a1a;
         }
-        .results-subtext {
-            font-size: 13px;
-            color: #666;
-        }
+
 
         .btn-filters { 
             height: 44px; padding: 0 16px; border: 1px solid #d1d5db; border-radius: 4px; background: white; 
@@ -871,29 +868,26 @@
 
                 <!-- Row 3: Meta & Sort -->
                 <div class="header-row-3">
-                    <div style="display: flex; justify-content: space-between; align-items: flex-end;">
-                        <div class="results-meta-main">
-                            <span id="results-label">... Inmuebles</span>
-                        </div>
-                        <div class="sort-container">
-                            <span data-i18n="sort.by">Ordenar por</span>
-                            <div class="sort-dropdown" id="sort-dropdown">
-                                <div class="sort-trigger" onclick="toggleSort()">
-                                    <span id="current-sort-label" data-i18n="sort.recommended">Recomendados</span>
-                                    <i class="fa-solid fa-chevron-down" style="font-size: 10px;"></i>
-                                </div>
-                                <div class="sort-options" id="sort-options">
-                                    <div class="sort-option active" data-value="recommended" data-i18n="sort.recommended" onclick="selectSort('recommended')">Recomendados</div>
-                                    <div class="sort-option" data-value="newest" data-i18n="sort.newest" onclick="selectSort('newest')">Nuevos anuncios</div>
-                                    <div class="sort-option" data-value="price-asc" data-i18n="sort.price.asc" onclick="selectSort('price-asc')">Precio: de menor a mayor</div>
-                                    <div class="sort-option" data-value="price-desc" data-i18n="sort.price.desc" onclick="selectSort('price-desc')">Precio: de mayor a menor</div>
-                                    <div class="sort-option" data-value="sqft-desc" data-i18n="sort.sqft.desc" onclick="selectSort('sqft-desc')">Superficie: de mayor a menor</div>
-                                    <div class="sort-option" data-value="sqft-asc" data-i18n="sort.sqft.asc" onclick="selectSort('sqft-asc')">Superficie: de menor a mayor</div>
-                                </div>
+                    <div class="results-meta-main">
+                        <span id="results-label">... Inmuebles</span>
+                    </div>
+                    <div class="sort-container">
+                        <span data-i18n="sort.by">Ordenar por</span>
+                        <div class="sort-dropdown" id="sort-dropdown">
+                            <div class="sort-trigger" onclick="toggleSort()">
+                                <span id="current-sort-label" data-i18n="sort.recommended">Recomendados</span>
+                                <i class="fa-solid fa-chevron-down" style="font-size: 10px;"></i>
+                            </div>
+                            <div class="sort-options" id="sort-options">
+                                <div class="sort-option active" data-value="recommended" data-i18n="sort.recommended" onclick="selectSort('recommended')">Recomendados</div>
+                                <div class="sort-option" data-value="newest" data-i18n="sort.newest" onclick="selectSort('newest')">Nuevos anuncios</div>
+                                <div class="sort-option" data-value="price-asc" data-i18n="sort.price.asc" onclick="selectSort('price-asc')">Precio: de menor a mayor</div>
+                                <div class="sort-option" data-value="price-desc" data-i18n="sort.price.desc" onclick="selectSort('price-desc')">Precio: de mayor a menor</div>
+                                <div class="sort-option" data-value="sqft-desc" data-i18n="sort.sqft.desc" onclick="selectSort('sqft-desc')">Superficie: de mayor a menor</div>
+                                <div class="sort-option" data-value="sqft-asc" data-i18n="sort.sqft.asc" onclick="selectSort('sqft-asc')">Superficie: de menor a mayor</div>
                             </div>
                         </div>
                     </div>
-                    <div class="results-subtext">Coming soons, standard exclusives</div>
                 </div>
             </div>
 
@@ -1024,7 +1018,7 @@
                 <div style="grid-column: 1/-1; text-align: center; padding: 40px; color: #94a3b8;">Cargando inmuebles...</div>
             </div>
             <div style="padding: 10px 15px; border-top: 1px solid var(--border); font-size: 10px; color: #94a3b8; text-align: center;">
-                VERSION 5.23.9
+                VERSION 5.23.10
             </div>
         </aside>
 
@@ -1569,11 +1563,11 @@
             container.innerHTML = '';
             
             const startIdx = props.length > 0 ? 1 : 0;
-            const resText = currentLang === 'es' ? `${startIdx}-${props.length} de ${filteredProperties.length} Inmuebles visibles` : 
-                           (currentLang === 'en' ? `${startIdx}-${props.length} of ${filteredProperties.length} Visible properties` : 
-                           (currentLang === 'de' ? `${startIdx}-${props.length} von ${filteredProperties.length} Sichtbar` : 
-                           `${startIdx}-${props.length} van ${filteredProperties.length} Zichtbaar`));
-            document.getElementById('results-label').textContent = resText;
+            const resText = currentLang === 'es' ? `<b>${startIdx}-${props.length}</b> de <b>${filteredProperties.length}</b> Inmuebles visibles` : 
+                           (currentLang === 'en' ? `<b>${startIdx}-${props.length}</b> of <b>${filteredProperties.length}</b> Visible properties` : 
+                           (currentLang === 'de' ? `<b>${startIdx}-${props.length}</b> von <b>${filteredProperties.length}</b> Sichtbar` : 
+                           `<b>${startIdx}-${props.length}</b> van <b>${filteredProperties.length}</b> Zichtbaar`));
+            document.getElementById('results-label').innerHTML = resText;
 
             if (props.length === 0) {
                 container.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 40px; color: #94a3b8;">No hay inmuebles visibles en esta zona del mapa.</div>`;
