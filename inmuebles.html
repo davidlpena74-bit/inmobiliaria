@@ -120,7 +120,7 @@
         .properties-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; padding: 20px; }
         .prop-card { 
             cursor: pointer; display: flex; flex-direction: column; background: white;
-            border: 1px solid #d1d5db; border-radius: 6px; overflow: hidden;
+            border: 1px solid #a0aec0; border-radius: 6px; overflow: hidden;
             box-shadow: 0 12px 12px -8px rgba(0, 0, 0, 0.5);
             transition: all 0.3s ease;
             height: 100%;
@@ -710,6 +710,12 @@
             accent-color: var(--compass-blue);
         }
         .nested-check { margin-left: 28px; margin-top: 8px; }
+        .filter-group-header { 
+            font-size: 11px; font-weight: 700; color: #888; text-transform: uppercase; 
+            letter-spacing: 0.5px; margin: 16px 0 8px; border-bottom: 1px solid #f0f0f0; padding-bottom: 4px;
+        }
+        .filter-group-header:first-child { margin-top: 0; }
+        .filter-subgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 12px; }
         
         .keyword-input {
             width: 100%;
@@ -947,11 +953,28 @@
                         <!-- Property Type -->
                         <div class="filter-section">
                             <h3 data-i18n="filter.type">Property Type</h3>
-                            <div class="checkbox-grid-2">
-                                <label class="compass-check"><input type="checkbox" class="filter-type" value="Apartamento" onchange="liveModalUpdate()"> <span data-i18n="type.apartamento">Apartment</span></label>
-                                <label class="compass-check"><input type="checkbox" class="filter-type" value="Chalet" onchange="liveModalUpdate()"> <span data-i18n="type.chalet">House</span></label>
-                                <label class="compass-check"><input type="checkbox" class="filter-type" value="Ático" onchange="liveModalUpdate()"> <span data-i18n="type.penthouse">Penthouse</span></label>
-                                <label class="compass-check"><input type="checkbox" class="filter-type" value="Duplex" onchange="liveModalUpdate()"> <span data-i18n="type.duplex">Duplex</span></label>
+                            
+                            <!-- Grupo 1: Pisos -->
+                            <div class="filter-group-header" data-i18n="type.group.flats">Pisos, áticos y dúplex</div>
+                            <div class="filter-subgrid">
+                                <label class="compass-check"><input type="checkbox" class="filter-type" value="piso" onchange="liveModalUpdate()"> <span data-i18n="type.piso">Pisos</span></label>
+                                <label class="compass-check"><input type="checkbox" class="filter-type" value="atico" onchange="liveModalUpdate()"> <span data-i18n="type.penthouse">Áticos</span></label>
+                                <label class="compass-check"><input type="checkbox" class="filter-type" value="Dúplex" onchange="liveModalUpdate()"> <span data-i18n="type.duplex">Dúplex</span></label>
+                            </div>
+
+                            <!-- Grupo 2: Casas -->
+                            <div class="filter-group-header" data-i18n="type.group.houses">Casas y chalets</div>
+                            <div class="filter-subgrid">
+                                <label class="compass-check"><input type="checkbox" class="filter-type" value="villa" onchange="liveModalUpdate()"> <span data-i18n="type.detached">Independientes</span></label>
+                                <label class="compass-check"><input type="checkbox" class="filter-type" value="Bungalow" onchange="liveModalUpdate()"> <span data-i18n="type.bungalow">Bungalows</span></label>
+                                <label class="compass-check"><input type="checkbox" class="filter-type" value="pareado" onchange="liveModalUpdate()"> <span data-i18n="type.semi_detached">Pareados</span></label>
+                                <label class="compass-check"><input type="checkbox" class="filter-type" value="adosado" onchange="liveModalUpdate()"> <span data-i18n="type.townhouse">Adosados</span></label>
+                                <label class="compass-check"><input type="checkbox" class="filter-type" value="rustica" onchange="liveModalUpdate()"> <span data-i18n="type.rustic">Casas rústicas</span></label>
+                            </div>
+
+                            <!-- Otros -->
+                            <div class="filter-group-header" data-i18n="type.group.others">Otros</div>
+                            <div class="filter-subgrid">
                                 <label class="compass-check"><input type="checkbox" class="filter-type" value="Terreno" onchange="liveModalUpdate()"> <span data-i18n="type.terreno">Land</span></label>
                                 <label class="compass-check"><input type="checkbox" class="filter-type" value="Local" onchange="liveModalUpdate()"> <span data-i18n="type.local">Commercial</span></label>
                             </div>
@@ -1001,7 +1024,7 @@
                 <div style="grid-column: 1/-1; text-align: center; padding: 40px; color: #94a3b8;">Cargando inmuebles...</div>
             </div>
             <div style="padding: 10px 15px; border-top: 1px solid var(--border); font-size: 10px; color: #94a3b8; text-align: center;">
-                VERSION 5.23.8
+                VERSION 5.23.9
             </div>
         </aside>
 
@@ -1387,7 +1410,23 @@
                     if (!title.includes(currentFilters.keywords) && !desc.includes(currentFilters.keywords)) return false;
                 }
 
-                if (currentFilters.types.length > 0 && !currentFilters.types.includes(p.tipo)) return false;
+                if (currentFilters.types.length > 0) {
+                    let match = false;
+                    const combinedText = `${p.titulo || ''} ${p.descripcion || ''}`.toLowerCase();
+                    
+                    for (let typeVal of currentFilters.types) {
+                        if (typeVal === 'piso' && (p.tipo === 'Apartamento' || combinedText.includes('piso'))) match = true;
+                        else if (typeVal === 'atico' && (combinedText.includes('ático') || combinedText.includes('atico') || combinedText.includes('penthouse'))) match = true;
+                        else if (typeVal === 'Dúplex' && (p.tipo === 'Dúplex' || combinedText.includes('duplex'))) match = true;
+                        else if (typeVal === 'villa' && (p.tipo === 'Villa' || combinedText.includes('independiente') || combinedText.includes('villa'))) match = true;
+                        else if (typeVal === 'Bungalow' && (p.tipo === 'Bungalow' || combinedText.includes('bungalow'))) match = true;
+                        else if (typeVal === 'pareado' && combinedText.includes('pareado')) match = true;
+                        else if (typeVal === 'adosado' && (combinedText.includes('adosado') || combinedText.includes('townhouse') || combinedText.includes('terraced'))) match = true;
+                        else if (typeVal === 'rustica' && (combinedText.includes('rústica') || combinedText.includes('rustica') || combinedText.includes('finca'))) match = true;
+                        else if (p.tipo === typeVal) match = true;
+                    }
+                    if (!match) return false;
+                }
 
                 for (let am of currentFilters.amenities) {
                     if (!pAms[am] && pAms[am] !== true && pAms[am] !== "1" && pAms[am] !== "si") return false;
